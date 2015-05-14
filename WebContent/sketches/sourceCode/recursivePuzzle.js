@@ -32,8 +32,7 @@ var recursivePuzzleSketch = function(p) {
 		canvas = p.createCanvas(img.width, img.height);
 		p.frameRate(20);
 
-		// Initiate a new puzzle each time the mouse is pressed inside the
-		// canvas
+		// Initiate a new puzzle each time the mouse is pressed inside the canvas
 		canvas.mousePressed(newPuzzle);
 
 		// Initiate a new puzzle

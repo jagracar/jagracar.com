@@ -36,7 +36,7 @@
 			</h1>
 		</header>
 
-		<!-- Sketch side bar -->
+		<!-- Sketches list -->
 		<?php include_once $homeDir . 'p5jsSketchesList.php';?>
 
 		<div class="sketch-container">

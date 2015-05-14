@@ -189,8 +189,7 @@ var wordLimitsSketch = function(p) {
 	// Update the particle position and velocity
 	//
 	Particle.prototype.update = function(limits) {
-		// Calculate the box center and box size where we should search for
-		// collisions
+		// Calculate the box center and box size where we should search for collisions
 		var boxCenterX = Math.round(this.pos.x + 0.5 * this.vel.x);
 		var boxCenterY = Math.round(this.pos.y + 0.5 * this.vel.y);
 		var boxHalfSizeX = Math.abs(Math.ceil(0.5 * this.vel.x)) + 1;

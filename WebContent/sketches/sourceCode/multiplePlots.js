@@ -72,8 +72,7 @@ var multiplePlotsSketch = function(p) {
 		plot1.addLayer("layer 2", points1c);
 		plot1.getLayer("layer 2").setLineColor(p.color(100, 100, 255));
 
-		// Leave empty the points for the second plot. We will fill them in
-		// draw()
+		// Leave empty the points for the second plot. We will fill them in draw()
 		points2 = [];
 
 		// Setup for the second plot

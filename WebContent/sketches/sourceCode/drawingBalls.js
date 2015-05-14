@@ -124,8 +124,8 @@ var drawingBallsSketch = function(p) {
 	};
 
 	//
-	// This method checks if the ball is in contact with another ball,
-	// and if that is the case, will change their positions and velocities
+	// This method checks if the ball is in contact with another ball, and if that is the case, will change their
+	// positions and velocities
 	//
 	Ball.prototype.checkContact = function(b) {
 		var contactDist, xDiff, yDiff, diffSq, c;

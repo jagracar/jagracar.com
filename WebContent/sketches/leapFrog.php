@@ -31,14 +31,14 @@
 	<!-- Navigation bar -->
 	<?php include_once $homeDir . 'navBar.php';?>
 
-	<div class=main-container>
+	<div class="main-container">
 		<header>
 			<h1>
 				<a href="<?php echo $homeDir;?>p5jsSketches.php">p5.js sketches</a>
 			</h1>
 		</header>
 
-		<!-- Sketch side bar -->
+		<!-- Sketches list -->
 		<?php include_once $homeDir . 'p5jsSketchesList.php';?>
 
 		<div class="sketch-container">

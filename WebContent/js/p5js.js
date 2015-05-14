@@ -1,11 +1,11 @@
 // Global variables
-var p5Sketch, gui;
-var sketchContainer = "p5js-sketch__canvas";
-var guiContainer = "p5js-sketch__gui";
+var sketch, gui;
+var sketchContainer = "sketch__canvas";
+var guiContainer = "sketch__gui";
 
 function runSketch(sketch, element) {
 	// Start the new sketch
-	p5Sketch = new p5(sketch, sketchContainer);
+	sketch = new p5(sketch, sketchContainer);
 }
 
 /*

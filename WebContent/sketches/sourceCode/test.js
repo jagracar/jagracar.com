@@ -2,7 +2,9 @@ function runSketch() {
 	var scene = undefined;
 	var renderer = undefined;
 	var camera = undefined;
-	var plane, cube, sphere;
+	var plane = undefined;
+	var cube = undefined;
+	var sphere = undefined;
 	var step = 0;
 
 	init();

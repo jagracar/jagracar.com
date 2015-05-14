@@ -36,7 +36,7 @@
 			</h1>
 		</header>
 
-		<!-- Examples side bar -->
+		<!-- Sketches list -->
 		<?php include_once $homeDir . 'threejsSketchesList.php';?>
 
 		<div class="sketch-container">

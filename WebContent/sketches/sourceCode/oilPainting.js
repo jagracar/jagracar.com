@@ -84,8 +84,7 @@ var oilPaintingSketch = function(p) {
 		imgHeight = originalImg.height;
 		nPixels = imgWidth * imgHeight;
 
-		// Create the canvas buffer and the similarColor and visitedPixels
-		// arrays
+		// Create the canvas buffer and the similarColor and visitedPixels arrays
 		canvas = p.createGraphics(imgWidth, imgHeight);
 		similarColor = [];
 		visitedPixels = [];
@@ -95,8 +94,7 @@ var oilPaintingSketch = function(p) {
 			visitedPixels[pixel] = false;
 		}
 
-		// Create the similarColor and visitedPixels images if we are in debug
-		// mode
+		// Create the similarColor and visitedPixels images if we are in debug mode
 		if (debugMode) {
 			similarColorImg = p.createImage(imgWidth, imgHeight);
 			visitedPixelsImg = p.createImage(imgWidth, imgHeight);
@@ -211,8 +209,7 @@ var oilPaintingSketch = function(p) {
 				// Add the brush to the trace
 				trace.setBrush(brush);
 
-				// Calculate the trace colors and check that painting the trace
-				// will improve the painting
+				// Calculate the trace colors and check that painting the trace will improve the painting
 				if (trace.calculateColors(maxColorDiff, similarColor, originalImg, canvas)) {
 					// Test passed, the trace is good enough to be painted
 					newTrace = false;
@@ -264,8 +261,8 @@ var oilPaintingSketch = function(p) {
 	};
 
 	//
-	// Populates the similarColor boolean array. The array elements will be true
-	// when the canvas is painted with a color similar to the original image.
+	// Populates the similarColor boolean array. The array elements will be true when the canvas is painted with a color
+	// similar to the original image.
 	//
 	function populateSimilarColor(maxColorDiff, minAlpha, similarColor, originalImg, canvas) {
 		var canvasImg, nPixels, pixel, imgPixel, rDiff, gDiff, bDiff;
@@ -282,8 +279,7 @@ var oilPaintingSketch = function(p) {
 
 			// Check if the pixel has been painted before
 			if (canvasImg.pixels[imgPixel + 3] >= minAlpha) {
-				// Check if the pixel color in the canvas is similar to the
-				// original image color
+				// Check if the pixel color in the canvas is similar to the original image color
 				rDiff = Math.abs(originalImg.pixels[imgPixel] - canvasImg.pixels[imgPixel]);
 				gDiff = Math.abs(originalImg.pixels[imgPixel + 1] - canvasImg.pixels[imgPixel + 1]);
 				bDiff = Math.abs(originalImg.pixels[imgPixel + 2] - canvasImg.pixels[imgPixel + 2]);
@@ -419,8 +415,7 @@ var oilPaintingSketch = function(p) {
 		this.positionsForAverage = 4;
 		// The noise range to add to the bristles vertical position on the brush
 		this.bristleVerticalNoise = 8;
-		// The noise range to add in each update to the bristles horizontal
-		// position on the brush
+		// The noise range to add in each update to the bristles horizontal position on the brush
 		this.bristleHorizontalNoise = 4;
 		// Sets the bristles horizontal noise speed
 		this.noiseSpeedFactor = 0.04;
@@ -544,8 +539,7 @@ var oilPaintingSketch = function(p) {
 	};
 
 	//
-	// Draws the brush on the screen and the canvas using the provided bristle
-	// colors
+	// Draws the brush on the screen and the canvas using the provided bristle colors
 	//
 	Brush.prototype.paint = function(colors, alpha, minAlpha, canvas) {
 		if (this.positionsHistory.length === this.positionsForAverage && alpha > 0) {
@@ -580,36 +574,27 @@ var oilPaintingSketch = function(p) {
 	function Trace(position, nSteps, speed, minAlpha) {
 		// Sets how random the trace movement is
 		this.noiseFactor = 0.007;
-		// The maximum allowed fraction of pixels in the trace trajectory with
-		// colors similar to the original image
+		// The maximum allowed fraction of pixels in the trace trajectory with colors similar to the original image
 		this.maxSimilarColorFractionInTrajectory = 0.6;
-		// The maximum allowed fraction of pixels in the trace trajectory that
-		// have been visited before
+		// The maximum allowed fraction of pixels in the trace trajectory that have been visited before
 		this.maxVisitsFractionInTrajectory = 0.35;
-		// The maximum allowed fraction of pixels in the trace trajectory that
-		// fall outside the canvas
+		// The maximum allowed fraction of pixels in the trace trajectory that fall outside the canvas
 		this.maxOutsideFractionInTrajectory = 0.6;
-		// The maximum allowed fraction of pixels in the trace with colors
-		// similar to the original image
+		// The maximum allowed fraction of pixels in the trace with colors similar to the original image
 		this.maxSimilarColorFraction = 0.85;
-		// The maximum allowed fraction of pixels in the trace that fall outside
-		// the canvas
+		// The maximum allowed fraction of pixels in the trace that fall outside the canvas
 		this.maxOutsideFraction = 0.3;
-		// The minimum fraction of trace that needs to be painted already to
-		// consider it painted
+		// The minimum fraction of trace that needs to be painted already to consider it painted
 		this.minPaintedFraction = 0.65;
-		// The trace minimum color improvement factor required to paint it on
-		// the canvas
+		// The trace minimum color improvement factor required to paint it on the canvas
 		this.minColorImprovementFactor = 20;
-		// The minimum improvement fraction in the number of well painted pixels
-		// to consider to paint the trace
-		// even if there is not a significant color improvement
+		// The minimum improvement fraction in the number of well painted pixels to consider to paint the trace even if
+		// there is not a significant color improvement
 		this.bigWellPaintedImprovementFraction = 0.35;
-		// The minimum reduction fraction in the number of bad painted pixels
-		// required to paint the trace on the canvas
+		// The minimum reduction fraction in the number of bad painted pixels required to paint the trace on the canvas
 		this.minBadPaintedReductionFraction = 0.3;
-		// The maximum allowed fraction of pixels in the trace that were
-		// previously well painted and will be now bad painted
+		// The maximum allowed fraction of pixels in the trace that were previously well painted and will be now bad
+		// painted
 		this.maxWellPaintedDestructionFraction = 0.55;
 		// The brightness relative change range between the bristles
 		this.brightnessRelativeChange = 0.09;
@@ -647,13 +632,9 @@ var oilPaintingSketch = function(p) {
 	}
 
 	//
-	// Checks if the trace trajectory is valid. To be valid it should fall on a
-	// region
-	// that was not painted correctly before, the fraction of visited pixels in
-	// the
-	// trace trajectory should be small, and it should not fall most of the time
-	// outside
-	// the canvas.
+	// Checks if the trace trajectory is valid. To be valid it should fall on a region that was not painted correctly
+	// before, the fraction of visited pixels in the trace trajectory should be small, and it should not fall most of
+	// the time outside the canvas.
 	//
 	Trace.prototype.hasValidTrajectory = function(similarColor, visitedPixels, width, height) {
 		var similarColorCounter, visitedPixelsCounter, outsideCounter, step, pos, x, y, pixel;
@@ -699,11 +680,8 @@ var oilPaintingSketch = function(p) {
 	};
 
 	//
-	// Calculates the trace colors. Returns false if the region covered by the
-	// trace
-	// was already painted with similar colors, most of the trace is outside the
-	// canvas,
-	// or drawing the trace will not improve considerably the painting.
+	// Calculates the trace colors. Returns false if the region covered by the trace was already painted with similar
+	// colors, most of the trace is outside the canvas, or drawing the trace will not improve considerably the painting.
 	//
 	Trace.prototype.calculateColors = function(maxColorDiff, similarColor, originalImg, canvas) {
 		var canvasImg, width, height, rAverage, gAverage, bAverage, rOriginal, gOriginal, bOriginal;
@@ -766,8 +744,7 @@ var oilPaintingSketch = function(p) {
 							this.colors[loc] = -1;
 						}
 
-						// Add the original image color to the average if alpha
-						// is high
+						// Add the original image color to the average if alpha is high
 						if (highAlpha) {
 							rAverage += rOriginal;
 							gAverage += gOriginal;
@@ -811,8 +788,7 @@ var oilPaintingSketch = function(p) {
 		// Reset the brush
 		this.brush.reset(this.positions[0]);
 
-		// Check if the trace region was painted before with similar colors or
-		// falls outside the image
+		// Check if the trace region was painted before with similar colors or falls outside the image
 		wellPainted = similarColorCounter >= this.maxSimilarColorFraction * insideCounter;
 		outsideCanvas = outsideCounter >= this.maxOutsideFraction * (insideCounter + outsideCounter);
 
@@ -821,8 +797,7 @@ var oilPaintingSketch = function(p) {
 			return false;
 		}
 
-		// Check that drawing the trace will improve the accuracy of the
-		// painting
+		// Check that drawing the trace will improve the accuracy of the painting
 		wellPaintedCounter = 0;
 		destroyedWellPaintedCounter = 0;
 		alreadyPaintedCounter = 0;
@@ -832,13 +807,11 @@ var oilPaintingSketch = function(p) {
 			// Check if the alpha value is high enough
 			if (this.alphas[step] >= this.minAlpha) {
 				for (bristle = 0; bristle < this.nBristles; bristle++) {
-					// Check that the bristle position is inside the canvas
-					// (it should have an original image color)
+					// Check that the bristle position is inside the canvas (it should have an original image color)
 					loc = 3 * (bristle + step * this.nBristles);
 
 					if (originalColors[loc] >= 0) {
-						// Count the number of well painted pixels, and how many
-						// are not well painted anymore
+						// Count the number of well painted pixels, and how many are not well painted anymore
 						rOriginal = originalColors[loc];
 						gOriginal = originalColors[loc + 1];
 						bOriginal = originalColors[loc + 2];
@@ -852,8 +825,7 @@ var oilPaintingSketch = function(p) {
 							destroyedWellPaintedCounter++;
 						}
 
-						// Count previously painted pixels and calculate their
-						// color improvement
+						// Count previously painted pixels and calculate their color improvement
 						if (this.colors[loc] >= 0) {
 							rCanvasDiff = Math.abs(rOriginal - this.colors[loc]);
 							gCanvasDiff = Math.abs(gOriginal - this.colors[loc + 1]);

@@ -28,7 +28,7 @@ function runSketch() {
 		// Renderer setup
 		renderer = new THREE.WebGLRenderer();
 		renderer.setSize(canvasWidth, canvasHeight);
-		renderer.setClearColor(new THREE.Color(0.98, 0.98, 0.98));
+		renderer.setClearColor(new THREE.Color(0.93, 0.93, 0.93));
 
 		// Camera setup
 		camera = new THREE.PerspectiveCamera(45, canvasWidth / canvasHeight, 0.1, 10000);
@@ -79,8 +79,8 @@ function runSketch() {
 		var scan = new Scan();
 		scan.initFromFile(this.responseText);
 		scan.fillHoles(4);
-		scan.reduceResolution(2);
-		scan.gaussianSmooth(1);
+		scan.reduceResolution(3);
+		//scan.gaussianSmooth(1);
 		scan.crop();
 		scan.centerAndExtend();
 
@@ -90,10 +90,10 @@ function runSketch() {
 
 		// Add the mesh to the scene
 		// scene.remove(scan.mesh);
-		scene.add(scan.pointCloud);
+		// scene.add(scan.pointCloud);
 		// scene.remove(scan.pointCloud);
-		// scene.add(scan.frontMesh);
-		// scene.add(scan.backMesh);
+		scene.add(scan.frontMesh);
+		scene.add(scan.backMesh);
 	}
 
 	/*

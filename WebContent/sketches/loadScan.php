@@ -30,14 +30,14 @@
 	<!-- Navigation bar -->
 	<?php include_once $homeDir . 'navBar.php';?>
 
-	<div class=main-container>
+	<div class="main-container">
 		<header>
 			<h1>
 				<a href="<?php echo $homeDir;?>threejsSketches.php">Three.js sketches</a>
 			</h1>
 		</header>
 
-		<!-- Examples side bar -->
+		<!-- Sketches list -->
 		<?php include_once $homeDir . 'threejsSketchesList.php';?>
 
 		<div class="sketch-container">

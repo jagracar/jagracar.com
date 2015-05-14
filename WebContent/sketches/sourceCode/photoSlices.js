@@ -119,8 +119,7 @@ var photoSlicesSketch = function(p) {
 	};
 
 	//
-	// This method checks if the cursor is near the slice,
-	// and if it is, it gives it a push
+	// This method checks if the cursor is near the slice, and if it is, it gives it a push
 	//
 	Slice.prototype.checkPush = function() {
 		if (p.mouseY >= 0 && p.mouseY < p.height && p.mouseX >= this.x && p.mouseX <= (this.x + this.imgSlice.width)

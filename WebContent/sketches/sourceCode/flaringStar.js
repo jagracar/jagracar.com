@@ -91,8 +91,7 @@ var flaringStarSketch = function(p) {
 		center = this.imageWidth / 2;
 		nPixels = p.sq(this.imageWidth);
 
-		// Create the flares in the star's body (save the result in the red
-		// channel)
+		// Create the flares in the star's body (save the result in the red channel)
 		this.flares.loadPixels();
 
 		for (x = 0; x < this.imageWidth; x++) {

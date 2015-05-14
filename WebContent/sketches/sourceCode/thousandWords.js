@@ -2,12 +2,12 @@ var thousandWordsSketch = function(p) {
 	// Global variables
 	var img = undefined;
 	var buffer = undefined;
-	var phrase = undefined;
-	var lastLine = undefined;
-	var nLines = undefined;
 	var textSize = undefined;
 	var textLeading = undefined;
 	var initPhrase = "Type some\n text...";
+	var phrase = initPhrase;
+	var lastLine = "";
+	var nLines = 1;
 
 	// Load the image before the sketch is run
 	p.preload = function() {
@@ -33,10 +33,7 @@ var thousandWordsSketch = function(p) {
 		// Create the canvas
 		p.createCanvas(img.width, img.height);
 
-		// Initialize the global variables
-		phrase = initPhrase;
-		lastLine = "";
-		nLines = 1;
+		// Set the text properties
 		textSize = 0.17 * p.width;
 		textLeading = textSize;
 
