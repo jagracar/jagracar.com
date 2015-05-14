@@ -19,7 +19,7 @@ var seaLifeSketch = function(p) {
 	var paintLines = false;
 	var paintLimits = false;
 	var paintDetails = true;
-	var bgImg;
+	var bgImg = undefined;
 
 	// Load the image before the sketch is run
 	p.preload = function() {
@@ -29,7 +29,7 @@ var seaLifeSketch = function(p) {
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvas;
+		var maxCanvasWidth;
 
 		// Resize the image if necessary
 		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
@@ -45,10 +45,10 @@ var seaLifeSketch = function(p) {
 		}
 
 		// Create the canvas
-		canvas = p.createCanvas(bgImg.width, bgImg.height);
+		p.createCanvas(bgImg.width, bgImg.height);
 
 		// Create the water-like image to be used as the background
-		//bgImg = createWaterImage(p.width, p.height);
+		// bgImg = createWaterImage(p.width, p.height);
 
 		// Create all the species
 		createFishes(Math.round(0.3 * bgImg.height));
@@ -68,7 +68,7 @@ var seaLifeSketch = function(p) {
 		p.background(bgImg);
 
 		// Fishes
-		for ( i = 0; i < fishes.length; i++) {
+		for (i = 0; i < fishes.length; i++) {
 			fish = fishes[i];
 
 			// Update the fish properties
@@ -92,7 +92,7 @@ var seaLifeSketch = function(p) {
 		}
 
 		// Jelly-fishes
-		for ( i = 0; i < jellys.length; i++) {
+		for (i = 0; i < jellys.length; i++) {
 			jelly = jellys[i];
 
 			// Update the jelly-fish properties
@@ -111,7 +111,7 @@ var seaLifeSketch = function(p) {
 		}
 
 		// Killer whales
-		for ( i = 0; i < whales.length; i++) {
+		for (i = 0; i < whales.length; i++) {
 			whale = whales[i];
 
 			// Update the killer whale properties
@@ -131,7 +131,7 @@ var seaLifeSketch = function(p) {
 		}
 
 		// Hammer sharks
-		for ( i = 0; i < hammers.length; i++) {
+		for (i = 0; i < hammers.length; i++) {
 			hammer = hammers[i];
 
 			// Update the hammer shark properties
@@ -164,10 +164,10 @@ var seaLifeSketch = function(p) {
 
 		img.loadPixels();
 
-		for ( x = 0; x < imgWidth; x++) {
-			for ( y = 0; y < imgHeight; y++) {
+		for (x = 0; x < imgWidth; x++) {
+			for (y = 0; y < imgHeight; y++) {
 				dx = x - xCenter;
-				dy = y - xCenter;
+				dy = y - yCenter;
 				dist = Math.sqrt(p.sq(dx) + p.sq(dy));
 				ang = Math.abs(p.atan2(dy, dx));
 				red = (3 + 0.04 * dist) * Math.random();
@@ -196,7 +196,7 @@ var seaLifeSketch = function(p) {
 		} else if (n > oldSize) {
 			var i, ang, mag, pos, vel, col, headSize;
 
-			for ( i = oldSize; i < n; i++) {
+			for (i = oldSize; i < n; i++) {
 				ang = p.TWO_PI * Math.random();
 				mag = limitDist * Math.random();
 				pos = p.createVector(0.5 * p.width + mag * Math.cos(ang), 0.5 * p.height + mag * Math.sin(ang));
@@ -220,7 +220,7 @@ var seaLifeSketch = function(p) {
 		} else if (n > oldSize) {
 			var i, ang, mag, pos, vel, col, headSize, nArms, lengthArms;
 
-			for ( i = oldSize; i < n; i++) {
+			for (i = oldSize; i < n; i++) {
 				ang = p.TWO_PI * Math.random();
 				mag = limitDist * Math.random();
 				pos = p.createVector(0.5 * p.width + mag * Math.cos(ang), 0.5 * p.height + mag * Math.sin(ang));
@@ -246,7 +246,7 @@ var seaLifeSketch = function(p) {
 		} else if (n > oldSize) {
 			var i, ang, mag, pos, vel, col, headSize;
 
-			for ( i = oldSize; i < n; i++) {
+			for (i = oldSize; i < n; i++) {
 				ang = p.TWO_PI * Math.random();
 				mag = limitDist * Math.random();
 				pos = p.createVector(0.5 * p.width + mag * Math.cos(ang), 0.5 * p.height + mag * Math.sin(ang));
@@ -270,7 +270,7 @@ var seaLifeSketch = function(p) {
 		} else if (n > oldSize) {
 			var i, ang, mag, pos, vel, col, headSize;
 
-			for ( i = oldSize; i < n; i++) {
+			for (i = oldSize; i < n; i++) {
 				ang = p.TWO_PI * Math.random();
 				mag = limitDist * Math.random();
 				pos = p.createVector(0.5 * p.width + mag * Math.cos(ang), 0.5 * p.height + mag * Math.sin(ang));
@@ -445,10 +445,11 @@ var seaLifeSketch = function(p) {
 	//
 	// Evaluates which interactions are taking place
 	//
-	Flock.prototype.evaluateInteractions = function(flocks, repulsionCond, alignCond, attractionCond, huntedCond, huntCond) {
+	Flock.prototype.evaluateInteractions = function(flocks, repulsionCond, alignCond, attractionCond, huntedCond,
+			huntCond) {
 		var i, f, distanceSq;
 
-		for ( i = 0; i < flocks.length; i++) {
+		for (i = 0; i < flocks.length; i++) {
 			f = flocks[i];
 
 			// Calculate the separation vector and the distance
@@ -501,7 +502,8 @@ var seaLifeSketch = function(p) {
 	Flock.prototype.align = function(forceDir, distSq) {
 		if (distSq > repulsionDistSq && distSq < alignDistSq) {
 			var distance = Math.sqrt(distSq);
-			var forceFactor = 0.05 * (1 - Math.cos(p.TWO_PI * (distance - repulsionDist) / (alignDist - repulsionDist))) / distance;
+			var forceFactor = 0.05
+					* (1 - Math.cos(p.TWO_PI * (distance - repulsionDist) / (alignDist - repulsionDist))) / distance;
 			this.force.x += forceFactor * forceDir.x;
 			this.force.y += forceFactor * forceDir.y;
 		}
@@ -513,7 +515,8 @@ var seaLifeSketch = function(p) {
 	Flock.prototype.attraction = function(forceDir, distSq) {
 		if (distSq > alignDistSq && distSq < attractionDistSq) {
 			var distance = Math.sqrt(distSq);
-			var forceFactor = 0.005 * (1 - Math.cos(p.TWO_PI * (distance - alignDist) / (attractionDist - alignDist))) / distance;
+			var forceFactor = 0.005 * (1 - Math.cos(p.TWO_PI * (distance - alignDist) / (attractionDist - alignDist)))
+					/ distance;
 			this.force.x += forceFactor * forceDir.x;
 			this.force.y += forceFactor * forceDir.y;
 		}
@@ -1099,7 +1102,7 @@ var seaLifeSketch = function(p) {
 		// Create the jelly-fish arms
 		var i, offset, nLinks;
 
-		for ( i = 0; i < nArms; i++) {
+		for (i = 0; i < nArms; i++) {
 			offset = (nArms > 1) ? this.headSize * (-0.3 + 0.6 * i / (nArms - 1)) : 0;
 			nLinks = Math.round(lengthArms * (0.7 + 0.3 * Math.random()));
 			this.arms[i] = new Arm(offset, nLinks);
@@ -1178,9 +1181,9 @@ var seaLifeSketch = function(p) {
 		// Create the links
 		var i, sep, diam;
 
-		for ( i = 0; i < nLinks; i++) {
+		for (i = 0; i < nLinks; i++) {
 			sep = (nLinks - i) + 5;
-			diam = (sep - 3 ) / 1.4;
+			diam = (sep - 3) / 1.4;
 			this.links[i] = new Link(sep, diam);
 		}
 	}

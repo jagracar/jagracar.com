@@ -174,7 +174,8 @@ var treeGeneratorSketch = function(p) {
 
 			if (newDiameter > 1) {
 				var deltaColor = p.round(0, 20);
-				newColor = p.color(p.red(this.color) + deltaColor, p.green(this.color) + deltaColor, p.blue(this.color));
+				newColor = p
+						.color(p.red(this.color) + deltaColor, p.green(this.color) + deltaColor, p.blue(this.color));
 			} else {
 				newColor = p.color(0.75 * p.red(this.color), p.green(this.color), 0.85 * p.blue(this.color));
 			}

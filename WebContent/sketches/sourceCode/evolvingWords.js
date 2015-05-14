@@ -1,10 +1,11 @@
 var evolvingWordsSketch = function(p) {
 	// Global variables
-	var positions, step;
+	var positions = undefined;
+	var step = 0;
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight, canvas;
+		var maxCanvasWidth, canvasWidth, canvasHeight;
 
 		// Needed for mobile devices with high pixel densities
 		p.devicePixelScaling(false);
@@ -20,12 +21,11 @@ var evolvingWordsSketch = function(p) {
 		}
 
 		// Create the canvas
-		canvas = p.createCanvas(canvasWidth, canvasHeight);
+		p.createCanvas(canvasWidth, canvasHeight);
 		p.frameRate(50);
 
 		// Calculate the trajectory positions for every particle
 		positions = calculateTrajectories("This is not a LOVE story", 2 * canvasWidth);
-		step = 0;
 	};
 
 	// Execute the sketch
@@ -62,7 +62,7 @@ var evolvingWordsSketch = function(p) {
 		// Calculate the words limits
 		limits = [];
 
-		for ( i = 0; i < words.length; i++) {
+		for (i = 0; i < words.length; i++) {
 			limits[i] = wordLimits(words[i]);
 		}
 
@@ -70,7 +70,7 @@ var evolvingWordsSketch = function(p) {
 		trajectories = [];
 		nSteps = 80;
 
-		for ( i = 0; i < nParticles; i++) {
+		for (i = 0; i < nParticles; i++) {
 			trajectories[i] = trajectory(limits, nSteps);
 		}
 
@@ -103,16 +103,17 @@ var evolvingWordsSketch = function(p) {
 
 		p.loadPixels();
 
-		for ( y = 0; y < p.height; y++) {
-			for ( x = 0; x < p.width; x++) {
+		for (y = 0; y < p.height; y++) {
+			for (x = 0; x < p.width; x++) {
 				pixel = x + y * p.width;
 				isLimit = false;
 
 				if (p.pixels[4 * pixel] === 255) {
 					// Check the nearby pixels for a color change
-					for ( dx = -1; dx <= 1; dx++) {
-						for ( dy = -1; dy <= 1; dy++) {
-							// Don't calculate more if we already know that it's a limit
+					for (dx = -1; dx <= 1; dx++) {
+						for (dy = -1; dy <= 1; dy++) {
+							// Don't calculate more if we already know that it's
+							// a limit
 							if (!isLimit) {
 								px = x + dx;
 								py = y + dy;
@@ -150,7 +151,7 @@ var evolvingWordsSketch = function(p) {
 		// Calculate the particle position in the different words
 		positionInWords = [];
 
-		for ( i = 0; i < limits.length; i++) {
+		for (i = 0; i < limits.length; i++) {
 			positionInWords[i] = limits[i][Math.floor(limits[i].length * Math.random())];
 		}
 
@@ -161,7 +162,7 @@ var evolvingWordsSketch = function(p) {
 		maxDim = Math.max(p.width, p.height);
 		center = new toxi.geom.Vec2D(0.5 * p.width, 0.5 * p.height);
 
-		for ( i = 0; i < positionInWords.length - 1; i++) {
+		for (i = 0; i < positionInWords.length - 1; i++) {
 			spline.add(positionInWords[i]);
 			spline.add(randomVector(0, 15).add(center));
 			spline.add(randomVector(0, 0.2 * minDim).add(positionInWords[i + 1]));

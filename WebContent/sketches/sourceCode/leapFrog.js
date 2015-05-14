@@ -1,6 +1,6 @@
 var leapFrogSketch = function(p) {
 	// Global variables
-	var img;
+	var img = undefined;
 	var solarSystems = [];
 	var stepsPerFrame = 10;
 	var timeStep = 0.02;
@@ -41,8 +41,8 @@ var leapFrogSketch = function(p) {
 		// Do several steps per frame
 		var step, i;
 
-		for ( step = 0; step < stepsPerFrame; step++) {
-			for ( i = 0; i < solarSystems.length; i++) {
+		for (step = 0; step < stepsPerFrame; step++) {
+			for (i = 0; i < solarSystems.length; i++) {
 				// Paint all the solar system
 				solarSystems[i].paintPlanetsWithImg(img, 0.5);
 
@@ -59,7 +59,7 @@ var leapFrogSketch = function(p) {
 		var newSolarSystems, i, starPos, starMass, nPlanets;
 		newSolarSystems = [];
 
-		for ( i = 0; i < nSolarSystems; i++) {
+		for (i = 0; i < nSolarSystems; i++) {
 			starPos = p.createVector(p.random(0.3, 0.7) * p.width, p.random(0.3, 0.7) * p.height);
 			starMass = p.random(0.5, 2) * 3000000;
 			nPlanets = Math.round(p.random(5, 10));
@@ -81,8 +81,8 @@ var leapFrogSketch = function(p) {
 	};
 
 	/*
-	 * Simple solar system class. A solar system is composed of
-	 * a single star and set of planets orbiting around it
+	 * Simple solar system class. A solar system is composed of a single star
+	 * and set of planets orbiting around it
 	 */
 	function SolarSystem(starPos, starMass, nPlanets) {
 		this.star = new Star(starPos, starMass);
@@ -126,7 +126,7 @@ var leapFrogSketch = function(p) {
 	SolarSystem.prototype.paintPlanetsWithImg = function(img, diameter) {
 		var i, planetPos, x, y, pixel, color;
 
-		for ( i = 0; i < this.planets.length; i++) {
+		for (i = 0; i < this.planets.length; i++) {
 			planetPos = this.planets[i].getPos();
 			x = Math.round(planetPos.x);
 			y = Math.round(planetPos.y);

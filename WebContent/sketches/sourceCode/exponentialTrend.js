@@ -1,10 +1,11 @@
 var exponentialTrendSketch = function(p) {
 	// Global variables
-	var plot, logScale;
+	var plot = undefined;
+	var logScale = undefined;
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight, canvas;
+		var maxCanvasWidth, canvasWidth, canvasHeight;
 		var points, i, x, y, xErr, yErr;
 
 		// Resize the canvas if necessary
@@ -18,12 +19,12 @@ var exponentialTrendSketch = function(p) {
 		}
 
 		// Create the canvas
-		canvas = p.createCanvas(canvasWidth, canvasHeight);
+		p.createCanvas(canvasWidth, canvasHeight);
 
 		// Prepare the points for the plot
 		points = [];
 
-		for ( i = 0; i < 1000; i++) {
+		for (i = 0; i < 1000; i++) {
 			x = 10 + p.random(200);
 			y = 10 * p.exp(0.015 * x);
 			xErr = p.randomGaussian(0, 2);

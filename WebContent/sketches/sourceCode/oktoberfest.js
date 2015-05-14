@@ -1,9 +1,11 @@
 var oktoberfestSketch = function(p) {
 	// Global variables
-	var table, plot;
-	var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-	var daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-	var daysPerMonthLeapYear = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	var table = undefined;
+	var plot = undefined;
+	var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September",
+			"October", "November", "December" ];
+	var daysPerMonth = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+	var daysPerMonthLeapYear = [ 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
 
 	// Load the table before the sketch is run
 	p.preload = function() {
@@ -18,7 +20,7 @@ var oktoberfestSketch = function(p) {
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight, canvas;
+		var maxCanvasWidth, canvasWidth, canvasHeight;
 		var pointsOktoberfest, pointsElections, row, data, year, month, day, date;
 		var oktoberfestCount, electionsCount;
 
@@ -33,13 +35,13 @@ var oktoberfestSketch = function(p) {
 		}
 
 		// Create the canvas
-		canvas = p.createCanvas(canvasWidth, canvasHeight);
+		p.createCanvas(canvasWidth, canvasHeight);
 
 		// Save the table data in two GPointsArrays
 		pointsOktoberfest = [];
 		pointsElections = [];
 
-		for ( row = 0; row < table.getRowCount(); row++) {
+		for (row = 0; row < table.getRowCount(); row++) {
 			data = table.getRow(row);
 
 			// Check that the row contains valid data
@@ -83,7 +85,7 @@ var oktoberfestSketch = function(p) {
 		plot.drawTitle();
 		plot.drawGridLines(GPlot.VERTICAL);
 		plot.drawFilledContours(GPlot.HORIZONTAL, 0);
-		plot.drawLegend(["Oktoberfest", "Bundestagswahl"], [0.07, 0.30], [0.92, 0.92]);
+		plot.drawLegend([ "Oktoberfest", "Bundestagswahl" ], [ 0.07, 0.30 ], [ 0.92, 0.92 ]);
 		plot.drawLabels();
 		plot.endDraw();
 	};

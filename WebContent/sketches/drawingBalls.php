@@ -11,8 +11,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="keywords"
-	content="processing, p5.js, P5js, javaScript, examples, simulation, image processing">
+<meta name="keywords" content="processing, p5.js, P5js, javaScript, examples, simulation, image processing">
 <meta name="description" content="p5.js drawing balls sketch">
 <meta name="author" content="Javier Graciá Carpio">
 <title>Drawing balls sketch - jagracar</title>
@@ -39,35 +38,29 @@
 		</header>
 
 		<!-- Sketch side bar -->
-		<?php include_once $homeDir . 'sketchSideBar.php';?>
+		<?php include_once $homeDir . 'p5jsSketchesList.php';?>
 
-		<div class="p5js-mainContent">
-			<div class="p5js-sketch" id="widthRef">
-				<div class="p5js-sketch__wrapper">
-					<div class="p5js-sketch__canvas" id="p5js-sketch__canvas"></div>
+		<div class="sketch-container">
+			<div class="sketch" id="widthRef">
+				<div class="sketch__wrapper">
+					<div class="sketch__canvas" id="sketch__canvas"></div>
 				</div>
 
-				<div class="p5js-sketch__description">
+				<div class="sketch__description">
 					<p>
-						This sketch was inspired by the <a
-							href="http://roberthodgin.com/stippling/">stippling works</a> of
-						Robert Hodgin.
+						This sketch was inspired by the <a href="http://roberthodgin.com/stippling/">stippling works</a> of Robert Hodgin.
 					</p>
 
-					<p>A new ball or particle is added in each frame. The particles
-						take the colors of an underground image, and their sizes are
-						proportional to the pixel brightness. Clicking the canvas will
-						produce a small explosion.</p>
+					<p>A new ball or particle is added in each frame. The particles take the colors of an underground image, and
+						their sizes are proportional to the pixel brightness. Clicking the canvas will produce a small explosion.</p>
 
 					<p>
-						The background picture is from <a
-							href="https://www.flickr.com/photos/sukanto_debnath/3081836966/">Sukanto
+						The background picture is from <a href="https://www.flickr.com/photos/sukanto_debnath/3081836966/">Sukanto
 							Debnath</a>.
 					</p>
 
 					<p>
-						For more details, check the <a href="sourceCode/drawingBalls.js">source
-							code</a> or play with it at <a
+						For more details, check the <a href="sourceCode/drawingBalls.js">source code</a> or play with it at <a
 							href="http://jsfiddle.net/jagracar/25ad67cq/">JSFiddle</a>.
 					</p>
 				</div>
@@ -79,12 +72,12 @@
 	<?php include_once $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.4/p5.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.4/p5.min.js"></script>
 	<script src="sourceCode/drawingBalls.js"></script>
 
 	<!-- Run the sketch -->
 	<script>
-	p5Sketch = new p5(drawingBallsSketch, "p5js-sketch__canvas");
-    </script>
+		var sketch = new p5(drawingBallsSketch, "sketch__canvas");
+	</script>
 </body>
+</html>

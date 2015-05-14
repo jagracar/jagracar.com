@@ -1,8 +1,7 @@
 <?php $activeSketch = 'active-sketch';?>
 
-<div class="p5js-sideMenu">
+<div class="sketches-list">
 	<h2>Examples</h2>
-
 	<ul>
 		<li><a href="<?php echo $homeDir;?>sketches/test.php"
 			class="<?php if($sketch == 'test') { echo $activeSketch; }?>">Test</a></li>

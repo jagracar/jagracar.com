@@ -1,7 +1,7 @@
 var defaultPlotSketch = function(p) {
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight, canvas;
+		var maxCanvasWidth, canvasWidth, canvasHeight;
 		var points, seed, plot, i;
 
 		// Resize the canvas if necessary
@@ -15,13 +15,13 @@ var defaultPlotSketch = function(p) {
 		}
 
 		// Create the canvas
-		canvas = p.createCanvas(canvasWidth, canvasHeight);
+		p.createCanvas(canvasWidth, canvasHeight);
 
 		// Prepare the points for the plot
 		points = [];
 		seed = 100 * p.random();
 
-		for ( i = 0; i < 100; i++) {
+		for (i = 0; i < 100; i++) {
 			points[i] = new GPoint(i, 10 * p.noise(0.1 * i + seed));
 		}
 

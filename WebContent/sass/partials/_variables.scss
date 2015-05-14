@@ -2,10 +2,10 @@
 $legacy_browser_support: false;
 
 // Break points
-$XS: 18em; //  288px for 16px body font
-$S:  30em; //  480px for 16px body font
-$M:  43em; //  688px for 16px body font
-$L:  57em; //  912px for 16px body font
+$XS: 18em; // 288px for 16px body font
+$S: 30em; // 480px for 16px body font
+$M: 43em; // 688px for 16px body font
+$L: 57em; // 912px for 16px body font
 $XL: 75em; // 1200px for 16px body font
 
 // General colors
@@ -17,7 +17,7 @@ $footer-color: lighten($general-text-color, 20%);
 
 // General variables
 $footer-height: 4em;
-$footer-height-lowRes: 5em;
+$footer-height-lowRes: 6em;
 $main-container-top-padding: 3.5em;
 $main-container-bottom-padding: $footer-height + 2.5em;
 $main-container-bottom-padding-lowRes: $footer-height-lowRes + 2.5em;
@@ -48,14 +48,14 @@ $nav-transition-time: 400ms;
 // CV colors
 $cv-section-bg-color: darken(white, 10%);
 
-// p5.js colors
-$p5js-sideMenu-bg-color: $cv-section-bg-color;
+// sketches list colors
+$sketches-list-bg-color: $cv-section-bg-color;
 
-// p5.js variables
-$p5js-sideMenu-margin: 0.3em;
-$p5js-sideMenu-padding: 0.4em;
-$p5js-border-radius: $nav-border-radius;
-$p5js-transition-time: $nav-transition-time;
+// Sketches list variables
+$sketches-list-margin: 0.3em;
+$sketches-list-padding: 0.4em;
+$sketches-list-border-radius: $nav-border-radius;
+$sketches-list-transition-time: $nav-transition-time;
 
 // Font awesome icons
 $fa-angle-left: "\f104";

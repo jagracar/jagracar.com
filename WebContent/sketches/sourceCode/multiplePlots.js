@@ -1,8 +1,16 @@
 var multiplePlotsSketch = function(p) {
 	// Global variables
-	var plot1, plot2, plot3, plot4;
-	var polygonPoints, mug, star;
-	var gaussianStack, gaussianCounter, uniformStack, uniformCounter;
+	var plot1 = undefined;
+	var plot2 = undefined;
+	var plot3 = undefined;
+	var plot4 = undefined;
+	var polygonPoints = undefined;
+	var mug = undefined;
+	var star = undefined;
+	var gaussianStack = undefined;
+	var gaussianCounter = undefined;
+	var uniformStack = undefined;
+	var uniformCounter = undefined;
 
 	// Load the image before the sketch is run
 	p.preload = function() {
@@ -12,7 +20,7 @@ var multiplePlotsSketch = function(p) {
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight, canvas;
+		var maxCanvasWidth, canvasWidth, canvasHeight;
 		var points1a, points1b, points1c, points2, points3, points4, i, index;
 
 		// Resize the canvas if necessary
@@ -26,14 +34,14 @@ var multiplePlotsSketch = function(p) {
 		}
 
 		// Create the canvas
-		canvas = p.createCanvas(canvasWidth, canvasHeight);
+		p.createCanvas(canvasWidth, canvasHeight);
 
 		// Obtain the points for the first plot
 		points1a = [];
 		points1b = [];
 		points1c = [];
 
-		for (var i = 0; i < 500; i++) {
+		for (i = 0; i < 500; i++) {
 			points1a[i] = new GPoint(i, p.noise(0.1 * i) + 1, "point " + i);
 			points1b[i] = new GPoint(i, p.noise(500 + 0.1 * i) + 0.5, "point " + i);
 			points1c[i] = new GPoint(i, p.noise(1000 + 0.1 * i), "point " + i);
@@ -64,7 +72,8 @@ var multiplePlotsSketch = function(p) {
 		plot1.addLayer("layer 2", points1c);
 		plot1.getLayer("layer 2").setLineColor(p.color(100, 100, 255));
 
-		// Leave empty the points for the second plot. We will fill them in draw()
+		// Leave empty the points for the second plot. We will fill them in
+		// draw()
 		points2 = [];
 
 		// Setup for the second plot
@@ -80,11 +89,11 @@ var multiplePlotsSketch = function(p) {
 		gaussianStack = [];
 		gaussianCounter = 0;
 
-		for ( i = 0; i < 10; i++) {
+		for (i = 0; i < 10; i++) {
 			gaussianStack[i] = 0;
 		}
 
-		for ( i = 0; i < 20; i++) {
+		for (i = 0; i < 20; i++) {
 			index = Math.round(p.randomGaussian(gaussianStack.length / 2, 1));
 
 			if (index >= 0 && index < gaussianStack.length) {
@@ -95,7 +104,7 @@ var multiplePlotsSketch = function(p) {
 
 		points3 = [];
 
-		for ( i = 0; i < gaussianStack.length; i++) {
+		for (i = 0; i < gaussianStack.length; i++) {
 			points3[i] = new GPoint(i + 0.5 - gaussianStack.length / 2, gaussianStack[i] / gaussianCounter, "H" + i);
 		}
 
@@ -115,17 +124,18 @@ var multiplePlotsSketch = function(p) {
 		plot3.startHistograms(GPlot.VERTICAL);
 		plot3.getHistogram().setDrawLabels(true);
 		plot3.getHistogram().setRotateLabels(true);
-		plot3.getHistogram().setBgColors([p.color(0, 0, 255, 50), p.color(0, 0, 255, 100), p.color(0, 0, 255, 150), p.color(0, 0, 255, 200)]);
+		plot3.getHistogram().setBgColors(
+				[ p.color(0, 0, 255, 50), p.color(0, 0, 255, 100), p.color(0, 0, 255, 150), p.color(0, 0, 255, 200) ]);
 
 		// Obtain the points for the fourth plot
 		uniformStack = [];
 		uniformCounter = 0;
 
-		for ( i = 0; i < 30; i++) {
+		for (i = 0; i < 30; i++) {
 			uniformStack[i] = 0;
 		}
 
-		for ( i = 0; i < 20; i++) {
+		for (i = 0; i < 20; i++) {
 			index = Math.round(uniformStack.length * Math.random());
 
 			if (index >= 0 && index < uniformStack.length) {
@@ -136,7 +146,7 @@ var multiplePlotsSketch = function(p) {
 
 		points4 = [];
 
-		for ( i = 0; i < uniformStack.length; i++) {
+		for (i = 0; i < uniformStack.length; i++) {
 			points4[i] = new GPoint(i + 0.5 - uniformStack.length / 2, uniformStack[i] / uniformCounter, "point " + i);
 		}
 
@@ -197,7 +207,8 @@ var multiplePlotsSketch = function(p) {
 		} else {
 			lastPoint = points2[points2.length - 1];
 
-			if (!lastPoint.isValid() || Math.pow(lastPoint.getX() - p.mouseX, 2) + Math.pow(lastPoint.getY() + p.mouseY, 2) > 2500) {
+			if (!lastPoint.isValid()
+					|| Math.pow(lastPoint.getX() - p.mouseX, 2) + Math.pow(lastPoint.getY() + p.mouseY, 2) > 2500) {
 				points2.push(new GPoint(p.mouseX, -p.mouseY, "(" + p.mouseX + " , " + -p.mouseY + ")"));
 				plot2.setPoints(points2);
 			}
@@ -228,7 +239,7 @@ var multiplePlotsSketch = function(p) {
 
 			points3 = [];
 
-			for ( i = 0; i < gaussianStack.length; i++) {
+			for (i = 0; i < gaussianStack.length; i++) {
 				points3[i] = new GPoint(i + 0.5 - gaussianStack.length / 2, gaussianStack[i] / gaussianCounter, "H" + i);
 			}
 
@@ -278,8 +289,9 @@ var multiplePlotsSketch = function(p) {
 
 			points4 = [];
 
-			for ( i = 0; i < uniformStack.length; i++) {
-				points4[i] = new GPoint(i + 0.5 - uniformStack.length / 2, uniformStack[i] / uniformCounter, "point " + i);
+			for (i = 0; i < uniformStack.length; i++) {
+				points4[i] = new GPoint(i + 0.5 - uniformStack.length / 2, uniformStack[i] / uniformCounter, "point "
+						+ i);
 			}
 
 			plot4.setPoints(points4);

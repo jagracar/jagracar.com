@@ -10,8 +10,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="keywords"
-	content="processing, java, kinect, interactive, examples">
+<meta name="keywords" content="processing, java, kinect, interactive, examples">
 <meta name="description" content="Kinect experiments">
 <meta name="author" content="Javier Graciá Carpio">
 <title>Kinect - jagracar</title>
@@ -41,3 +40,4 @@
 	<!-- Footer -->
 	<?php include_once $homeDir . 'footer.php';?>
 </body>
+</html>

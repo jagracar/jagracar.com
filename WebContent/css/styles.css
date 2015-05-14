@@ -226,8 +226,8 @@ th {
  */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../fonts/fontAwesome/fontawesome-webfont.eot?v=4.3.0&1421952751');
-  src: url('../fonts/fontAwesome/fontawesome-webfont.eot?&1421952751#iefix&v=4.3.0') format("embedded-opentype"), url('../fonts/fontAwesome/fontawesome-webfont.woff2?v=4.3.0&1421952751') format("woff2"), url('../fonts/fontAwesome/fontawesome-webfont.woff?v=4.3.0&1421952751') format("woff"), url('../fonts/fontAwesome/fontawesome-webfont.ttf?v=4.3.0&1421952751') format("truetype"), url('../fonts/fontAwesome/fontawesome-webfont.svg?v=4.3.0&1421952751#fontawesomeregular') format("svg");
+  src: url('../fonts/fontAwesome/fontawesome-webfont.eot?v=4.3.0&1431612357');
+  src: url('../fonts/fontAwesome/fontawesome-webfont.eot?&1431612357#iefix&v=4.3.0') format("embedded-opentype"), url('../fonts/fontAwesome/fontawesome-webfont.woff2?v=4.3.0&1431612357') format("woff2"), url('../fonts/fontAwesome/fontawesome-webfont.woff?v=4.3.0&1431612357') format("woff"), url('../fonts/fontAwesome/fontawesome-webfont.ttf?v=4.3.0&1431612357') format("truetype"), url('../fonts/fontAwesome/fontawesome-webfont.svg?v=4.3.0&1431612357#fontawesomeregular') format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -361,30 +361,30 @@ iframe {
 }
 
 @media (max-width: 43em) {
-  .p5js-sideMenu ul {
+  .sketches-list ul {
     overflow: hidden;
     *zoom: 1;
   }
-  .p5js-sideMenu li {
+  .sketches-list li {
     width: 31.03448%;
     float: left;
     margin-right: 3.44828%;
   }
-  .p5js-sideMenu li:nth-of-type(3n+0) {
+  .sketches-list li:nth-of-type(3n+0) {
     width: 31.03448%;
     float: right;
     margin-right: 0;
   }
 }
 @media (min-width: 43em) {
-  .p5js-sideMenu {
+  .sketches-list {
     width: 23.72881%;
     float: left;
     margin-right: 1.69492%;
   }
 }
 @media (min-width: 57em) {
-  .p5js-sideMenu {
+  .sketches-list {
     width: 18.36735%;
     float: left;
     margin-right: 2.04082%;
@@ -392,14 +392,14 @@ iframe {
 }
 
 @media (min-width: 43em) {
-  .p5js-mainContent {
+  .sketch-container {
     width: 74.57627%;
     float: right;
     margin-right: 0;
   }
 }
 @media (min-width: 57em) {
-  .p5js-mainContent {
+  .sketch-container {
     width: 79.59184%;
     float: right;
     margin-right: 0;
@@ -420,14 +420,11 @@ html, body {
 }
 @media (max-width: 43em) {
   .main-container {
-    padding-bottom: 7.5em;
-    margin-bottom: -5em;
+    padding-bottom: 8.5em;
+    margin-bottom: -6em;
   }
 }
 
-/*
- * Footer
- */
 footer {
   max-height: 4em;
   padding: 0.5em 0;
@@ -437,7 +434,7 @@ footer {
 }
 @media (max-width: 43em) {
   footer {
-    max-height: 5em;
+    max-height: 6em;
   }
 }
 footer .separator {
@@ -766,31 +763,31 @@ nav a:hover, nav a:focus {
 }
 
 /*
- * p5.js components
+ * Sketch components
  */
-.p5js-sideMenu h2 {
+.sketches-list h2 {
   margin-left: 0.5em;
 }
 @media (max-width: 43em) {
-  .p5js-sideMenu h2 {
+  .sketches-list h2 {
     display: none;
   }
 }
-.p5js-sideMenu ul {
+.sketches-list ul {
   margin: 0;
   border: 0;
   padding: 0;
 }
-.p5js-sideMenu li {
+.sketches-list li {
   margin-bottom: 0.3em;
   list-style: none;
 }
-.p5js-sideMenu li li {
+.sketches-list li li {
   list-style-image: none;
   list-style-type: none;
   margin-left: 0;
 }
-.p5js-sideMenu a {
+.sketches-list a {
   display: block;
   padding: 0.4em;
   white-space: nowrap;
@@ -806,46 +803,46 @@ nav a:hover, nav a:focus {
   -webkit-transition: background-color 400ms;
   transition: background-color 400ms;
 }
-.p5js-sideMenu a:hover, .p5js-sideMenu a:focus, .p5js-sideMenu a.active-sketch {
+.sketches-list a:hover, .sketches-list a:focus, .sketches-list a.active-sketch {
   text-decoration: none;
   color: white;
   background-color: #999999;
 }
 @media (max-width: 43em) {
-  .p5js-sideMenu a {
+  .sketches-list a {
     font-size: 0.9em;
   }
 }
 @media (max-width: 30em) {
-  .p5js-sideMenu a {
+  .sketches-list a {
     font-size: 0.8em;
   }
 }
 
 @media (max-width: 43em) {
-  .p5js-mainContent {
+  .sketch-container {
     margin-top: 1em;
   }
 }
 @media (min-width: 43em) {
-  .p5js-mainContent {
+  .sketch-container {
     padding-left: 1em;
   }
 }
 
-.p5js-sketch__wrapper {
+.sketch__wrapper {
   overflow: auto;
 }
-.p5js-sketch__canvas {
+.sketch__canvas {
   display: table;
   position: relative;
   margin-left: auto;
   margin-right: auto;
 }
-.p5js-sketch__canvas.is-framed canvas {
+.sketch__canvas.is-framed canvas {
   border: 1px dashed #333333;
 }
-.p5js-sketch__gui {
+.sketch__gui {
   position: absolute;
   right: 0;
 }

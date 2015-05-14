@@ -1,6 +1,6 @@
 var drawingBallsSketch = function(p) {
 	// Global variables
-	var img;
+	var img = undefined;
 	var balls = [];
 
 	// Load the image before the sketch is run
@@ -52,13 +52,13 @@ var drawingBallsSketch = function(p) {
 		}
 
 		// Update the balls positions
-		for ( i = 0; i < balls.length; i++) {
+		for (i = 0; i < balls.length; i++) {
 			balls[i].update();
 		}
 
 		// Check if the balls are in contact and move them in that case
-		for ( i = 0; i < balls.length; i++) {
-			for ( j = 0; j < balls.length; j++) {
+		for (i = 0; i < balls.length; i++) {
+			for (j = 0; j < balls.length; j++) {
 				if (j != i) {
 					balls[i].checkContact(balls[j]);
 				}
@@ -66,7 +66,7 @@ var drawingBallsSketch = function(p) {
 		}
 
 		// Paint the balls in the canvas
-		for ( i = 0; i < balls.length; i++) {
+		for (i = 0; i < balls.length; i++) {
 			balls[i].paint();
 		}
 	};
@@ -78,7 +78,8 @@ var drawingBallsSketch = function(p) {
 		for (var i = 0; i < balls.length; i++) {
 			balls[i].force(p.mouseX, p.mouseY);
 		}
-	};
+	}
+	;
 
 	/*
 	 * The Ball class

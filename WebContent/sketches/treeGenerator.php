@@ -11,8 +11,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="keywords"
-	content="processing, p5.js, P5js, javaScript, examples, tree, simulation, nature, recursion">
+<meta name="keywords" content="processing, p5.js, P5js, javaScript, examples, tree, simulation, nature, recursion">
 <meta name="description" content="p5.js tree generator sketch">
 <meta name="author" content="Javier Graciá Carpio">
 <title>Tree generator sketch - jagracar</title>
@@ -39,25 +38,22 @@
 		</header>
 
 		<!-- Sketch side bar -->
-		<?php include_once $homeDir . 'sketchSideBar.php';?>
+		<?php include_once $homeDir . 'p5jsSketchesList.php';?>
 
-		<div class="p5js-mainContent">
-			<div class="p5js-sketch" id="widthRef">
-				<div class="p5js-sketch__wrapper">
-					<div class="p5js-sketch__canvas is-framed" id="p5js-sketch__canvas"></div>
+		<div class="sketch-container">
+			<div class="sketch" id="widthRef">
+				<div class="sketch__wrapper">
+					<div class="sketch__canvas is-framed" id="sketch__canvas"></div>
 				</div>
 
-				<div class="p5js-sketch__description">
+				<div class="sketch__description">
 					<p>
-						A relatively simple tree generator. The tree grows starting from a
-						single branch using a <a
-							href="http://en.wikipedia.org/wiki/Recursion">recursive</a>
-						procedure. Click the screen to generate a new tree.
+						A relatively simple tree generator. The tree grows starting from a single branch using a <a
+							href="http://en.wikipedia.org/wiki/Recursion">recursive</a> procedure. Click the screen to generate a new tree.
 					</p>
 
 					<p>
-						For more details, check the <a href="sourceCode/treeGenerator.js">source
-							code</a> or play with it at <a
+						For more details, check the <a href="sourceCode/treeGenerator.js">source code</a> or play with it at <a
 							href="http://jsfiddle.net/jagracar/fqduk0wv/">JSFiddle</a>.
 					</p>
 				</div>
@@ -69,12 +65,12 @@
 	<?php include_once $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.4/p5.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.4/p5.min.js"></script>
 	<script src="sourceCode/treeGenerator.js"></script>
 
 	<!-- Run the sketch -->
 	<script>
-	p5Sketch = new p5(treeGeneratorSketch, "p5js-sketch__canvas");
-    </script>
+		var sketch = new p5(treeGeneratorSketch, "sketch__canvas");
+	</script>
 </body>
+</html>

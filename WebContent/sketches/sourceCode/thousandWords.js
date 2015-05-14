@@ -1,6 +1,12 @@
 var thousandWordsSketch = function(p) {
 	// Global variables
-	var img, buffer, phrase, lastLine, nLines, textSize, textLeading;
+	var img = undefined;
+	var buffer = undefined;
+	var phrase = undefined;
+	var lastLine = undefined;
+	var nLines = undefined;
+	var textSize = undefined;
+	var textLeading = undefined;
 	var initPhrase = "Type some\n text...";
 
 	// Load the image before the sketch is run
@@ -12,7 +18,7 @@ var thousandWordsSketch = function(p) {
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvas;
+		var maxCanvasWidth;
 
 		// Needed for mobile devices
 		p.devicePixelScaling(false);
@@ -25,7 +31,7 @@ var thousandWordsSketch = function(p) {
 		}
 
 		// Create the canvas
-		canvas = p.createCanvas(img.width, img.height);
+		p.createCanvas(img.width, img.height);
 
 		// Initialize the global variables
 		phrase = initPhrase;
@@ -126,8 +132,8 @@ var thousandWordsSketch = function(p) {
 		bufferImg.loadPixels();
 		img.loadPixels();
 
-		for ( x = 0; x < bufferImg.width; x++) {
-			for ( y = 0; y < bufferImg.height; y++) {
+		for (x = 0; x < bufferImg.width; x++) {
+			for (y = 0; y < bufferImg.height; y++) {
 				pixel = 4 * (x + y * bufferImg.width);
 
 				if (bufferImg.pixels[pixel] === 255) {

@@ -1,107 +1,106 @@
 /*
  * General layout
  */
-
 // Susy map
 $susy: (
-  columns: 12,
-  container: 90%,
-  global-box-sizing: "border-box",
-  /*
-  debug: (
-    image: show,
-    output: overlay
-  )
-  */
+	columns: 12,
+	container: 90%,
+	global-box-sizing: "border-box",
+	/*
+	debug: (
+		image: show,
+		output: overlay
+	)
+	*/
 );
 
 // Box sizing model 
 @include border-box-sizing;
 
 .main-container, footer {
-  @include container;
+	@include container;
 }
 
-.cv-keyValueList {  
-  @include clearfix; 
+.cv-keyValueList {
+	@include clearfix; 
 
-  li {
-    @include break;
-  }
+	li {
+		@include break;
+	}
 
-  &__key {
-    @include span(1 of 3);
-  }
+	&__key {
+		@include span(1 of 3);
+	}
   
-  &__value {
-    @include span(2 of 3 last);
-  }
+	&__value {
+		@include span(2 of 3 last);
+	}
 
-  @include breakpoint($M) {
-    &__key {
-      @include span(1 of 4);
-    }
+	@include breakpoint($M) {
+		&__key {
+			@include span(1 of 4);
+		}
   
-    &__value {
-      @include span(3 of 4 last);
-    }
-  }
+		&__value {
+			@include span(3 of 4 last);
+		}
+	}
 
-  @include breakpoint($L) {
-    &__key {
-      @include span(2);
-    }
+	@include breakpoint($L) {
+		&__key {
+			@include span(2);
+		}
   
-    &__value {
-      @include span(10 last);
-    }
-  }
+		&__value {
+			@include span(10 last);
+		}
+	}
 }
 
 .cv-achievement {
-  @include breakpoint($M) {
-    @include clearfix;
+	@include breakpoint($M) {
+		@include clearfix;
    
-    &__period{
-      @include span(3);
-    }
+		&__period{
+			@include span(3);
+		}
   
-    &__description {
-      @include span(9 last);
-    }
-  }
+		&__description {
+			@include span(9 last);
+		}
+	}
 }
 
-.p5js-sideMenu {
-  @include breakpoint(max-width $M) {
-    ul {
-      @include clearfix;
-    }
+.sketches-list {
+	@include breakpoint(max-width $M) {
+		ul {
+			@include clearfix;
+		}
   
-    li {
-      @include span(2 of 6); 
+		li {
+			@include span(2 of 6); 
 
-      &:nth-of-type(3n+0) {
-        @include span(2 of 6 last);
-      }
-    }
-  }
+			&:nth-of-type(3n+0) {
+				@include span(2 of 6 last);
+			}
+		}
+	}
 
-  @include breakpoint($M) {
-    @include span(3);
-  }
+	@include breakpoint($M) {
+		@include span(3);
+	}
   
-  @include breakpoint($L) {
-    @include span(2 of 10);
-  }
+	@include breakpoint($L) {
+		@include span(2 of 10);
+	}
 }
 
-.p5js-mainContent {
-  @include breakpoint($M) {
-    @include span(9 last);
-  }
+.sketch-container {
+	@include breakpoint($M) {
+		@include span(9 last);
+	}
 
-  @include breakpoint($L) {
-    @include span(8 of 10 last);
-  }
+	@include breakpoint($L) {
+		@include span(8 of 10 last);
+	}
 }

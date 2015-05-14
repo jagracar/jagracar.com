@@ -1,6 +1,8 @@
 var recursivePuzzleSketch = function(p) {
 	// Global variables
-	var img, puzzle, step;
+	var img = undefined;
+	var puzzle = undefined;
+	var step = undefined;
 	var pieceSize = 64;
 	var minPieceSize = pieceSize;
 	var nSteps = 16;
@@ -30,7 +32,8 @@ var recursivePuzzleSketch = function(p) {
 		canvas = p.createCanvas(img.width, img.height);
 		p.frameRate(20);
 
-		// Initiate a new puzzle each time the mouse is pressed inside the canvas
+		// Initiate a new puzzle each time the mouse is pressed inside the
+		// canvas
 		canvas.mousePressed(newPuzzle);
 
 		// Initiate a new puzzle
@@ -86,7 +89,7 @@ var recursivePuzzleSketch = function(p) {
 	// Calculate the next hole position
 	//
 	Hole.prototype.nextMove = function(minPos, maxPos) {
-		switch(Math.floor(4* Math.random())) {
+		switch (Math.floor(4 * Math.random())) {
 		case 0:
 			if (this.pos.x + this.size >= maxPos.x || this.size === -this.movementDir.x) {
 				this.nextMove(minPos, maxPos);
@@ -197,8 +200,8 @@ var recursivePuzzleSketch = function(p) {
 		xHole = Math.floor(Math.random() * this.width / pieceSize);
 		yHole = Math.floor(Math.random() * this.height / pieceSize);
 
-		for ( x = 0; x < this.width / pieceSize; x++) {
-			for ( y = 0; y < this.height / pieceSize; y++) {
+		for (x = 0; x < this.width / pieceSize; x++) {
+			for (y = 0; y < this.height / pieceSize; y++) {
 				elementPos = p.createVector(this.pos.x + x * pieceSize, this.pos.y + y * pieceSize);
 
 				if (x === xHole && y === yHole) {
@@ -233,7 +236,7 @@ var recursivePuzzleSketch = function(p) {
 		}
 
 		// Calculate the next puzzle move in all the sub-puzzles
-		for ( i = 0; i < this.pieces.length; i++) {
+		for (i = 0; i < this.pieces.length; i++) {
 			if (this.pieces[i].puzzle) {
 				this.pieces[i].puzzle.nextMove();
 			}

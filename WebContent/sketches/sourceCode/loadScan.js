@@ -1,5 +1,10 @@
 function runSketch() {
-	var scene, renderer, camera, controls, spotLight, ambientLight;
+	var scene = undefined;
+	var renderer = undefined;
+	var camera = undefined;
+	var controls = undefined;
+	var spotLight = undefined;
+	var ambientLight = undefined;
 
 	init();
 	animate();
@@ -50,7 +55,7 @@ function runSketch() {
 
 	function animate() {
 		controls.update();
-		spotLight.position.set(camera.position.x,camera.position.y, camera.position.z);
+		spotLight.position.set(camera.position.x, camera.position.y, camera.position.z);
 
 		requestAnimationFrame(animate);
 		renderer.render(scene, camera);
@@ -84,11 +89,11 @@ function runSketch() {
 		scan.createPointCloud(4);
 
 		// Add the mesh to the scene
-		//scene.remove(scan.mesh);
+		// scene.remove(scan.mesh);
 		scene.add(scan.pointCloud);
-		//scene.remove(scan.pointCloud);
-		//scene.add(scan.frontMesh);
-		//scene.add(scan.backMesh);
+		// scene.remove(scan.pointCloud);
+		// scene.add(scan.frontMesh);
+		// scene.add(scan.backMesh);
 	}
 
 	/*
@@ -131,12 +136,14 @@ function runSketch() {
 		this.colors = [];
 		this.visible = [];
 
-		for ( i = 1; i < scanLines.length; i++) {
+		for (i = 1; i < scanLines.length; i++) {
 			pointData = scanLines[i].split(" ");
 
 			if (pointData[3] >= 0) {
-				this.points[i] = new THREE.Vector3(parseFloat(pointData[0]), parseFloat(pointData[1]), parseFloat(pointData[2]));
-				this.colors[i] = new THREE.Color(parseFloat(pointData[3]) / 255, parseFloat(pointData[4]) / 255, parseFloat(pointData[5]) / 255);
+				this.points[i] = new THREE.Vector3(parseFloat(pointData[0]), parseFloat(pointData[1]),
+						parseFloat(pointData[2]));
+				this.colors[i] = new THREE.Color(parseFloat(pointData[3]) / 255, parseFloat(pointData[4]) / 255,
+						parseFloat(pointData[5]) / 255);
 				this.visible[i] = true;
 			} else {
 				this.points[i] = undefined;
@@ -166,12 +173,12 @@ function runSketch() {
 		this.end = [];
 		this.empty = [];
 
-		for ( y = 0; y < this.height; y++) {
+		for (y = 0; y < this.height; y++) {
 			this.ini[y] = undefined;
 			this.end[y] = undefined;
 			this.empty[y] = true;
 
-			for ( x = 0; x < this.width; x++) {
+			for (x = 0; x < this.width; x++) {
 				if (this.points[x + y * this.width]) {
 					if (this.empty[y]) {
 						this.ini[y] = x;
@@ -193,9 +200,9 @@ function runSketch() {
 		this.centralPosition = new THREE.Vector3();
 		minDistanceSq = Number.MAX_VALUE;
 
-		for ( y = 0; y < this.height; y++) {
+		for (y = 0; y < this.height; y++) {
 			if (!this.empty[y]) {
-				for ( x = this.ini[y]; x <= this.end[y]; x++) {
+				for (x = this.ini[y]; x <= this.end[y]; x++) {
 					point = this.points[x + y * this.width];
 
 					if (point) {
@@ -217,27 +224,28 @@ function runSketch() {
 	 * Calculates the point normals
 	 */
 	Scan.prototype.calculatePointNormals = function() {
-		var averageNormal, v1, v2, perp, x, y, pixel, counter;
+		var averageNormal, v1, v2, perp, i, x, y, pixel, counter;
 		averageNormal = new THREE.Vector3();
 		v1 = new THREE.Vector3();
 		v2 = new THREE.Vector3();
 		perp = new THREE.Vector3();
 
 		this.normals = [];
-		for ( i = 0; i < this.width * this.height; i++) {
+		for (i = 0; i < this.width * this.height; i++) {
 			this.normals[i] = undefined;
 		}
 
-		for ( y = 0; y < this.height; y++) {
+		for (y = 0; y < this.height; y++) {
 			if (!this.empty[y]) {
-				for ( x = this.ini[y]; x <= this.end[y]; x++) {
+				for (x = this.ini[y]; x <= this.end[y]; x++) {
 					pixel = x + y * this.width;
 
 					if (this.points[pixel]) {
 						averageNormal.set(0, 0, 0);
 						counter = 0;
 
-						if (x + 1 < this.width && y + 1 < this.height && this.points[pixel + 1] && this.points[pixel + this.width]) {
+						if (x + 1 < this.width && y + 1 < this.height && this.points[pixel + 1]
+								&& this.points[pixel + this.width]) {
 							v1.subVectors(this.points[pixel + 1], this.points[pixel]);
 							v2.subVectors(this.points[pixel + this.width], this.points[pixel]);
 							perp.crossVectors(v1, v2);
@@ -246,7 +254,8 @@ function runSketch() {
 							counter++;
 						}
 
-						if (x - 1 >= 0 && y + 1 < this.height && this.points[pixel - 1] && this.points[pixel + this.width]) {
+						if (x - 1 >= 0 && y + 1 < this.height && this.points[pixel - 1]
+								&& this.points[pixel + this.width]) {
 							v1.subVectors(this.points[pixel + this.width], this.points[pixel]);
 							v2.subVectors(this.points[pixel - 1], this.points[pixel]);
 							perp.crossVectors(v1, v2);
@@ -264,7 +273,8 @@ function runSketch() {
 							counter++;
 						}
 
-						if (x + 1 < this.width && y - 1 >= 0 && this.points[pixel + 1] && this.points[pixel - this.width]) {
+						if (x + 1 < this.width && y - 1 >= 0 && this.points[pixel + 1]
+								&& this.points[pixel - this.width]) {
 							v1.subVectors(this.points[pixel - this.width], this.points[pixel]);
 							v2.subVectors(this.points[pixel + 1], this.points[pixel]);
 							perp.crossVectors(v1, v2);
@@ -302,7 +312,7 @@ function runSketch() {
 		colorsExt = [];
 		visibleExt = [];
 
-		for ( i = 0; i < widthExt * heightExt; i++) {
+		for (i = 0; i < widthExt * heightExt; i++) {
 			pointsExt[i] = undefined;
 			colorsExt[i] = undefined;
 			visibleExt[i] = undefined;
@@ -321,9 +331,9 @@ function runSketch() {
 			yStart = heightExt - this.height;
 		}
 
-		for ( y = 0; y < this.height; y++) {
+		for (y = 0; y < this.height; y++) {
 			if (!this.empty[y]) {
-				for ( x = this.ini[y]; x <= this.end[y]; x++) {
+				for (x = this.ini[y]; x <= this.end[y]; x++) {
 					pixel = x + y * this.width;
 					pixelExt = (xStart + x) + (yStart + y) * widthExt;
 					pointsExt[pixelExt] = this.points[pixel];
@@ -356,7 +366,7 @@ function runSketch() {
 			colorsExt = [];
 			visibleExt = [];
 
-			for ( i = 0; i < widthExt * heightExt; i++) {
+			for (i = 0; i < widthExt * heightExt; i++) {
 				pointsExt[i] = undefined;
 				colorsExt[i] = undefined;
 				visibleExt[i] = undefined;
@@ -366,9 +376,9 @@ function runSketch() {
 			xStart = Math.floor((widthExt - this.width) / 2);
 			yStart = Math.floor((heightExt - this.height) / 2);
 
-			for ( y = 0; y < this.height; y++) {
+			for (y = 0; y < this.height; y++) {
 				if (!this.empty[y]) {
-					for ( x = this.ini[y]; x <= this.end[y]; x++) {
+					for (x = this.ini[y]; x <= this.end[y]; x++) {
 						pixel = x + y * this.width;
 						pixelExt = (xStart + x) + (yStart + y) * widthExt;
 						pointsExt[pixelExt] = this.points[pixel];
@@ -403,7 +413,7 @@ function runSketch() {
 		yIni = xIni;
 		yEnd = -xIni;
 
-		for ( y = 0; y < this.width; y++) {
+		for (y = 0; y < this.width; y++) {
 			if (!this.empty[y]) {
 				if (this.ini[y] < xIni) {
 					xIni = this.ini[y];
@@ -433,15 +443,15 @@ function runSketch() {
 			colorsCrop = [];
 			visibleCrop = [];
 
-			for ( i = 0; i < widthCrop * heightCrop; i++) {
+			for (i = 0; i < widthCrop * heightCrop; i++) {
 				pointsCrop[i] = undefined;
 				colorsCrop[i] = undefined;
 				visibleCrop[i] = undefined;
 			}
 
 			// Populate the arrays
-			for ( y = 0; y < heightCrop; y++) {
-				for ( x = 0; x < widthCrop; x++) {
+			for (y = 0; y < heightCrop; y++) {
+				for (x = 0; x < widthCrop; x++) {
 					pixelCrop = x + y * widthCrop;
 					pixel = (xIni + x) + (yIni + y) * this.width;
 					pointsCrop[pixelCrop] = this.points[pixel];
@@ -482,15 +492,15 @@ function runSketch() {
 			colorsRed = [];
 			visibleRed = [];
 
-			for ( i = 0; i < widthRed * heightRed; i++) {
+			for (i = 0; i < widthRed * heightRed; i++) {
 				pointsRed[i] = undefined;
 				colorsRed[i] = undefined;
 				visibleRed[i] = undefined;
 			}
 
 			// Populate the arrays
-			for ( y = 0; y < heightRed; y++) {
-				for ( x = 0; x < widthRed; x++) {
+			for (y = 0; y < heightRed; y++) {
+				for (x = 0; x < widthRed; x++) {
 					// Average between nearby pixels
 					delta = Math.floor(n / 2);
 					point = new THREE.Vector3();
@@ -500,8 +510,8 @@ function runSketch() {
 					visible = false;
 					counter = 0;
 
-					for ( i = -delta; i <= delta; i++) {
-						for ( j = -delta; j <= delta; j++) {
+					for (i = -delta; i <= delta; i++) {
+						for (j = -delta; j <= delta; j++) {
 							xNearby = x * n + i;
 							yNearby = y * n + j;
 
@@ -547,9 +557,9 @@ function runSketch() {
 	Scan.prototype.scaleFactor = function(f) {
 		var x, y;
 
-		for ( y = 0; y < this.height; y++) {
+		for (y = 0; y < this.height; y++) {
 			if (!this.empty[y]) {
-				for ( x = this.ini[y]; x <= this.end[y]; x++) {
+				for (x = this.ini[y]; x <= this.end[y]; x++) {
 					this.points[x + y * this.width].multiplyScalar(f);
 				}
 			}
@@ -562,15 +572,16 @@ function runSketch() {
 	Scan.prototype.constrainPoints = function(xMin, xMax, yMin, yMax, zMin, zMax) {
 		var x, y, pixel, point;
 
-		for ( y = 0; y < this.height; y++) {
+		for (y = 0; y < this.height; y++) {
 			if (!this.empty[y]) {
-				for ( x = this.ini[y]; x <= this.end[y]; x++) {
+				for (x = this.ini[y]; x <= this.end[y]; x++) {
 					// Check only those points that are still visible
 					pixel = x + y * this.width;
 					point = this.points[pixel];
 
 					if (point && this.visible[pixel]) {
-						if (point.x < xMin || point.x > xMax || point.y < yMin || point.y > yMax || point.z < zMin || point.z > zMax) {
+						if (point.x < xMin || point.x > xMax || point.y < yMin || point.y > yMax || point.z < zMin
+								|| point.z > zMax) {
 							this.visible[pixel] = false;
 						}
 					}
@@ -585,9 +596,9 @@ function runSketch() {
 	Scan.prototype.resetVisiblePoints = function() {
 		var x, y, pixel;
 
-		for ( y = 0; y < this.height; y++) {
+		for (y = 0; y < this.height; y++) {
 			if (!this.empty[y]) {
-				for ( x = this.ini[y]; x <= this.end[y]; x++) {
+				for (x = this.ini[y]; x <= this.end[y]; x++) {
 					pixel = x + y * this.width;
 
 					if (this.points[pixel]) {
@@ -604,16 +615,16 @@ function runSketch() {
 	Scan.prototype.fillHoles = function(maxHoles) {
 		var x, y, start, finish, i, step, deltaPos, deltaR, deltaG, deltaB, visible;
 
-		for ( y = 0; y < this.height; y++) {
+		for (y = 0; y < this.height; y++) {
 			if (!this.empty[y]) {
 				// Find holes in the line
-				for ( x = this.ini[y] + 1; x < this.end[y]; x++) {
+				for (x = this.ini[y] + 1; x < this.end[y]; x++) {
 					if (!this.points[x + y * this.width]) {
 						// Calculate the limits of the hole
 						start = (x - 1) + y * this.width;
 						finish = start;
 
-						for ( i = x + 1; i <= this.end[y]; i++) {
+						for (i = x + 1; i <= this.end[y]; i++) {
 							if (this.points[i + y * this.width]) {
 								finish = i + y * this.width;
 								// the x loop will continue from here
@@ -632,9 +643,10 @@ function runSketch() {
 							deltaB = step * (this.colors[finish].b - this.colors[start].b);
 							visible = this.visible[start] && this.visible[finish];
 
-							for ( i = start + 1; i < finish; i++) {
+							for (i = start + 1; i < finish; i++) {
 								this.points[i] = new THREE.Vector3().addVectors(this.points[i - 1], deltaPos);
-								this.colors[i] = new THREE.Color(this.colors[i - 1].r + deltaR, this.colors[i - 1].g + deltaG, this.colors[i - 1].b + deltaB);
+								this.colors[i] = new THREE.Color(this.colors[i - 1].r + deltaR, this.colors[i - 1].g
+										+ deltaG, this.colors[i - 1].b + deltaB);
 								this.visible[i] = visible;
 							}
 						}
@@ -662,10 +674,10 @@ function runSketch() {
 			// Create the Gaussian kernel
 			kernel = [];
 
-			for ( i = -n; i <= n; i++) {
+			for (i = -n; i <= n; i++) {
 				row = [];
 
-				for ( j = -n; j <= n; j++) {
+				for (j = -n; j <= n; j++) {
 					distSq = i * i + j * j;
 
 					if (distSq <= n * n) {
@@ -681,14 +693,14 @@ function runSketch() {
 			// Prepare the array with the smoothed points
 			pointsSm = [];
 
-			for ( i = 0; i < this.width * this.height; i++) {
+			for (i = 0; i < this.width * this.height; i++) {
 				pointsSm[i] = undefined;
 			}
 
 			// Populate the array
-			for ( y = 0; y < this.height; y++) {
+			for (y = 0; y < this.height; y++) {
 				if (!this.empty[y]) {
-					for ( x = this.ini[y]; x <= this.end[y]; x++) {
+					for (x = this.ini[y]; x <= this.end[y]; x++) {
 						pixel = x + y * this.width;
 						center = this.points[pixel];
 
@@ -697,8 +709,8 @@ function runSketch() {
 							point = new THREE.Vector3();
 							counter = 0;
 
-							for ( i = -n; i <= n; i++) {
-								for ( j = -n; j <= n; j++) {
+							for (i = -n; i <= n; i++) {
+								for (j = -n; j <= n; j++) {
 									if (x + i >= 0 && x + i < this.width && y + j >= 0 && y + j < this.height) {
 										pointNearby = this.points[x + i + (y + j) * this.width];
 
@@ -736,7 +748,7 @@ function runSketch() {
 		// Prepare order array
 		order = [];
 
-		for ( i = 0; i < this.widht * this.height; i++) {
+		for (i = 0; i < this.widht * this.height; i++) {
 			order[i] = undefined;
 		}
 
@@ -745,9 +757,9 @@ function runSketch() {
 		backVertices = [];
 		counter = 0;
 
-		for ( y = 0; y < this.height; y++) {
+		for (y = 0; y < this.height; y++) {
 			if (!this.empty[y]) {
-				for ( x = this.ini[y]; x <= this.end[y]; x++) {
+				for (x = this.ini[y]; x <= this.end[y]; x++) {
 					pixel = x + y * this.width;
 
 					if (this.points[pixel] && this.visible[pixel]) {
@@ -764,12 +776,12 @@ function runSketch() {
 		faces = [];
 		counter = 0;
 
-		for ( y = 0; y < this.height - 1; y++) {
+		for (y = 0; y < this.height - 1; y++) {
 			if (!this.empty[y] && !this.empty[y + 1]) {
 				xStart = Math.min(this.ini[y], this.ini[y + 1]);
 				xEnd = Math.max(this.end[y], this.end[y + 1]);
 
-				for ( x = xStart; x < xEnd; x++) {
+				for (x = xStart; x < xEnd; x++) {
 					pixel1 = x + y * this.width;
 					pixel2 = pixel1 + 1;
 					pixel3 = pixel2 + this.width;
@@ -781,26 +793,34 @@ function runSketch() {
 
 					// First triangle
 					if (this.visible[pixel1] && this.visible[pixel4] && p1.distanceToSquared(p4) < this.maxSeparationSq) {
-						if (this.visible[pixel2] && p1.distanceToSquared(p2) < this.maxSeparationSq && p4.distanceToSquared(p2) < this.maxSeparationSq) {
+						if (this.visible[pixel2] && p1.distanceToSquared(p2) < this.maxSeparationSq
+								&& p4.distanceToSquared(p2) < this.maxSeparationSq) {
 							faces[counter] = new THREE.Face3(order[pixel1], order[pixel2], order[pixel4]);
-							faces[counter].vertexColors = [this.colors[pixel1], this.colors[pixel2], this.colors[pixel4]];
+							faces[counter].vertexColors = [ this.colors[pixel1], this.colors[pixel2],
+									this.colors[pixel4] ];
 							counter++;
-						} else if (this.visible[pixel3] && p1.distanceToSquared(p3) < this.maxSeparationSq && p4.distanceToSquared(p3) < this.maxSeparationSq) {
+						} else if (this.visible[pixel3] && p1.distanceToSquared(p3) < this.maxSeparationSq
+								&& p4.distanceToSquared(p3) < this.maxSeparationSq) {
 							faces[counter] = new THREE.Face3(order[pixel1], order[pixel3], order[pixel4]);
-							faces[counter].vertexColors = [this.colors[pixel1], this.colors[pixel3], this.colors[pixel4]];
+							faces[counter].vertexColors = [ this.colors[pixel1], this.colors[pixel3],
+									this.colors[pixel4] ];
 							counter++;
 						}
 					}
 
 					// Second triangle
 					if (this.visible[pixel2] && this.visible[pixel3] && p2.distanceToSquared(p3) < this.maxSeparationSq) {
-						if (this.visible[pixel4] && p2.distanceToSquared(p4) < this.maxSeparationSq && p3.distanceToSquared(p4) < this.maxSeparationSq) {
+						if (this.visible[pixel4] && p2.distanceToSquared(p4) < this.maxSeparationSq
+								&& p3.distanceToSquared(p4) < this.maxSeparationSq) {
 							faces[counter] = new THREE.Face3(order[pixel2], order[pixel3], order[pixel4]);
-							faces[counter].vertexColors = [this.colors[pixel2], this.colors[pixel3], this.colors[pixel4]];
+							faces[counter].vertexColors = [ this.colors[pixel2], this.colors[pixel3],
+									this.colors[pixel4] ];
 							counter++;
-						} else if (this.visible[pixel1] && p2.distanceToSquared(p1) < this.maxSeparationSq && p3.distanceToSquared(p1) < this.maxSeparationSq) {
+						} else if (this.visible[pixel1] && p2.distanceToSquared(p1) < this.maxSeparationSq
+								&& p3.distanceToSquared(p1) < this.maxSeparationSq) {
 							faces[counter] = new THREE.Face3(order[pixel1], order[pixel2], order[pixel3]);
-							faces[counter].vertexColors = [this.colors[pixel1], this.colors[pixel2], this.colors[pixel3]];
+							faces[counter].vertexColors = [ this.colors[pixel1], this.colors[pixel2],
+									this.colors[pixel3] ];
 							counter++;
 						}
 					}
@@ -853,7 +873,7 @@ function runSketch() {
 		colors = [];
 		counter = 0;
 
-		for ( i = 0; i < this.points.length; i++) {
+		for (i = 0; i < this.points.length; i++) {
 			if (this.points[i] && this.visible[i]) {
 				vertices[counter] = this.points[i];
 				colors[counter] = this.colors[i];

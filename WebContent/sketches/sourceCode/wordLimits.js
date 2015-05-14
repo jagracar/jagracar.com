@@ -5,7 +5,7 @@ var wordLimitsSketch = function(p) {
 	var bgColor = 255;
 	var obstacleColor = 130;
 	var inclination = p.random(-0.05, 0.05);
-	var limits;
+	var limits = undefined;
 
 	// Initial setup
 	p.setup = function() {
@@ -25,7 +25,7 @@ var wordLimitsSketch = function(p) {
 		}
 
 		// Create the canvas
-		var canvas = p.createCanvas(canvasWidth, canvasHeight);
+		canvas = p.createCanvas(canvasWidth, canvasHeight);
 
 		// Reset the sketch each time the mouse is pressed inside the canvas
 		canvas.mousePressed(resetSketch);
@@ -88,16 +88,17 @@ var wordLimitsSketch = function(p) {
 
 		p.loadPixels();
 
-		for ( y = 0; y < p.height; y++) {
-			for ( x = 0; x < p.width; x++) {
+		for (y = 0; y < p.height; y++) {
+			for (x = 0; x < p.width; x++) {
 				pixel = x + y * p.width;
 				isLimit = false;
 
 				if (p.pixels[4 * pixel] === obstacleColor) {
 					// Check the nearby pixels for a color change
-					for ( dx = -1; dx <= 1; dx++) {
-						for ( dy = -1; dy <= 1; dy++) {
-							// Don't calculate more if we already know that it's a limit
+					for (dx = -1; dx <= 1; dx++) {
+						for (dy = -1; dy <= 1; dy++) {
+							// Don't calculate more if we already know that it's
+							// a limit
 							if (!isLimit) {
 								px = x + dx;
 								py = y + dy;
@@ -188,7 +189,8 @@ var wordLimitsSketch = function(p) {
 	// Update the particle position and velocity
 	//
 	Particle.prototype.update = function(limits) {
-		// Calculate the box center and box size where we should search for collisions
+		// Calculate the box center and box size where we should search for
+		// collisions
 		var boxCenterX = Math.round(this.pos.x + 0.5 * this.vel.x);
 		var boxCenterY = Math.round(this.pos.y + 0.5 * this.vel.y);
 		var boxHalfSizeX = Math.abs(Math.ceil(0.5 * this.vel.x)) + 1;
@@ -201,14 +203,15 @@ var wordLimitsSketch = function(p) {
 		var minPerpDistSq = 0.5;
 		var collides = false;
 
-		for ( dx = -boxHalfSizeX; dx <= boxHalfSizeX; dx++) {
-			for ( dy = -boxHalfSizeY; dy <= boxHalfSizeY; dy++) {
+		for (dx = -boxHalfSizeX; dx <= boxHalfSizeX; dx++) {
+			for (dy = -boxHalfSizeY; dy <= boxHalfSizeY; dy++) {
 				x = boxCenterX + dx;
 				y = boxCenterY + dy;
 
 				// Check if there is a limit in that pixel
 				if (x >= 0 && x < p.width && y >= 0 && y < p.height && limits[x + y * p.width]) {
-					// Calculate the parallel and perpendicular distances to the velocity direction
+					// Calculate the parallel and perpendicular distances to the
+					// velocity direction
 					distX = x - this.pos.x;
 					distY = y - this.pos.y;
 					dotProduct = this.vel.x * distX + this.vel.y * distY;
@@ -231,8 +234,8 @@ var wordLimitsSketch = function(p) {
 			var l1DistSq = Number.MAX_VALUE;
 			var l2DistSq = Number.MAX_VALUE;
 
-			for ( dx = -1; dx <= 1; dx++) {
-				for ( dy = -1; dy <= 1; dy++) {
+			for (dx = -1; dx <= 1; dx++) {
+				for (dy = -1; dy <= 1; dy++) {
 					if (!(dx === 0 && dy === 0)) {
 						x = colX + dx;
 						y = colY + dy;

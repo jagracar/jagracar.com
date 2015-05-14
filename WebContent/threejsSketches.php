@@ -10,8 +10,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="keywords"
-	content="processing, java, three.js, interactive, examples, 3D">
+<meta name="keywords" content="processing, java, three.js, interactive, examples, 3D">
 <meta name="description" content="Three.js experiments">
 <meta name="author" content="Javier Graciá Carpio">
 <title>three.js - jagracar</title>
@@ -32,18 +31,19 @@
 
 	<div class="main-container">
 		<header>
-			<h1><a href="<?php echo $homeDir;?>threejsSketches.php">Three.js sketches</a></h1>
+			<h1>
+				<a href="<?php echo $homeDir;?>threejsSketches.php">Three.js sketches</a>
+			</h1>
 		</header>
 
 		<!-- Examples side bar -->
-		<?php include_once $homeDir . 'threejsExamplesSideBar.php';?>
+		<?php include_once $homeDir . 'threejsSketchesList.php';?>
 
-		<div class="p5js-mainContent">
+		<div class="sketch-container">
 			<h2>The three.js library</h2>
 
 			<p>
-				Some experiments done with the <a href="http://threejs.org/">three.js</a>
-				library.
+				Some experiments done with the <a href="http://threejs.org/">three.js</a> library.
 			</p>
 		</div>
 	</div>
@@ -51,3 +51,4 @@
 	<!-- Footer -->
 	<?php include_once $homeDir . 'footer.php';?>
 </body>
+</html>

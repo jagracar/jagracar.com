@@ -1,10 +1,10 @@
 var flaringStarSketch = function(p) {
 	// Global variables
-	var star;
+	var star = undefined;
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight, canvas;
+		var maxCanvasWidth, canvasWidth, canvasHeight;
 		var position, radius, fadingFactor, flaresActivity, imageWidth;
 
 		// Resize the canvas if necessary
@@ -18,7 +18,7 @@ var flaringStarSketch = function(p) {
 		}
 
 		// Create the canvas
-		canvas = p.createCanvas(canvasWidth, canvasHeight);
+		p.createCanvas(canvasWidth, canvasHeight);
 
 		// Create the star
 		position = p.createVector(p.width / 2, p.height / 2);
@@ -67,8 +67,8 @@ var flaringStarSketch = function(p) {
 
 		this.body.loadPixels();
 
-		for ( x = 0; x < this.imageWidth; x++) {
-			for ( y = 0; y < this.imageWidth; y++) {
+		for (x = 0; x < this.imageWidth; x++) {
+			for (y = 0; y < this.imageWidth; y++) {
 				pixel = 4 * (x + y * this.imageWidth);
 				distanceSq = p.sq(x - center) + p.sq(y - center);
 				this.body.pixels[pixel] = 255;
@@ -86,16 +86,17 @@ var flaringStarSketch = function(p) {
 	//
 	Star.prototype.update = function() {
 		var radiusSq, center, nPixels, x, y, deltaX, deltaY, pixel, distanceSq;
-		var relativeAngle, dx, dy, sumColor, counter, pixelColor;
+		var relativeAngle, dx, dy, sumColor, counter, pixelColor, i;
 		radiusSq = p.sq(this.radius);
 		center = this.imageWidth / 2;
 		nPixels = p.sq(this.imageWidth);
 
-		// Create the flares in the star's body (save the result in the red channel)
+		// Create the flares in the star's body (save the result in the red
+		// channel)
 		this.flares.loadPixels();
 
-		for ( x = 0; x < this.imageWidth; x++) {
-			for ( y = 0; y < this.imageWidth; y++) {
+		for (x = 0; x < this.imageWidth; x++) {
+			for (y = 0; y < this.imageWidth; y++) {
 				deltaX = x - center;
 				deltaY = y - center;
 				distanceSq = p.sq(deltaX) + p.sq(deltaY);
@@ -108,14 +109,15 @@ var flaringStarSketch = function(p) {
 					}
 
 					pixel = 4 * (x + y * this.imageWidth);
-					this.flares.pixels[pixel] = 255 * p.noise(0.1 * (Math.sqrt(distanceSq) - this.timeCounter), 10 * relativeAngle);
+					this.flares.pixels[pixel] = 255 * p.noise(0.1 * (Math.sqrt(distanceSq) - this.timeCounter),
+							10 * relativeAngle);
 				}
 			}
 		}
 
 		// Smooth the flares (save the result in the blue and alpha channels)
-		for ( x = 2; x < this.imageWidth - 2; x++) {
-			for ( y = 2; y < this.imageWidth - 2; y++) {
+		for (x = 2; x < this.imageWidth - 2; x++) {
+			for (y = 2; y < this.imageWidth - 2; y++) {
 				pixel = 4 * (x + y * this.imageWidth);
 				deltaX = x - center;
 				deltaY = y - center;
@@ -124,8 +126,8 @@ var flaringStarSketch = function(p) {
 				counter = 0;
 
 				// Loop over nearby pixels
-				for ( dx = -2; dx <= 2; dx++) {
-					for ( dy = -2; dy <= 2; dy++) {
+				for (dx = -2; dx <= 2; dx++) {
+					for (dy = -2; dy <= 2; dy++) {
 						if (p.sq(deltaX + dx) + p.sq(deltaY + dy) < distanceSq) {
 							sumColor += this.flares.pixels[pixel + 4 * (dx + dy * this.imageWidth)];
 							counter++;
@@ -144,7 +146,7 @@ var flaringStarSketch = function(p) {
 		}
 
 		// Update the flares image (i.e. the red and green channels)
-		for ( i = 0; i < nPixels; i++) {
+		for (i = 0; i < nPixels; i++) {
 			pixel = 4 * i;
 			pixelColor = this.flares.pixels[pixel + 2];
 			this.flares.pixels[pixel] = pixelColor;

@@ -1,7 +1,7 @@
 var multiplePanelsSketch = function(p) {
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight, canvas;
+		var maxCanvasWidth, canvasWidth, canvasHeight;
 		var firstPlotPos, margins, panelDim, plot1, plot2, plot3, plot4;
 		var nPoints, points1, points2, points3, points4, i;
 
@@ -16,12 +16,12 @@ var multiplePanelsSketch = function(p) {
 		}
 
 		// Create the canvas
-		canvas = p.createCanvas(canvasWidth, canvasHeight);
+		p.createCanvas(canvasWidth, canvasHeight);
 
 		// Define panel properties
-		firstPlotPos = [0, 0];
-		margins = [60, 70, 40, 30];
-		panelDim = [0.5 * (p.width - margins[1] - margins[3]), 0.5 * (p.width - margins[0] - margins[2])];
+		firstPlotPos = [ 0, 0 ];
+		margins = [ 60, 70, 40, 30 ];
+		panelDim = [ 0.5 * (p.width - margins[1] - margins[3]), 0.5 * (p.width - margins[0] - margins[2]) ];
 
 		// Create four plots to represent the 4 panels
 		plot1 = new GPlot(p);
@@ -63,7 +63,7 @@ var multiplePanelsSketch = function(p) {
 		points3 = [];
 		points4 = [];
 
-		for ( i = 0; i < nPoints; i++) {
+		for (i = 0; i < nPoints; i++) {
 			points1[i] = new GPoint(Math.sin(p.TWO_PI * i / (nPoints - 1)), Math.cos(p.TWO_PI * i / (nPoints - 1)));
 			points2[i] = new GPoint(i, Math.cos(p.TWO_PI * i / (nPoints - 1)));
 			points3[i] = new GPoint(Math.sin(p.TWO_PI * i / (nPoints - 1)), i);

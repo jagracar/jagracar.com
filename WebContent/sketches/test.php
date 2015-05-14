@@ -33,26 +33,24 @@
 	<div class=main-container>
 		<header>
 			<h1>
-				<a href="<?php echo $homeDir;?>threejsSketches.php">Three.js
-					sketches</a>
+				<a href="<?php echo $homeDir;?>threejsSketches.php">Three.js sketches</a>
 			</h1>
 		</header>
 
 		<!-- Examples side bar -->
-		<?php include_once $homeDir . 'threejsExamplesSideBar.php';?>
+		<?php include_once $homeDir . 'threejsSketchesList.php';?>
 
-		<div class="p5js-mainContent">
-			<div class="p5js-sketch" id="widthRef">
-				<div class="p5js-sketch__wrapper">
-					<div class="p5js-sketch__canvas" id="p5js-sketch__canvas"></div>
+		<div class="sketch-container">
+			<div class="sketch" id="widthRef">
+				<div class="sketch__wrapper">
+					<div class="sketch__canvas" id="sketch__canvas"></div>
 				</div>
 
-				<div class="p5js-sketch__description">
+				<div class="sketch__description">
 					<p>This is my first test</p>
 
 					<p>
-						For more details, check the <a href="sourceCode/test.js">source
-							code</a>.
+						For more details, check the <a href="sourceCode/test.js">source code</a>.
 					</p>
 				</div>
 			</div>
@@ -63,13 +61,13 @@
 	<?php include_once $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
 	<script src="sourceCode/test.js"></script>
 
 	<!-- Run the sketch -->
 	<script>
-	    var sketchContainer = "p5js-sketch__canvas"
+		var sketchContainer = "sketch__canvas"
 		window.onload = runSketch;
-    </script>
+	</script>
 </body>
+</html>

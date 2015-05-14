@@ -1,5 +1,7 @@
 function runSketch() {
-	var scene, renderer, camera;
+	var scene = undefined;
+	var renderer = undefined;
+	var camera = undefined;
 	var plane, cube, sphere;
 	var step = 0;
 
@@ -53,7 +55,7 @@ function runSketch() {
 		});
 		cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 		cube.position.set(-4, 3, 0);
-		//cube.castShadow = true;
+		// cube.castShadow = true;
 		scene.add(cube);
 
 		// Create a sphere
@@ -63,7 +65,7 @@ function runSketch() {
 		});
 		sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 		sphere.position.set(20, 4, 2);
-		//sphere.castShadow = true;
+		// sphere.castShadow = true;
 		scene.add(sphere);
 
 		// Show axes in the screen
@@ -73,7 +75,7 @@ function runSketch() {
 		// add spotlight for the shadows
 		spotLight = new THREE.PointLight(0xffffff);
 		spotLight.position.set(-40, 60, -10);
-		//spotLight.castShadow = true;
+		// spotLight.castShadow = true;
 		scene.add(spotLight);
 
 		// add subtle ambient lighting

@@ -1,6 +1,6 @@
 var movingPointsSketch = function(p) {
 	// Global variables
-	var plot;
+	var plot = undefined;
 	var step = 0;
 	var stepsPerCycle = 100;
 	var lastStepTime = 0;
@@ -9,7 +9,7 @@ var movingPointsSketch = function(p) {
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight, canvas;
+		var maxCanvasWidth, canvasWidth, canvasHeight;
 		var nPoints1, points1, nPoints2, points2, i;
 
 		// Resize the canvas if necessary
@@ -23,13 +23,13 @@ var movingPointsSketch = function(p) {
 		}
 
 		// Create the canvas
-		canvas = p.createCanvas(canvasWidth, canvasHeight);
+		p.createCanvas(canvasWidth, canvasHeight);
 
 		// Prepare the first set of points
 		nPoints1 = stepsPerCycle / 10;
 		points1 = [];
 
-		for ( i = 0; i < nPoints1; i++) {
+		for (i = 0; i < nPoints1; i++) {
 			points1[i] = calculatePoint(step, stepsPerCycle, scale);
 			step = (clockwise) ? step + 1 : step - 1;
 		}
@@ -40,7 +40,7 @@ var movingPointsSketch = function(p) {
 		nPoints2 = stepsPerCycle + 1;
 		points2 = [];
 
-		for ( i = 0; i < nPoints2; i++) {
+		for (i = 0; i < nPoints2; i++) {
 			points2[i] = calculatePoint(i, stepsPerCycle, 0.9 * scale);
 		}
 

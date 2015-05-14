@@ -1,7 +1,7 @@
 var photoSlicesSketch = function(p) {
 	// Global variables
-	var originalImg;
-	var slices;
+	var originalImg = undefined;
+	var slices = undefined;
 	var sliceSize = 8;
 
 	// Load the image before the sketch is run
@@ -53,7 +53,7 @@ var photoSlicesSketch = function(p) {
 		nSlices = p.floor(img.width / sliceSize);
 		s = [];
 
-		for ( i = 0; i < nSlices; i++) {
+		for (i = 0; i < nSlices; i++) {
 			s[i] = new Slice(i * sliceSize, sliceSize, img);
 		}
 
@@ -104,7 +104,8 @@ var photoSlicesSketch = function(p) {
 	//
 	Slice.prototype.update = function() {
 		this.xWithoutNoise += this.vel;
-		this.x = this.xWithoutNoise + this.noiseRange * (p.noise(this.noiseSeed + this.noiseDelta) - 0.5) + this.noiseSmallRange * (p.noise(this.noiseSmallSeed + this.noiseSmallDelta) - 0.5);
+		this.x = this.xWithoutNoise + this.noiseRange * (p.noise(this.noiseSeed + this.noiseDelta) - 0.5)
+				+ this.noiseSmallRange * (p.noise(this.noiseSmallSeed + this.noiseSmallDelta) - 0.5);
 		this.noiseDelta += this.noiseStep;
 		this.noiseSmallDelta += this.noiseSmallStep;
 		this.vel *= 0.95;
@@ -122,9 +123,11 @@ var photoSlicesSketch = function(p) {
 	// and if it is, it gives it a push
 	//
 	Slice.prototype.checkPush = function() {
-		if (p.mouseY >= 0 && p.mouseY < p.height && p.mouseX >= this.x && p.mouseX <= (this.x + this.imgSlice.width) && p.abs(p.mouseX - p.pmouseX) > 2) {
+		if (p.mouseY >= 0 && p.mouseY < p.height && p.mouseX >= this.x && p.mouseX <= (this.x + this.imgSlice.width)
+				&& p.abs(p.mouseX - p.pmouseX) > 2) {
 			this.vel = (p.mouseX - p.pmouseX > 0) ? 5 : -5;
-		} else if (p.touchY >= 0 && p.touchY < p.height && p.touchX >= this.x && p.touchX <= (this.x + this.imgSlice.width) && p.abs(p.touchX - p.ptouchX) > 2) {
+		} else if (p.touchY >= 0 && p.touchY < p.height && p.touchX >= this.x
+				&& p.touchX <= (this.x + this.imgSlice.width) && p.abs(p.touchX - p.ptouchX) > 2) {
 			this.vel = (p.touchX - p.ptouchX > 0) ? 5 : -5;
 		}
 	};
