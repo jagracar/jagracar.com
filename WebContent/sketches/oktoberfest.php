@@ -1,0 +1,90 @@
+<?php
+	// General php variables
+	$page = 'grafica';
+	$homeDir = '../';
+	$sketch = 'oktoberfest';
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords"
+	content="processing, p5.js, P5js, javaScript, grafica, grafica.js, examples, plot, Oktoberfest">
+<meta name="description"
+	content="p5.js and grafica.js Oktoberfest sketch">
+<meta name="author" content="Javier Graciá Carpio">
+<title>Oktoberfest sketch - jagracar</title>
+
+<!-- CSS files -->
+<link rel="stylesheet" href="<?php echo $homeDir;?>css/styles.css" />
+
+<!-- Useful JavaScript files -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+	<!-- Navigation bar -->
+	<?php include_once $homeDir . 'navBar.php';?>
+
+	<div class=main-container>
+		<header>
+			<h1>
+				<a href="<?php echo $homeDir;?>grafica.php">Grafica library</a>
+			</h1>
+		</header>
+
+		<!-- Examples side bar -->
+		<?php include_once $homeDir . 'graficaExamplesSideBar.php';?>
+
+		<div class="p5js-mainContent">
+			<div class="p5js-sketch" id="widthRef">
+				<div class="p5js-sketch__wrapper">
+					<div class="p5js-sketch__canvas" id="p5js-sketch__canvas"></div>
+				</div>
+
+				<div class="p5js-sketch__description">
+					<p>
+						Every 4 years two main events in Germany coincide in time. The <a
+							href="http://en.wikipedia.org/wiki/Oktoberfest">Oktoberfest</a>
+						takes place every year in Munich during the last two weeks of
+						September and beginning of October. The German elections day (<a
+							href="http://en.wikipedia.org/wiki/Elections_in_Germany">Bundestagswahl</a>)
+						happens every 4 year almost a the same time. I wonder how many
+						Germans try to vote totally drunk after a whole day at the
+						Oktoberfest...
+					</p>
+
+					<p>
+						The data was obtained from <a href="http://www.google.com/trends/">Google
+							trends</a>. Click near the points to display the labels.
+					</p>
+					<p>
+						For more details, check the <a href="sourceCode/oktoberfest.js">source
+							code</a> or play with it at <a
+							href="http://jsfiddle.net/jagracar/34mm712n/">JSFiddle</a>.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<?php include_once $homeDir . 'footer.php';?>
+
+	<!-- JavaScript files -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.4/p5.min.js"></script>
+	<script src="<?php echo $homeDir;?>js/grafica.min.js"></script>
+	<script src="sourceCode/oktoberfest.js"></script>
+
+	<!-- Run the sketch -->
+	<script>
+	p5Sketch = new p5(oktoberfestSketch, "p5js-sketch__canvas");
+    </script>
+</body>

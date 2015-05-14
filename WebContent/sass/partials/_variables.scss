@@ -1,0 +1,76 @@
+// For _normalize.scss
+$legacy_browser_support: false;
+
+// Break points
+$XS: 18em; //  288px for 16px body font
+$S:  30em; //  480px for 16px body font
+$M:  43em; //  688px for 16px body font
+$L:  57em; //  912px for 16px body font
+$XL: 75em; // 1200px for 16px body font
+
+// General colors
+$general-text-color: lighten(black, 20%);
+$header-color: lighten(black, 40%);
+$link-color: lighten(blue, 20%);
+$footer-border-color: darken(white, 20%); 
+$footer-color: lighten($general-text-color, 20%); 
+
+// General variables
+$footer-height: 4em;
+$footer-height-lowRes: 5em;
+$main-container-top-padding: 3.5em;
+$main-container-bottom-padding: $footer-height + 2.5em;
+$main-container-bottom-padding-lowRes: $footer-height-lowRes + 2.5em;
+$video-container-proportion: 0.562;
+
+// Nav colors
+$alpha: 0.9;
+$nav-bg-color: rgba(black, $alpha);
+$nav-shadow-color: rgba(lighten(black, 40%), $alpha);
+$nav-item-color: darken(white, 10%);
+$nav-item-bg-color: transparent;
+$nav-item-hover-color: lighten($nav-item-color, 20%);
+$nav-item-hover-bg-color: rgba(lighten($nav-bg-color, 30%), 0.8*$alpha);
+$nav-active-item-bg-color: rgba(green, 0.8*$alpha);
+$nav-active-item-hover-bg-color: lighten($nav-active-item-bg-color, 30%);
+
+// Nav variables
+$nav-margin: 0.3em;
+$nav-logo-width: 7em;
+$nav-item-min-width: 4em;
+$nav-item-padding: 0.4em 0.7em;
+$nav-menu-item-min-width: 2.5em;
+$nav-border-radius: 0.3em;
+$nav-item-max-height: 3em;
+$nav-item-max-width: 10em;
+$nav-transition-time: 400ms;
+
+// CV colors
+$cv-section-bg-color: darken(white, 10%);
+
+// p5.js colors
+$p5js-sideMenu-bg-color: $cv-section-bg-color;
+
+// p5.js variables
+$p5js-sideMenu-margin: 0.3em;
+$p5js-sideMenu-padding: 0.4em;
+$p5js-border-radius: $nav-border-radius;
+$p5js-transition-time: $nav-transition-time;
+
+// Font awesome icons
+$fa-angle-left: "\f104";
+$fa-angle-right: "\f105";
+$fa-angle-up: "\f106";
+$fa-angle-down: "\f107";
+$fa-facebook-official: "\f230";
+$fa-github: "\f09b";
+$fa-linkedin-square: "\f08c";
+$fa-twitter: "\f099";
+$fa-vimeo-square: "\f194";
+$fa-bars: "\f0c9";
+$fa-at: "\f1fa";
+$fa-gear: "\f013";
+$fa-bar-chart: "\f080";
+$fa-envelope-o: "\f003";
+$fa-phone: "\f095";
+$fa-paw: "\f1b0";

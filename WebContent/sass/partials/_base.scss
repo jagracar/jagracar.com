@@ -1,0 +1,46 @@
+/*
+ * General styling
+ */
+body {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.9em;
+  line-height: 1.4;
+  color: $general-text-color;
+}
+
+a {
+  color: $link-color;
+  @include hover-link;
+}
+
+h1, h2, h3, h4 {
+  font-weight: normal;
+  color: $header-color;
+}
+
+header {
+  h1 {
+    font-size: 2.2em;
+    line-height: 1;
+    
+    @include breakpoint($M){
+      font-size: 2.6em;
+    }
+    
+    a {
+      color: inherit;
+
+      &:hover, &:focus {
+        text-decoration: none;
+      }
+    }
+  }
+  
+  small {
+    font-size: 60%;  
+  }
+}
+
+iframe {
+  border: none;
+}

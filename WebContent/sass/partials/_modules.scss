@@ -1,0 +1,441 @@
+/*
+ * General web look
+ */
+html, body {
+  height: 100%;
+}
+
+.main-container {
+  min-height: 100%;
+  padding: $main-container-top-padding 0 $main-container-bottom-padding 0;
+  margin-bottom: -$footer-height;
+ 
+  @include breakpoint(max-width $M){
+    padding-bottom: $main-container-bottom-padding-lowRes;
+    margin-bottom: -$footer-height-lowRes;
+  }
+}
+
+/*
+ * Footer
+ */
+footer {
+  max-height: $footer-height;
+  padding: 0.5em 0;
+  border-top: 1px dotted $footer-border-color;
+  color: $footer-color;
+  overflow: hidden;
+ 
+  @include breakpoint(max-width $M){
+    max-height: $footer-height-lowRes;
+  }
+ 
+  .separator {
+    padding: 0 0.5em;
+  }
+}
+
+/*
+ * Icons
+ */
+.envelope-icon:before {
+  font-family: "FontAwesome";
+  content: $fa-envelope-o;
+}
+
+.phone-icon:before {
+  font-family: "FontAwesome";
+  content: $fa-phone;
+}
+
+.noSpam-icon:before {
+  font-family: "FontAwesome";
+  content: $fa-at;
+}
+
+.handMade-icon:before {
+  font-family: "FontAwesome";
+  content: $fa-paw;
+}
+
+/*
+ * Navigation bar components
+ */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  background-color: $nav-bg-color;
+  @include box-shadow(0px 3px 3px $nav-shadow-color);
+  
+  a:hover, a:focus {
+    text-decoration: none;
+  }
+}
+
+.nav-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  margin: $nav-margin 0;
+  
+  @include breakpoint($M) {
+    width: $nav-logo-width;
+  }
+}
+
+.nav-menu-wrapper {
+  display: table;
+  margin: $nav-margin;
+  
+  &:hover {
+    margin-bottom: 0;
+    padding-bottom: $nav-margin;
+  }
+  
+  @include breakpoint($M) {
+    margin-left: $nav-logo-width;
+  }
+}
+
+.nav-menu-checkbox {
+  display: none;
+}
+
+.nav-blocks-wrapper {
+  @include breakpoint(max-width $M) {
+    position: absolute;
+    top: 100%;
+    left: auto;
+    overflow: hidden;
+    background-color: $nav-bg-color;
+    @include border-bottom-radius($nav-border-radius);
+  }
+  
+  @include breakpoint($M) {
+    @include clearfix;
+  }
+}
+
+.nav-block {
+  @include breakpoint(max-width $M) {
+    &.is-secondary-block {
+      display: none;
+    }
+  }
+  
+  @include breakpoint($M) {
+    margin-left: $nav-margin;
+    @include float-left;
+  }
+}
+
+.nav-item {
+  display: block;
+  min-width: $nav-item-min-width;
+  padding: $nav-item-padding;
+  white-space: nowrap;
+  color: $nav-item-color;
+  background-color: $nav-item-bg-color;
+  @include transition(color $nav-transition-time, background-color $nav-transition-time);
+  
+  &:hover, .nav-menu-wrapper:hover &.is-menu-item, .nav-menu-checkbox:checked ~ label &, .nav-block:hover &.is-list-toogle-item {
+    color: $nav-item-hover-color;
+    background-color: $nav-item-hover-bg-color;
+  }
+  
+  &.is-logo-item {
+    text-align: center;
+    
+    &:hover {
+      background-color: $nav-item-bg-color;
+    }
+  }
+  
+  &.is-menu-item {
+    text-align: center;
+    min-width: $nav-menu-item-min-width;
+    @include border-radius($nav-border-radius);
+  }
+  
+  @include breakpoint(max-width $M) {
+    &.is-list-toogle-item {
+      display: none;
+    }
+  }
+  
+  @include breakpoint($M) {   
+    &.is-menu-item {
+      display: none;
+    }
+    
+    &.is-active-item {
+      background-color: $nav-active-item-bg-color;
+    
+      &:hover {
+        background-color: $nav-active-item-hover-bg-color;
+      }
+    }
+    
+    &.is-list-toogle-item, .nav-list.is-main-list & {
+      text-align: center;
+      @include border-radius($nav-border-radius);
+    }
+  }
+}
+
+.nav-list {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  
+  li {
+    overflow: hidden;
+    max-width: 0;
+    max-height: 0;
+    @include transition(max-width 0ms $nav-transition-time, max-height $nav-transition-time);
+    @include no-bullet;
+  }
+  
+  @include breakpoint(max-width $M) {
+    .nav-menu-checkbox:checked ~ .nav-blocks-wrapper & li, .nav-menu-wrapper:hover & li {
+      max-width: $nav-item-max-width;
+      max-height: $nav-item-max-height;
+      @include transition(max-width 0ms, max-height $nav-transition-time);
+    }
+  }
+  
+  @include breakpoint($M) {
+    &.is-main-list {
+      @include clearfix;
+      
+      li {
+        max-width: $nav-item-max-width;
+        max-height: $nav-item-max-height;
+        @include transition(max-width 0ms, max-height 0ms);
+        @include float-left;
+        
+        &:not(:first-of-type) {
+          margin-left: $nav-margin;
+        }
+      }
+    }
+    
+    &:not(.is-main-list){
+      position: absolute;
+      top: auto;
+      left: auto;
+      padding-top: $nav-margin;
+      
+      li {
+        background-color: $nav-bg-color;
+        
+        &:last-of-type {
+          @include border-bottom-radius($nav-border-radius);
+        }
+        
+        .nav-block:hover & {
+          max-width: $nav-item-max-width;
+          max-height: $nav-item-max-height;
+          @include transition(max-width 0ms, max-height $nav-transition-time);
+        }
+      }
+    }
+  }
+}
+
+.menu-icon:before {
+  font-family: "FontAwesome";
+  content: $fa-bars;
+}
+
+.twitter-icon:before {
+  @extend %inline-icon-props;
+  content: $fa-twitter;
+}
+
+.facebook-icon:before {
+  @extend %inline-icon-props;
+  content: $fa-facebook-official;
+}
+
+.vimeo-icon:before {
+  @extend %inline-icon-props;
+  content: $fa-vimeo-square;
+}
+
+.linkedin-icon:before {
+  @extend %inline-icon-props;
+  content: $fa-linkedin-square;
+}
+
+.github-icon:before {
+  @extend %inline-icon-props;
+  content: $fa-github;
+}
+
+/*
+ * CV components
+ */
+.cv-section {
+  margin-bottom: 1em;
+  border-bottom: 5px solid darken($cv-section-bg-color, 50%);
+  padding: 1em 1em 0 1em;
+  @include border-top-left-radius(15px);  
+  @include background-image(linear-gradient(to bottom, lighten($cv-section-bg-color, 7%), $cv-section-bg-color));
+  @include box-shadow;
+  
+  &__header h1 {
+    margin-top: 0;
+    font-size: 2em;
+    
+    @include breakpoint($M){
+      font-size: 2.2em;
+    }
+  }
+}
+
+.cv-keyValueList {
+  padding-left: 0;
+  @include no-bullets;
+}
+
+.cv-achievement {
+  &__period {
+    font-weight: bold;
+    color: lighten($general-text-color, 20%);
+  }
+
+  &:not(:last-of-type) &__description {
+    border-bottom: 1px dotted $general-text-color;
+  }
+}
+
+.toogle-button {
+  margin: 0;
+  border: 0;
+  font-family: "FontAwesome";
+  background-color: transparent;
+  @include float-right;
+  
+  &:focus {
+    outline: 0; 
+  }
+  
+  &.up-icon:before {
+    content: $fa-angle-up;
+  }
+
+  &.down-icon:before {
+    content: $fa-angle-down;
+  }
+}
+
+/*
+ * p5.js components
+ */
+.p5js-sideMenu {
+  h2 {
+    margin-left: 0.5em;
+    
+    @include breakpoint(max-width $M) {
+      display: none;
+    }
+  }
+
+  ul {
+    margin: 0;
+    border: 0;
+    padding: 0;
+  }
+ 
+  li {
+    margin-bottom: $p5js-sideMenu-margin;
+    @include no-bullets;
+  }
+
+  a {
+    display: block;
+    padding: $p5js-sideMenu-padding;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+    color: $general-text-color;
+    background-color: $p5js-sideMenu-bg-color;
+    @include border-radius($p5js-border-radius);
+    @include transition(background-color $p5js-transition-time);
+
+    &:hover, &:focus, &.active-sketch {
+      text-decoration: none;
+      color: lighten($general-text-color, 80%);
+      background-color: darken($p5js-sideMenu-bg-color, 30%);
+    }
+    
+    @include breakpoint(max-width $M) {
+      font-size: 0.9em;
+    }
+    
+    @include breakpoint(max-width $S) {
+      font-size: 0.8em;
+    }
+  }
+}
+
+.p5js-mainContent {
+  @include breakpoint(max-width $M) {
+    margin-top: 1em;
+  }
+
+  @include breakpoint($M) {
+    padding-left: 1em;
+  }
+}
+
+.p5js-sketch {
+  &__wrapper {
+    overflow: auto;
+  }
+
+  &__canvas {
+    display: table;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    
+    &.is-framed canvas {
+      border: 1px dashed $general-text-color;
+    }
+  }
+
+  &__gui {
+    position: absolute; 
+    right: 0;
+  }
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-top: $video-container-proportion*100%;
+  margin-bottom: 1em;
+  overflow: hidden;
+
+  @include breakpoint($L) {
+    display: inline-block;
+    width: 49.5%;
+    padding-top: $video-container-proportion*49.5%;
+    margin-bottom: 0;
+  }
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
