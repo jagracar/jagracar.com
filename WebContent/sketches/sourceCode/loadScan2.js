@@ -5,9 +5,7 @@ function runSketch() {
 	var controls = undefined;
 	var spotLight = undefined;
 	var ambientLight = undefined;
-	var scan = undefined;
-	var time = 0;
-	
+
 	init();
 	animate();
 
@@ -61,12 +59,6 @@ function runSketch() {
 		controls.update();
 		spotLight.position.set(camera.position.x, camera.position.y, camera.position.z);
 
-		if (scan) {
-			scan.frontMesh.material.uniforms.time.value =  10 + 10.0*Math.sin(time);
-			scan.backMesh.material.uniforms.time.value =  10 + 10.0*Math.sin(time);
-			time+= 0.01;
-		}
-
 		requestAnimationFrame(animate);
 		renderer.render(scene, camera);
 	}
@@ -86,11 +78,11 @@ function runSketch() {
 	 */
 	function addScanMesh() {
 		// Create a scan object and initialize it with the file content
-		scan = new Scan();
+		var scan = new Scan();
 		scan.initFromFile(this.responseText);
 		scan.fillHoles(4);
 		scan.reduceResolution(3);
-		// scan.gaussianSmooth(1);
+		//scan.gaussianSmooth(1);
 		scan.crop();
 		scan.centerAndExtend();
 
@@ -751,7 +743,7 @@ function runSketch() {
 	 * Creates the scan mesh
 	 */
 	Scan.prototype.createMesh = function(filled) {
-		var order, i, frontVertices, backVertices, verticesNormals, counter, x, y, pixel, faces, xStart, xEnd;
+		var order, i, frontVertices, backVertices, counter, x, y, pixel, faces, xStart, xEnd;
 		var pixel1, pixel2, pixel3, pixel4, p1, p2, p3, p4, frontGeometry, backGeometry;
 		var frontMaterial, backMaterial;
 
@@ -765,9 +757,6 @@ function runSketch() {
 		// Calculate the vertices
 		frontVertices = [];
 		backVertices = [];
-		verticesNormals = [];
-		verticesColors = [];
-		backVerticesColors = [];
 		counter = 0;
 
 		for (y = 0; y < this.height; y++) {
@@ -778,9 +767,6 @@ function runSketch() {
 					if (this.points[pixel] && this.visible[pixel]) {
 						frontVertices[counter] = this.points[pixel];
 						backVertices[counter] = frontVertices[counter].clone().sub(this.normals[pixel]);
-						verticesNormals[counter] = this.normals[pixel];
-						verticesColors[counter] = this.colors[pixel]; 
-						backVerticesColors[counter] = new THREE.Color(1,1,1); 
 						order[pixel] = counter;
 						counter++;
 					}
@@ -859,66 +845,19 @@ function runSketch() {
 		backGeometry.computeVertexNormals();
 
 		// Define the frontMesh material
-		var attributes = {
-			vNormal : {
-				type : 'v3',
-				value : verticesNormals
-			},
-			vColor : {
-				type : 'c',
-				value : verticesColors
-			},
-		};
-
-		var backAttributes = {
-				vNormal : {
-					type : 'v3',
-					value : verticesNormals
-				},
-				vColor : {
-					type : 'c',
-					value : backVerticesColors
-				},
-			};
-
-		var uniforms = {
-			time : {
-				type : "f",
-				value : time
-			},
-		};
-
-		frontMaterial = new THREE.ShaderMaterial({
-			attributes : attributes,
-			uniforms : uniforms,
-			vertexShader : document.getElementById("vertexShader").textContent,
-			fragmentShader : document.getElementById("fragmentShader").textContent,
-			transparent: true
+		frontMaterial = new THREE.MeshBasicMaterial({
+			vertexColors : THREE.VertexColors,
+			wireframe : !filled,
+			side : THREE.FrontSide,
 		});
 
 		// Define the backMesh material
-		var backUniforms = THREE.ShaderLib['lambert'].uniforms;
-		backUniforms.time = {type: "f", value: time};
-		console.log(THREE.ShaderLib['lambert'].vertexShader);
-		
-		backMaterial = new THREE.ShaderMaterial({
-			lights: true,
-			attributes : backAttributes,
-			uniforms : backUniforms,
-			vertexShader :  document.getElementById("backVertexShader").textContent,
-			fragmentShader : THREE.ShaderLib['lambert'].fragmentShader,
-			side : THREE.BackSide
-		});
-
-		/*
 		backMaterial = new THREE.MeshLambertMaterial({
 			color : 0xffffff,
 			wireframe : !filled,
 			side : THREE.BackSide,
 			shading : THREE.SmoothShading
 		});
-		*/
-		
 
 		// Create the meshes
 		this.frontMesh = new THREE.Mesh(frontGeometry, frontMaterial);

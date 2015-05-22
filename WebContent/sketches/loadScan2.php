@@ -40,10 +40,6 @@
 		<!-- Sketches list -->
 		<?php include_once $homeDir . 'threejsSketchesList.php';?>
 
-		<script id="vertexShader" type="x-shader/x-vertex"><?php include_once 'sourceCode/shaders/test.vert';?></script>
-		<script id="fragmentShader" type="x-shader/x-fragment"><?php include_once 'sourceCode/shaders/test.frag';?></script>
-		<script id="backVertexShader" type="x-shader/x-vertex"><?php include_once 'sourceCode/shaders/backtest.vert';?></script>
-
 		<div class="sketch-container">
 			<div class="sketch" id="widthRef">
 				<div class="sketch__wrapper">
