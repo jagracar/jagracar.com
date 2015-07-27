@@ -2,7 +2,7 @@
 	// General php variables
 	$page = 'threejs';
 	$homeDir = '../';
-	$sketch = 'loadScan';
+	$sketch = 'kinectScanViewer';
 ?>
 
 <!DOCTYPE html>
@@ -11,10 +11,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="keywords" content="three.js, javaScript, examples, 3D, scan, kinect">
-<meta name="description" content="three.js test sketch">
+<meta name="keywords" content="three.js, javaScript, examples, 3D, scan, kinect, dat.GUI">
+<meta name="description" content="three.js Kinect scan viewer sketch">
 <meta name="author" content="Javier Graciá Carpio">
-<title>Load scan sketch - jagracar</title>
+<title>Kinect scan viewer sketch - jagracar</title>
 
 <!-- CSS files -->
 <link rel="stylesheet" href="<?php echo $homeDir;?>css/styles.css" />
@@ -40,21 +40,22 @@
 		<!-- Sketches list -->
 		<?php include_once $homeDir . 'threejsSketchesList.php';?>
 
-		<script id="vertexShader" type="x-shader/x-vertex"><?php include_once 'sourceCode/shaders/test.vert';?></script>
-		<script id="fragmentShader" type="x-shader/x-fragment"><?php include_once 'sourceCode/shaders/test.frag';?></script>
-		<script id="backVertexShader" type="x-shader/x-vertex"><?php include_once 'sourceCode/shaders/backtest.vert';?></script>
+		<script id="vertexShader" type="x-shader/x-vertex"><?php include_once 'sourceCode/shaders/scan.vert';?></script>
+		<script id="fragmentShader" type="x-shader/x-fragment"><?php include_once 'sourceCode/shaders/scan.frag';?></script>
 
 		<div class="sketch-container">
 			<div class="sketch" id="widthRef">
 				<div class="sketch__wrapper">
-					<div class="sketch__canvas" id="sketch__canvas"></div>
+					<div class="sketch__canvas" id="sketch__canvas">
+						<div class="sketch__gui" id="sketch__gui"></div>
+					</div>
 				</div>
 
 				<div class="sketch__description">
 					<p>This is my first test</p>
 
 					<p>
-						For more details, check the <a href="sourceCode/loadScan.js">source code</a>.
+						For more details, check the <a href="sourceCode/kinectScanViewer.js">source code</a>.
 					</p>
 				</div>
 			</div>
@@ -65,12 +66,15 @@
 	<?php include_once $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.4/p5.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.js"></script>
 	<script src="<?php echo $homeDir;?>js/orbitControls.js"></script>
-	<script src="sourceCode/loadScan.js"></script>
+	<script src="sourceCode/kinectScanViewer.js"></script>
 
 	<!-- Run the sketch -->
 	<script>
+		var guiContainer = "sketch__gui";
 		var sketchContainer = "sketch__canvas"
 		window.onload = runSketch;
 	</script>

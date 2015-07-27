@@ -411,6 +411,10 @@ nav {
 	&__gui {
 		position: absolute; 
 		right: 0;
+		
+		select {
+			color: $general-text-color;
+		}
 	}
 }
 
