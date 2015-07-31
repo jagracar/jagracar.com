@@ -33,7 +33,12 @@
 			<h1>Welcome to my home page!</h1>
 		</header>
 
-		<p>This is really work in progress...</p>
+		<p>This is work in progress...</p>
+
+		<p>
+			This web is basically an excuse to improve my HTML, CSS, PHP and JavaScript skills. If you want to see how it works
+			internally, you can check the <a href="https://github.com/jagracar/jagracar.com">GitHub repository</a>.
+		</p>
 	</div>
 
 	<!-- Footer -->
