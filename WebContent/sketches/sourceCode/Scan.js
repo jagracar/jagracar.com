@@ -893,6 +893,11 @@ Scan.prototype.createShaderMaterial = function(vertexShader, fragmentShader, can
 		value : 0
 	};
 
+	uniforms['effectColor'] = {
+		type : 'c',
+		value : new THREE.Color(1, 1, 1)
+	};
+
 	uniforms['effectTransparency'] = {
 		type : 'f',
 		value : 1

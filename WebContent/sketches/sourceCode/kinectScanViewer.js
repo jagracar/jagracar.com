@@ -85,7 +85,7 @@ function runSketch() {
 		requestAnimationFrame(animate);
 
 		// If necessary, calculate the mouse position on world coordinate units
-		if (guiControlKeys["Effect"] >= 11) {
+		if (guiControlKeys["Effect"] >= 12) {
 			// Calculate the rayCaster intersections with the scene objects
 			rayCaster.setFromCamera(mouseCanvasPosition, camera);
 			intersections = rayCaster.intersectObjects(scene.children, true);
@@ -142,7 +142,8 @@ function runSketch() {
 			"Effect" : 0,
 			"Invert effect" : false,
 			"Fill with color" : true,
-			"Transparency" : 0.3,
+			"Color" : [ 50, 50, 50 ],
+			"Transparency" : 1.0,
 			"Speed" : 0.5,
 		};
 
@@ -199,25 +200,26 @@ function runSketch() {
 			"Pulsation 1" : 1,
 			"Pulsation 2" : 2,
 			"Grid" : 3,
-			"Perlin noise" : 4,
-			"Hole" : 5,
-			"Circle" : 6,
-			"Vertical cut" : 7,
-			"Bouncing balls" : 8,
-			"Traces" : 9,
-			"Aggregation" : 10,
-			"Cursor 1" : 11,
-			"Cursor 2" : 12
+			"Toon" : 4,
+			"Perlin noise" : 5,
+			"Hole" : 6,
+			"Circle" : 7,
+			"Vertical cut" : 8,
+			"Bouncing balls" : 9,
+			"Traces" : 10,
+			"Aggregation" : 11,
+			"Cursor 1" : 12,
+			"Cursor 2" : 13
 		});
 		controller.onFinishChange(function(value) {
 			// Initialize the sketch if necessary
-			if (value == 8) {
+			if (value == 9) {
 				p5Sketch = new BallsSketch(300, 30, p5Canvas, 0, 255, true);
-			} else if (value == 9) {
-				p5Sketch = new BallsSketch(50, 10, p5Canvas, 255, 0, false);
 			} else if (value == 10) {
-				p5Sketch = new DLASketch(p5Canvas, 255, 0, true);
+				p5Sketch = new BallsSketch(50, 10, p5Canvas, 255, 0, false);
 			} else if (value == 11) {
+				p5Sketch = new DLASketch(p5Canvas, 255, 0, true);
+			} else if (value == 12) {
 				p5Sketch = new PaintWithCursorSketch(mouseWorldPosition, 20, p5Canvas, 255, 0, false);
 			} else {
 				p5Sketch = undefined;
@@ -230,6 +232,8 @@ function runSketch() {
 		controller = f2.add(guiControlKeys, "Invert effect");
 
 		controller = f2.add(guiControlKeys, "Fill with color");
+
+		controller = f2.addColor(guiControlKeys, "Color");
 
 		controller = f2.add(guiControlKeys, "Transparency", 0, 1);
 
@@ -341,7 +345,7 @@ function runSketch() {
 	 * Updates the scan uniforms for the vertex and fragment shaders
 	 */
 	function updateScanUniforms() {
-		var frontMeshUniforms, backMeshUniforms, pointCloudUniforms, backColor;
+		var frontMeshUniforms, backMeshUniforms, pointCloudUniforms, backColor, effectColor;
 
 		if (scan && scan.mesh) {
 			// Get the front and back mesh uniforms
@@ -350,6 +354,7 @@ function runSketch() {
 
 			// Update the uniforms
 			backColor = guiControlKeys["Back side color"];
+			effectColor = guiControlKeys["Color"];
 			frontMeshUniforms.backColor.value.setRGB(backColor[0] / 255, backColor[1] / 255, backColor[2] / 255);
 			backMeshUniforms.backColor.value.setRGB(backColor[0] / 255, backColor[1] / 255, backColor[2] / 255);
 			frontMeshUniforms.showLines.value = guiControlKeys["Show lines"];
@@ -360,6 +365,9 @@ function runSketch() {
 			backMeshUniforms.invertEffect.value = guiControlKeys["Invert effect"];
 			frontMeshUniforms.fillWithColor.value = guiControlKeys["Fill with color"];
 			backMeshUniforms.fillWithColor.value = guiControlKeys["Fill with color"];
+			frontMeshUniforms.effectColor.value
+					.setRGB(effectColor[0] / 255, effectColor[1] / 255, effectColor[2] / 255);
+			backMeshUniforms.effectColor.value.setRGB(effectColor[0] / 255, effectColor[1] / 255, effectColor[2] / 255);
 			frontMeshUniforms.effectTransparency.value = guiControlKeys["Transparency"];
 			backMeshUniforms.effectTransparency.value = guiControlKeys["Transparency"];
 			frontMeshUniforms.lightPosition.value = camera.position;
@@ -381,10 +389,13 @@ function runSketch() {
 			pointCloudUniforms = scan.pointCloud.material.uniforms;
 
 			// Update the uniforms
+			effectColor = guiControlKeys["Color"];
 			pointCloudUniforms.pointSize.value = guiControlKeys["Point size"];
 			pointCloudUniforms.effect.value = guiControlKeys["Effect"];
 			pointCloudUniforms.invertEffect.value = guiControlKeys["Invert effect"];
 			pointCloudUniforms.fillWithColor.value = guiControlKeys["Fill with color"];
+			pointCloudUniforms.effectColor.value.setRGB(effectColor[0] / 255, effectColor[1] / 255,
+					effectColor[2] / 255);
 			pointCloudUniforms.effectTransparency.value = guiControlKeys["Transparency"];
 			pointCloudUniforms.lightPosition.value = camera.position;
 			pointCloudUniforms.cursor.value = mouseWorldPosition;

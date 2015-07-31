@@ -8,6 +8,7 @@ uniform int showLines;
 uniform int effect;
 uniform int invertEffect;
 uniform int fillWithColor;
+uniform vec3 effectColor;
 uniform float effectTransparency;
 uniform vec3 lightPosition;
 uniform float time;
@@ -156,13 +157,28 @@ bool maskEffect() {
 //
 float diffuseFactor() {
 	// Check if the vertex fragment changed the vertex world position
-	if(effect == 1 || (effect == 12 && backScan != 1)) {
+	if(effect == 1 || (effect == 13 && backScan != 1)) {
 		// The varying normal is no longer correct. Calculate the new normal
 		vec3 newNormal = cross(dFdx(vNormCoord), dFdy(vNormCoord));
 		return dot(normalize(newNormal), normalize(lightPosition));
 	} else {
 		vec4 lightDirection = viewMatrix * vec4(lightPosition, 0.0);
 		return dot(normalize(vNormal), normalize(lightDirection.xyz));
+	}
+}
+
+//
+// Calculates the diffuse factor produced by the light illumination using a toon-like effect
+//
+float diffuseToonFactor() {
+	float df = diffuseFactor();
+
+	if(df < 0.4) {
+		return 0.1;	
+	} else if(df < 0.8) {
+		return 0.5;
+	} else {
+		return 0.8;
 	}
 }
 
@@ -197,23 +213,21 @@ void main() {
 	// Apply some of the effects
 	bool masked = false;
 
-    if(effect == 4) {
+    if(effect == 5) {
        	masked = perlinNoiseEffect() != (invertEffect == 1); 
-	} if(effect == 5) {
+	} if(effect == 6) {
     	masked = holeEffect() != (invertEffect == 1);
-	} else if(effect == 6) {
-		masked = circleEffect() != (invertEffect == 1);
 	} else if(effect == 7) {
+		masked = circleEffect() != (invertEffect == 1);
+	} else if(effect == 8) {
         masked = verticalCutEffect() != (invertEffect == 1);
-	}  else if(effect >= 8 && effect < 12) {
+	}  else if(effect >= 9 && effect < 13) {
        	masked = maskEffect() != (invertEffect == 1); 
 	} 
 	
 	// Fragment shader output
 	if(masked){
 		if(fillWithColor == 1) {
-			vec3 effectColor = vec3(1.0);
-
 			if(pointCloud == 1) {
 				gl_FragColor = vec4(effectColor * abs(diffuseFactor()), effectTransparency);
 			} else {
@@ -223,7 +237,9 @@ void main() {
 			discard;
 		}
 	} else if(effect == 3) {
-		gl_FragColor = vec4(mix(vec3(0.2 * diffuseFactor()), vec3(1.0, 0.0, 0.0), gridFactor()), 1.0);
+		gl_FragColor = vec4(mix(effectColor * diffuseFactor(), vec3(1.0, 0.0, 0.0), gridFactor()), effectTransparency);
+	} else if(effect == 4) {
+		gl_FragColor = vec4(effectColor * diffuseToonFactor(), effectTransparency);
 	} else if(showLines == 1) {
 		gl_FragColor = vec4(mix(backColor * diffuseFactor(), vec3(0.0), edgeFactor()), 1.0);
 	} else if(backScan == 1) {

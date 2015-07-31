@@ -71,7 +71,7 @@ void main() {
 		newPosition += pulsationEffect(normal);
 	} else if(effect == 2) {
 		newPosition += pulsationEffect2(pointCloud == 1? normal : faceNormal);
-	} else if(effect == 12 && backScan != 1) {
+	} else if(effect == 13 && backScan != 1) {
 		newPosition += ballEffect(normal);
 	}
 
