@@ -2,11 +2,16 @@ function runSketch() {
 	var scene = undefined;
 	var renderer = undefined;
 	var camera = undefined;
-	var scan = undefined;
-	var originalScan = undefined;
+	var rayCaster = undefined;
+	var mouseCanvasPosition = undefined;
+	var mouseWorldPosition = undefined;
 	var guiControlKeys = undefined;
 	var p5Canvas = undefined;
 	var p5Sketch = undefined;
+	var vertexShader = undefined;
+	var fragmentShader = undefined;
+	var scan = undefined;
+	var originalScan = undefined;
 	var time = 0;
 
 	init();
@@ -42,11 +47,19 @@ function runSketch() {
 		document.getElementById(sketchContainer).appendChild(renderer.domElement);
 
 		// Camera setup
-		camera = new THREE.PerspectiveCamera(45, canvasWidth / canvasHeight, 0.1, 1000);
-		camera.position.set(0, 0, -600);
+		camera = new THREE.PerspectiveCamera(45, canvasWidth / canvasHeight, 0.1, 2000);
+		camera.position.set(-300, 0, -500);
 
 		// Initialize the camera controls
 		controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+		// Ray caster setup
+		rayCaster = new THREE.Raycaster();
+		mouseCanvasPosition = new THREE.Vector2(-100000);
+		mouseWorldPosition = new THREE.Vector3(-100000);
+
+		// Add an event listener to the renderer dom element to update the mouseCanvasPosition
+		renderer.domElement.addEventListener('mousemove', onMouseMove, false);
 
 		// Create the GUI and initialize the GUI control keys
 		createGUI();
@@ -54,16 +67,36 @@ function runSketch() {
 		// Create the p5.js canvas for the animated masks
 		p5Canvas = new p5().createGraphics(512, 512);
 
+		// Get the vertex and fragment shaders
+		vertexShader = document.getElementById("vertexShader").textContent;
+		fragmentShader = document.getElementById("fragmentShader").textContent;
+
 		// Read the default scan and add the scan mesh to the scene
-		readScanAndAddMeshToScene(guiControlKeys["Scan name"]);
+		readScanAndAddMeshToScene();
 	}
 
 	/*
 	 * Animates the sketch
 	 */
 	function animate() {
+		var intersections;
+
 		// Request the next animation frame
 		requestAnimationFrame(animate);
+
+		// If necessary, calculate the mouse position on world coordinate units
+		if (guiControlKeys["Effect"] >= 11) {
+			// Calculate the rayCaster intersections with the scene objects
+			rayCaster.setFromCamera(mouseCanvasPosition, camera);
+			intersections = rayCaster.intersectObjects(scene.children, true);
+
+			// Update the mouseWorldPosition vector
+			if (intersections.length > 0) {
+				mouseWorldPosition.copy(intersections[0].point);
+			} else {
+				mouseWorldPosition.set(-100000, -100000, -100000);
+			}
+		}
 
 		// Update the processing sketch
 		if (p5Sketch) {
@@ -71,21 +104,23 @@ function runSketch() {
 			p5Sketch.paint();
 		}
 
-		// Update the scan mesh and point cloud uniforms used by the vertex and fragment shaders
-		if (scan) {
-			// Update the uniforms
-			scan.updateUniforms(guiControlKeys["Back side color"], guiControlKeys["Show lines"],
-					guiControlKeys["Point size"], guiControlKeys["Effect"], guiControlKeys["Invert effect"],
-					guiControlKeys["Fill with color"], guiControlKeys["Transparency"], camera.position, time);
-
-			// Advance the time
-			time += guiControlKeys["Speed"];
-		} else {
-			time = 0;
-		}
+		// Update the scan mesh and point cloud uniforms
+		updateScanUniforms();
 
 		// Render the scene
 		renderer.render(scene, camera);
+
+		// Advance the time
+		time += guiControlKeys["Speed"];
+	}
+
+	/*
+	 * Calculate mouse position in normalized device coordinates (-1 to 1)
+	 */
+	function onMouseMove(event) {
+		var rect = this.getBoundingClientRect();
+		mouseCanvasPosition.x = 2 * (event.clientX - rect.left) / renderer.domElement.width - 1;
+		mouseCanvasPosition.y = -2 * (event.clientY - rect.top) / renderer.domElement.height + 1;
 	}
 
 	/*
@@ -120,16 +155,16 @@ function runSketch() {
 		f1 = gui.addFolder("Scan configuration");
 		f2 = gui.addFolder("Effect configuration");
 
-		// Add the GUI controllers
+		// Add the first folder controllers
 		controller = f1.add(guiControlKeys, "Scan name", [ "scan1", "scan2", "scan3", "scan4", "chloe", "diego" ]);
 		controller.onFinishChange(readScanAndAddMeshToScene);
 
 		controller = f1.addColor(guiControlKeys, "Back side color");
 
-		controller = f1.add(guiControlKeys, "Resolution", 1, 5).step(1);
+		controller = f1.add(guiControlKeys, "Resolution", 1, 10).step(1);
 		controller.onFinishChange(updateScanProperties);
 
-		controller = f1.add(guiControlKeys, "Smoothness", 0, 4).step(1);
+		controller = f1.add(guiControlKeys, "Smoothness", 0, 5).step(1);
 		controller.onFinishChange(updateScanProperties);
 
 		controller = f1.add(guiControlKeys, "Fill holes", 0, 20).step(1);
@@ -158,30 +193,38 @@ function runSketch() {
 
 		controller = f1.add(guiControlKeys, "Point size", 1, 10);
 
+		// Add the second folder controllers
 		controller = f2.add(guiControlKeys, "Effect", {
 			"None" : 0,
-			"Pulsation" : 1,
-			"Hole" : 2,
-			"Circle" : 3,
-			"Vertical cut" : 4,
-			"Bouncing balls" : 5,
-			"Traces" : 6,
-			"Aggregation" : 7
+			"Pulsation 1" : 1,
+			"Pulsation 2" : 2,
+			"Grid" : 3,
+			"Perlin noise" : 4,
+			"Hole" : 5,
+			"Circle" : 6,
+			"Vertical cut" : 7,
+			"Bouncing balls" : 8,
+			"Traces" : 9,
+			"Aggregation" : 10,
+			"Cursor 1" : 11,
+			"Cursor 2" : 12
 		});
 		controller.onFinishChange(function(value) {
 			// Initialize the sketch if necessary
-			if (value == 5) {
+			if (value == 8) {
 				p5Sketch = new BallsSketch(300, 30, p5Canvas, 0, 255, true);
-			} else if (value == 6) {
+			} else if (value == 9) {
 				p5Sketch = new BallsSketch(50, 10, p5Canvas, 255, 0, false);
-			} else if (value == 7) {
+			} else if (value == 10) {
 				p5Sketch = new DLASketch(p5Canvas, 255, 0, true);
+			} else if (value == 11) {
+				p5Sketch = new PaintWithCursorSketch(mouseWorldPosition, 20, p5Canvas, 255, 0, false);
 			} else {
 				p5Sketch = undefined;
-
-				// Reset the time
-				time = 0;
 			}
+
+			// Reset the time
+			time = 0;
 		});
 
 		controller = f2.add(guiControlKeys, "Invert effect");
@@ -206,10 +249,10 @@ function runSketch() {
 	/*
 	 * Loads the scan from the server and adds the scan mesh to the scene
 	 */
-	function readScanAndAddMeshToScene(scanName) {
+	function readScanAndAddMeshToScene() {
 		var request = new XMLHttpRequest();
 		request.onload = addScanMesh;
-		request.open("get", "data/" + scanName + ".points", true);
+		request.open("get", "data/" + guiControlKeys["Scan name"] + ".points", true);
 		request.send();
 	}
 
@@ -223,10 +266,15 @@ function runSketch() {
 			scene.remove(scan.pointCloud);
 		}
 
-		// Create a scan object and initialize it with the file content
+		// Create a new scan object and initialize it with the file content
 		scan = new Scan();
 		scan.initFromFile(this.responseText);
 		scan.crop();
+
+		// Shift diego's scan a bit
+		if (guiControlKeys["Scan name"] == "diego") {
+			scan.shift(new THREE.Vector3(0, 60, 0));
+		}
 
 		// Save a copy of the original scan
 		originalScan = scan.clone();
@@ -241,8 +289,8 @@ function runSketch() {
 		scan.reduceResolution(guiControlKeys["Resolution"]);
 
 		// Create the scan mesh and the point cloud
-		scan.createMesh(p5Canvas);
-		scan.createPointCloud(p5Canvas);
+		scan.createMesh(vertexShader, fragmentShader, p5Canvas);
+		scan.createPointCloud(vertexShader, fragmentShader, p5Canvas);
 
 		// Add the mesh or the point cloud to the scene
 		if (guiControlKeys["Show points"]) {
@@ -250,10 +298,13 @@ function runSketch() {
 		} else {
 			scene.add(scan.mesh);
 		}
+
+		// Reset the time
+		time = 0;
 	}
 
 	/*
-	 * Updates the scan properties when the user modifies it with the GUI
+	 * Updates the scan properties when the user modifies them with the GUI
 	 */
 	function updateScanProperties() {
 		if (scan) {
@@ -274,8 +325,8 @@ function runSketch() {
 			scan.reduceResolution(guiControlKeys["Resolution"]);
 
 			// Create the scan mesh and the point cloud
-			scan.createMesh(p5Canvas);
-			scan.createPointCloud(p5Canvas);
+			scan.createMesh(vertexShader, fragmentShader, p5Canvas);
+			scan.createPointCloud(vertexShader, fragmentShader, p5Canvas);
 
 			// Add the mesh or the point cloud to the scene
 			if (guiControlKeys["Show points"]) {
@@ -287,926 +338,34 @@ function runSketch() {
 	}
 
 	/*
-	 * The Scan class
+	 * Updates the scan uniforms for the vertex and fragment shaders
 	 */
-	function Scan() {
-		this.width = 0;
-		this.height = 0;
-		this.points = undefined;
-		this.colors = undefined;
-		this.normals = undefined;
-		this.empty = undefined;
-		this.ini = undefined;
-		this.end = undefined;
-		this.mesh = undefined;
-		this.pointCloud = undefined;
-		this.maxSeparationSq = Math.pow(140, 2);
-	}
+	function updateScanUniforms() {
+		var frontMeshUniforms, backMeshUniforms, pointCloudUniforms, backColor;
 
-	/*
-	 * Clones the current scan
-	 */
-	Scan.prototype.clone = function() {
-		var scanClone, i;
-
-		scanClone = new Scan();
-
-		if (this.width != 0 || this.height != 0) {
-			scanClone.width = this.width;
-			scanClone.height = this.height;
-			scanClone.points = [];
-			scanClone.colors = [];
-			scanClone.normals = [];
-
-			for (i = 0; i < this.points.length; i++) {
-				if (this.points[i]) {
-					scanClone.points[i] = this.points[i].clone();
-					scanClone.colors[i] = this.colors[i].clone();
-					scanClone.normals[i] = this.normals[i].clone();
-				} else {
-					scanClone.points[i] = undefined;
-					scanClone.colors[i] = undefined;
-					scanClone.normals[i] = undefined;
-				}
-			}
-
-			scanClone.empty = this.empty.slice();
-			scanClone.ini = this.ini.slice();
-			scanClone.end = this.end.slice();
-
-			if (this.mesh) {
-				scanClone.mesh = this.mesh.clone();
-			}
-
-			if (this.pointCloud) {
-				scanClone.pointCloud = this.pointCloud.clone();
-			}
-		}
-
-		return scanClone;
-	}
-
-	/*
-	 * Initialize the scan from a file
-	 */
-	Scan.prototype.initFromFile = function(fileData) {
-		var scanLines, dimensions, x, y, pixel, pointData;
-
-		// Split the data in lines
-		scanLines = fileData.split("\n");
-
-		// Get the scan dimensions
-		dimensions = scanLines[0].split(" ");
-		this.width = parseInt(dimensions[0]);
-		this.height = parseInt(dimensions[1]);
-
-		// Fill the scan arrays
-		this.points = [];
-		this.colors = [];
-		this.empty = [];
-		this.ini = [];
-		this.end = [];
-
-		for (y = 0; y < this.height; y++) {
-			this.empty[y] = true;
-			this.ini[y] = undefined;
-			this.end[y] = undefined;
-
-			for (x = 0; x < this.width; x++) {
-				pixel = x + y * this.width;
-				pointData = scanLines[pixel + 1].split(" ");
-
-				if (parseFloat(pointData[3]) >= 0) {
-					this.points[pixel] = new THREE.Vector3(parseFloat(pointData[0]), parseFloat(pointData[1]),
-							parseFloat(pointData[2]));
-					this.colors[pixel] = new THREE.Color(parseFloat(pointData[3]) / 255,
-							parseFloat(pointData[4]) / 255, parseFloat(pointData[5]) / 255);
-
-					if (this.empty[y]) {
-						this.empty[y] = false;
-						this.ini[y] = x;
-					}
-
-					this.end[y] = x;
-				} else {
-					this.points[pixel] = undefined;
-					this.colors[pixel] = undefined;
-				}
-			}
-		}
-
-		// Calculate the point normals
-		this.calculatePointNormals();
-	};
-
-	/*
-	 * Calculates the point normals
-	 */
-	Scan.prototype.calculatePointNormals = function() {
-		var i, v1, v2, perp, x, y, pixel, averageNormal, counter;
-
-		// Initialize the normals array
-		this.normals = [];
-
-		for (i = 0; i < this.points.length; i++) {
-			this.normals[i] = undefined;
-		}
-
-		// Calculate the point normals
-		v1 = new THREE.Vector3();
-		v2 = new THREE.Vector3();
-		perp = new THREE.Vector3();
-
-		for (y = 0; y < this.height; y++) {
-			if (!this.empty[y]) {
-				for (x = this.ini[y]; x <= this.end[y]; x++) {
-					pixel = x + y * this.width;
-
-					if (this.points[pixel]) {
-						averageNormal = new THREE.Vector3();
-						counter = 0;
-
-						if (x + 1 < this.width && y + 1 < this.height && this.points[pixel + 1]
-								&& this.points[pixel + this.width]) {
-							v1.subVectors(this.points[pixel + 1], this.points[pixel]);
-							v2.subVectors(this.points[pixel + this.width], this.points[pixel]);
-							perp.crossVectors(v1, v2).normalize();
-							averageNormal.add(perp);
-							counter++;
-						}
-
-						if (x - 1 >= 0 && y + 1 < this.height && this.points[pixel - 1]
-								&& this.points[pixel + this.width]) {
-							v1.subVectors(this.points[pixel + this.width], this.points[pixel]);
-							v2.subVectors(this.points[pixel - 1], this.points[pixel]);
-							perp.crossVectors(v1, v2).normalize();
-							averageNormal.add(perp);
-							counter++;
-						}
-
-						if (x - 1 >= 0 && y - 1 >= 0 && this.points[pixel - 1] && this.points[pixel - this.width]) {
-							v1.subVectors(this.points[pixel - 1], this.points[pixel]);
-							v2.subVectors(this.points[pixel - this.width], this.points[pixel]);
-							perp.crossVectors(v1, v2).normalize();
-							averageNormal.add(perp);
-							counter++;
-						}
-
-						if (x + 1 < this.width && y - 1 >= 0 && this.points[pixel + 1]
-								&& this.points[pixel - this.width]) {
-							v1.subVectors(this.points[pixel - this.width], this.points[pixel]);
-							v2.subVectors(this.points[pixel + 1], this.points[pixel]);
-							perp.crossVectors(v1, v2).normalize();
-							averageNormal.add(perp);
-							counter++;
-						}
-
-						if (counter > 0) {
-							this.normals[pixel] = averageNormal.normalize();
-						} else {
-							this.normals[pixel] = averageNormal;
-						}
-					}
-				}
-			}
-		}
-	};
-
-	/*
-	 * Extends the dimensions of the scan to center it
-	 */
-	Scan.prototype.centerAndExtend = function() {
-		var centralPixel, widthExt, heightExt, pointsExt, colorsExt, normalsExt, emptyExt, iniExt, endExt;
-		var i, xStart, yStart, x, y, pixel, pixelExt;
-
-		// Calculate the dimensions of the extended scan
-		centralPixel = this.getCentralPixel();
-		widthExt = 2 * Math.max(centralPixel[0], this.width - 1 - centralPixel[0]) + 1;
-		heightExt = 2 * Math.max(centralPixel[1], this.height - 1 - centralPixel[1]) + 1;
-
-		// Prepare the arrays
-		pointsExt = [];
-		colorsExt = [];
-		normalsExt = [];
-		emptyExt = [];
-		iniExt = [];
-		endExt = [];
-
-		for (i = 0; i < widthExt * heightExt; i++) {
-			pointsExt[i] = undefined;
-			colorsExt[i] = undefined;
-			normalsExt[i] = undefined;
-		}
-
-		for (i = 0; i < heightExt; i++) {
-			emptyExt[i] = true;
-			iniExt[i] = undefined;
-			endExt[i] = undefined;
-		}
-
-		// Populate the arrays
-		if (centralPixel[0] > (this.width - 1 - centralPixel[0])) {
-			xStart = 0;
-		} else {
-			xStart = widthExt - this.width;
-		}
-
-		if (centralPixel[1] > (this.height - 1 - centralPixel[1])) {
-			yStart = 0;
-		} else {
-			yStart = heightExt - this.height;
-		}
-
-		for (y = 0; y < this.height; y++) {
-			if (!this.empty[y]) {
-				for (x = this.ini[y]; x <= this.end[y]; x++) {
-					pixel = x + y * this.width;
-					pixelExt = (xStart + x) + (yStart + y) * widthExt;
-					pointsExt[pixelExt] = this.points[pixel];
-					colorsExt[pixelExt] = this.colors[pixel];
-					normalsExt[pixelExt] = this.normals[pixel];
-				}
-
-				emptyExt[yStart + y] = this.empty[y];
-				iniExt[yStart + y] = this.ini[y] + xStart;
-				endExt[yStart + y] = this.end[y] + xStart;
-			}
-		}
-
-		// Update the scan to the new properties
-		this.width = widthExt;
-		this.height = heightExt;
-		this.points = pointsExt;
-		this.colors = colorsExt;
-		this.normals = normalsExt;
-		this.empty = emptyExt;
-		this.ini = iniExt;
-		this.end = endExt;
-	};
-
-	/*
-	 * Gets the pixel closer to the origin
-	 */
-	Scan.prototype.getCentralPixel = function() {
-		var centralPixel, minDistanceSq, x, y, point, distanceSq;
-
-		centralPixel = [];
-		minDistanceSq = Number.MAX_VALUE;
-
-		for (y = 0; y < this.height; y++) {
-			if (!this.empty[y]) {
-				for (x = this.ini[y]; x <= this.end[y]; x++) {
-					point = this.points[x + y * this.width];
-
-					if (point) {
-						distanceSq = point.x * point.x + point.y * point.y;
-
-						if (distanceSq < minDistanceSq) {
-							centralPixel[0] = x;
-							centralPixel[1] = y;
-							minDistanceSq = distanceSq;
-						}
-					}
-				}
-			}
-		}
-
-		return centralPixel;
-	};
-
-	/*
-	 * Extends the scan to the provided dimensions
-	 */
-	Scan.prototype.extend = function(widthExt, heightExt) {
-		var pointsExt, colorsExt, normalsExt, emptyExt, iniExt, endExt, i, xStart, yStart, x, y, pixel, pixelExt;
-
-		if (widthExt >= this.width && heightExt >= this.height) {
-			// Prepare the arrays
-			pointsExt = [];
-			colorsExt = [];
-			normalsExt = [];
-			emptyExt = [];
-			iniExt = [];
-			endExt = [];
-
-			for (i = 0; i < widthExt * heightExt; i++) {
-				pointsExt[i] = undefined;
-				colorsExt[i] = undefined;
-				normalsExt[i] = undefined;
-			}
-
-			for (i = 0; i < heightExt; i++) {
-				emptyExt[i] = true;
-				iniExt[i] = undefined;
-				endExt[i] = undefined;
-			}
-
-			// Populate the arrays
-			xStart = Math.floor((widthExt - this.width) / 2);
-			yStart = Math.floor((heightExt - this.height) / 2);
-
-			for (y = 0; y < this.height; y++) {
-				if (!this.empty[y]) {
-					for (x = this.ini[y]; x <= this.end[y]; x++) {
-						pixel = x + y * this.width;
-						pixelExt = (xStart + x) + (yStart + y) * widthExt;
-						pointsExt[pixelExt] = this.points[pixel];
-						colorsExt[pixelExt] = this.colors[pixel];
-						normalsExt[pixelExt] = this.normals[pixel];
-					}
-
-					emptyExt[yStart + y] = this.empty[y];
-					iniExt[yStart + y] = this.ini[y] + xStart;
-					endExt[yStart + y] = this.end[y] + xStart;
-				}
-			}
-
-			// Update the scan to the new properties
-			this.width = widthExt;
-			this.height = heightExt;
-			this.points = pointsExt;
-			this.colors = colorsExt;
-			this.normals = normalsExt;
-			this.empty = emptyExt;
-			this.ini = iniExt;
-			this.end = endExt;
-		}
-	};
-
-	/*
-	 * Crops the scan to the area with valid points
-	 */
-	Scan.prototype.crop = function() {
-		var xIni, xEnd, yIni, yEnd, x, y, widthCrop, heightCrop, pointsCrop, colorsCrop, normalsCrop;
-		var emptyCrop, iniCrop, endCrop, i, pixel, pixelCrop;
-
-		// Calculate the region in the scan with the valid data
-		xIni = Number.MAX_VALUE;
-		xEnd = -Number.MAX_VALUE;
-		yIni = Number.MAX_VALUE;
-		yEnd = -Number.MAX_VALUE;
-
-		for (y = 0; y < this.height; y++) {
-			if (!this.empty[y]) {
-				if (this.ini[y] < xIni) {
-					xIni = this.ini[y];
-				}
-
-				if (this.end[y] > xEnd) {
-					xEnd = this.end[y];
-				}
-
-				if (y < yIni) {
-					yIni = y;
-				}
-
-				if (y > yEnd) {
-					yEnd = y;
-				}
-			}
-		}
-
-		// Check that the limits make sense
-		if (xIni <= xEnd && yIni <= yEnd) {
-			// Dimensions of the cropped scan
-			widthCrop = (xEnd - xIni) + 1;
-			heightCrop = (yEnd - yIni) + 1;
-
-			// Prepare the arrays
-			pointsCrop = [];
-			colorsCrop = [];
-			normalsCrop = [];
-			emptyCrop = [];
-			iniCrop = [];
-			endCrop = [];
-
-			for (i = 0; i < widthCrop * heightCrop; i++) {
-				pointsCrop[i] = undefined;
-				colorsCrop[i] = undefined;
-				normalsCrop[i] = undefined;
-			}
-
-			for (i = 0; i < heightCrop; i++) {
-				emptyCrop[i] = true;
-				iniCrop[i] = undefined;
-				endCrop[i] = undefined;
-			}
-
-			// Populate the arrays
-			for (y = 0; y < this.height; y++) {
-				if (!this.empty[y]) {
-					for (x = this.ini[y]; x <= this.end[y]; x++) {
-						pixel = x + y * this.width;
-						pixelCrop = (x - xIni) + (y - yIni) * widthCrop;
-						pointsCrop[pixelCrop] = this.points[pixel];
-						colorsCrop[pixelCrop] = this.colors[pixel];
-						normalsCrop[pixelCrop] = this.normals[pixel];
-					}
-
-					emptyCrop[y - yIni] = this.empty[y];
-					iniCrop[y - yIni] = this.ini[y] - xIni;
-					endCrop[y - yIni] = this.end[y] - xIni;
-				}
-			}
-
-			// Update the scan to the new properties
-			this.width = widthCrop;
-			this.height = heightCrop;
-			this.points = pointsCrop;
-			this.colors = colorsCrop;
-			this.normals = normalsCrop;
-			this.empty = emptyCrop;
-			this.ini = iniCrop;
-			this.end = endCrop;
-		}
-	};
-
-	/*
-	 * Reduces the scan resolution
-	 */
-	Scan.prototype.reduceResolution = function(n) {
-		var widthRed, heightRed, pointsRed, colorsRed, emptyRed, iniRed, endRed, i, delta, x, y;
-		var point, r, g, b, counter, j, xNearby, yNearby, pixelNearby, pixelRed;
-
-		// Make sure the reduction factor is an integer
-		n = Math.round(n);
-
-		if (n >= 2) {
-			// Dimensions of the reduced scan
-			widthRed = Math.ceil(this.width / n);
-			heightRed = Math.ceil(this.height / n);
-
-			// Prepare the arrays
-			pointsRed = [];
-			colorsRed = [];
-			emptyRed = [];
-			iniRed = [];
-			endRed = [];
-
-			for (i = 0; i < widthRed * heightRed; i++) {
-				pointsRed[i] = undefined;
-				colorsRed[i] = undefined;
-			}
-
-			for (i = 0; i < heightRed; i++) {
-				emptyRed[i] = true;
-				iniRed[i] = undefined;
-				endRed[i] = undefined;
-			}
-
-			// Populate the arrays
-			delta = Math.floor(n / 2);
-
-			for (y = 0; y < heightRed; y++) {
-				for (x = 0; x < widthRed; x++) {
-					// Average between nearby pixels
-					point = new THREE.Vector3();
-					r = 0;
-					g = 0;
-					b = 0;
-					counter = 0;
-
-					for (i = -delta; i <= delta; i++) {
-						for (j = -delta; j <= delta; j++) {
-							xNearby = x * n + i;
-							yNearby = y * n + j;
-							pixelNearby = xNearby + yNearby * this.width;
-
-							if (xNearby >= 0 && xNearby < this.width && yNearby >= 0 && yNearby < this.height
-									&& this.points[pixelNearby]) {
-								point.add(this.points[pixelNearby]);
-								r += this.colors[pixelNearby].r;
-								g += this.colors[pixelNearby].g;
-								b += this.colors[pixelNearby].b;
-								counter++;
-							}
-						}
-					}
-
-					if (counter > 0) {
-						pixelRed = x + y * widthRed;
-						pointsRed[pixelRed] = point.divideScalar(counter);
-						colorsRed[pixelRed] = new THREE.Color(r / counter, g / counter, b / counter);
-
-						if (emptyRed[y]) {
-							emptyRed[y] = false;
-							iniRed[y] = x;
-						}
-
-						endRed[y] = x;
-					}
-				}
-			}
-
-			// Update the scan to the new properties
-			this.width = widthRed;
-			this.height = heightRed;
-			this.points = pointsRed;
-			this.colors = colorsRed;
-			this.empty = emptyRed;
-			this.ini = iniRed;
-			this.end = endRed;
-			this.calculatePointNormals();
-		}
-	};
-
-	/*
-	 * Fills the scan holes
-	 */
-	Scan.prototype.fillHoles = function(maxHoles) {
-		var x, y, start, finish, i, step, deltaPos, deltaR, deltaG, deltaB;
-
-		for (y = 0; y < this.height; y++) {
-			if (!this.empty[y]) {
-				// Find holes in the line
-				for (x = this.ini[y] + 1; x < this.end[y]; x++) {
-					if (!this.points[x + y * this.width]) {
-						// Calculate the limits of the hole
-						start = (x - 1) + y * this.width;
-						finish = start;
-
-						for (i = x + 1; i <= this.end[y]; i++) {
-							if (this.points[i + y * this.width]) {
-								finish = i + y * this.width;
-								// the x loop will continue from here
-								x = i;
-								break;
-							}
-						}
-
-						// Fill the hole if the gap is not too big
-						if (finish - start - 1 <= maxHoles) {
-							step = 1 / (finish - start);
-							deltaPos = new THREE.Vector3().subVectors(this.points[finish], this.points[start]);
-							deltaPos.multiplyScalar(step);
-							deltaR = step * (this.colors[finish].r - this.colors[start].r);
-							deltaG = step * (this.colors[finish].g - this.colors[start].g);
-							deltaB = step * (this.colors[finish].b - this.colors[start].b);
-
-							for (i = start + 1; i < finish; i++) {
-								this.points[i] = new THREE.Vector3().addVectors(this.points[i - 1], deltaPos);
-								this.colors[i] = new THREE.Color(this.colors[i - 1].r + deltaR, this.colors[i - 1].g
-										+ deltaG, this.colors[i - 1].b + deltaB);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		// Update the scan point normals
-		this.calculatePointNormals();
-	};
-
-	/*
-	 * Smoothes the scan using a Gaussian kernel
-	 */
-	Scan.prototype.gaussianSmooth = function(n) {
-		var kernel, row, i, j, distSq, pointsSm, x, y, pixel, center, point, counter, pointNearby;
-
-		// Make sure the smoothing factor is an integer
-		n = Math.round(n);
-
-		if (n > 0) {
-			// Create the Gaussian kernel
-			kernel = [];
-
-			for (i = -n; i <= n; i++) {
-				row = [];
-
-				for (j = -n; j <= n; j++) {
-					distSq = i * i + j * j;
-
-					if (distSq <= n * n) {
-						row.push(Math.pow(2.718, -distSq / (n * n / 2)));
-					} else {
-						row.push(0);
-					}
-				}
-
-				kernel.push(row);
-			}
-
-			// Prepare the array with the smoothed points
-			pointsSm = [];
-
-			for (i = 0; i < this.width * this.height; i++) {
-				pointsSm[i] = undefined;
-			}
-
-			// Populate the array
-			for (y = 0; y < this.height; y++) {
-				if (!this.empty[y]) {
-					for (x = this.ini[y]; x <= this.end[y]; x++) {
-						pixel = x + y * this.width;
-						center = this.points[pixel];
-
-						if (center) {
-							// Average between nearby pixels
-							point = new THREE.Vector3();
-							counter = 0;
-
-							for (i = -n; i <= n; i++) {
-								for (j = -n; j <= n; j++) {
-									if (x + i >= 0 && x + i < this.width && y + j >= 0 && y + j < this.height) {
-										pointNearby = this.points[x + i + (y + j) * this.width];
-
-										if (pointNearby && pointNearby.distanceToSquared(center) < this.maxSeparationSq) {
-											point.add(pointNearby.clone().multiplyScalar(kernel[i + n][j + n]));
-											counter += kernel[i + n][j + n];
-										}
-									}
-								}
-							}
-
-							if (counter > 0) {
-								pointsSm[pixel] = point.divideScalar(counter);
-							}
-						}
-					}
-				}
-			}
-
-			// Update the scan to the new properties
-			this.points = pointsSm;
-			this.calculatePointNormals();
-		}
-	};
-
-	/*
-	 * Creates the scan point cloud
-	 */
-	Scan.prototype.createPointCloud = function(canvas) {
-		var vertices, verticesColors, verticesNormals, i, geometry, material;
-
-		// Calculate the vertices properties
-		vertices = [];
-		verticesColors = [];
-		verticesNormals = [];
-
-		for (i = 0; i < this.points.length; i++) {
-			if (this.points[i]) {
-				vertices.push(this.points[i]);
-				verticesColors.push(this.colors[i]);
-				verticesNormals.push(this.normals[i]);
-			}
-		}
-
-		// Define the points geometry
-		geometry = new THREE.Geometry();
-		geometry.vertices = vertices;
-
-		// Define the points shader material
-		material = this.createShaderMaterial(verticesColors, verticesNormals, canvas);
-
-		// Create the point cloud
-		this.pointCloud = new THREE.PointCloud(geometry, material);
-	};
-
-	/*
-	 * Creates the scan mesh
-	 */
-	Scan.prototype.createMesh = function(canvas) {
-		var vertices, verticesColors, verticesNormals, order, counter, x, y, pixel, faces, barycentricCoord;
-		var xStart, xEnd, pixel1, pixel2, pixel3, pixel4, geometry, frontMaterial, backMaterial, frontMesh, backMesh;
-
-		// Calculate the vertices properties
-		vertices = [];
-		verticesColors = [];
-		verticesNormals = [];
-		order = [];
-		counter = 0;
-
-		for (y = 0; y < this.height; y++) {
-			if (!this.empty[y]) {
-				for (x = this.ini[y]; x <= this.end[y]; x++) {
-					pixel = x + y * this.width;
-
-					if (this.points[pixel]) {
-						vertices.push(this.points[pixel]);
-						verticesColors.push(this.colors[pixel]);
-						verticesNormals.push(this.normals[pixel]);
-						order[pixel] = counter;
-						counter++;
-					}
-				}
-			}
-		}
-
-		// Calculate the faces and the barycentric coordinates
-		faces = [];
-		barycentricCoord = [];
-
-		for (y = 0; y < this.height - 1; y++) {
-			if (!this.empty[y] && !this.empty[y + 1]) {
-				xStart = Math.min(this.ini[y], this.ini[y + 1]);
-				xEnd = Math.max(this.end[y], this.end[y + 1]);
-
-				for (x = xStart; x < xEnd; x++) {
-					pixel1 = x + y * this.width;
-					pixel2 = pixel1 + 1;
-					pixel3 = pixel2 + this.width;
-					pixel4 = pixel1 + this.width;
-
-					// First triangle
-					if (this.points[pixel1] && this.points[pixel4]) {
-						if (this.points[pixel2]) {
-							this.addFace(pixel1, pixel2, pixel4, order, faces, barycentricCoord);
-						} else if (this.points[pixel3]) {
-							this.addFace(pixel1, pixel3, pixel4, order, faces, barycentricCoord);
-						}
-					}
-
-					// Second triangle
-					if (this.points[pixel2] && this.points[pixel3]) {
-						if (this.points[pixel4]) {
-							this.addFace(pixel2, pixel3, pixel4, order, faces, barycentricCoord);
-						} else if (this.points[pixel1]) {
-							this.addFace(pixel1, pixel2, pixel3, order, faces, barycentricCoord);
-						}
-					}
-				}
-			}
-		}
-
-		// Define the mesh geometry
-		geometry = new THREE.Geometry();
-		geometry.vertices = vertices;
-		geometry.faces = faces;
-
-		// Define the front and back shader materials
-		frontMaterial = this.createShaderMaterial(verticesColors, verticesNormals, canvas, barycentricCoord, false);
-		backMaterial = this.createShaderMaterial(verticesColors, verticesNormals, canvas, barycentricCoord, true);
-
-		// Create the front and back meshes
-		frontMesh = new THREE.Mesh(geometry, frontMaterial);
-		backMesh = new THREE.Mesh(geometry, backMaterial);
-		frontMesh.name = "frontMesh";
-		backMesh.name = "backMesh";
-
-		// Add the front and back meshes to the mesh container
-		this.mesh = new THREE.Object3D();
-		this.mesh.add(backMesh);
-		this.mesh.add(frontMesh);
-	};
-
-	/*
-	 * Adds a face to the faces and barycentricCoord arrays
-	 */
-	Scan.prototype.addFace = function(pixel1, pixel2, pixel3, order, faces, barycentricCoord) {
-		var p1, p2, p3;
-
-		p1 = this.points[pixel1];
-		p2 = this.points[pixel2];
-		p3 = this.points[pixel3];
-
-		if (p1.distanceToSquared(p2) < this.maxSeparationSq && p1.distanceToSquared(p3) < this.maxSeparationSq
-				&& p2.distanceToSquared(p3) < this.maxSeparationSq) {
-			faces.push(new THREE.Face3(order[pixel1], order[pixel2], order[pixel3]));
-			barycentricCoord
-					.push([ new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1) ])
-		}
-	}
-
-	/*
-	 * Creates the appropriate scan shader material
-	 */
-	Scan.prototype.createShaderMaterial = function(verticesColors, verticesNormals, canvas, barycentricCoord, backScan) {
-		var pointMaterial, attributes, uniforms, material;
-
-		// The barycentric coordinates are not defined for point materials
-		pointMaterial = barycentricCoord ? false : true;
-
-		// Define the fragment attributes
-		attributes = {};
-
-		attributes['aColor'] = {
-			type : 'c',
-			value : verticesColors
-		};
-
-		attributes['aNormal'] = {
-			type : 'v3',
-			value : verticesNormals
-		};
-
-		if (!pointMaterial) {
-			attributes['aBarycentricCoord'] = {
-				type : 'v3',
-				boundTo : 'faceVertices',
-				value : barycentricCoord
-			};
-		}
-
-		// Define the fragment uniforms
-		uniforms = {};
-
-		uniforms['pointCloud'] = {
-			type : "i",
-			value : pointMaterial
-		};
-
-		uniforms['backScan'] = {
-			type : "i",
-			value : pointMaterial ? 0 : backScan
-		};
-
-		uniforms['backColor'] = {
-			type : "c",
-			value : new THREE.Color(1, 1, 1)
-		};
-
-		uniforms['showLines'] = {
-			type : "i",
-			value : 0
-		};
-
-		uniforms['pointSize'] = {
-			type : "f",
-			value : 2
-		};
-
-		uniforms['effect'] = {
-			type : "i",
-			value : 0
-		};
-
-		uniforms['invertEffect'] = {
-			type : "i",
-			value : 0
-		};
-
-		uniforms['fillWithColor'] = {
-			type : "i",
-			value : 0
-		};
-
-		uniforms['effectTransparency'] = {
-			type : "f",
-			value : 1
-		};
-
-		uniforms['lightPosition'] = {
-			type : "v3",
-			value : new THREE.Vector3(0)
-		};
-
-		uniforms['time'] = {
-			type : "f",
-			value : 0
-		};
-
-		// Add the texture
-		var texture = new THREE.Texture();
-		texture.image = canvas.elt;
-		texture.magFilter = THREE.LinearFilter;
-		texture.minFilter = THREE.LinearFilter;
-
-		uniforms['mask'] = {
-			type : "t",
-			value : texture
-		};
-
-		// Create the shader material
-		material = new THREE.ShaderMaterial({
-			attributes : attributes,
-			uniforms : uniforms,
-			vertexShader : document.getElementById("vertexShader").textContent,
-			fragmentShader : document.getElementById("fragmentShader").textContent,
-			side : pointMaterial ? THREE.DoubleSide : backScan ? THREE.BackSide : THREE.FrontSide,
-			transparent : true
-		});
-
-		return material;
-	}
-
-	/*
-	 * Updates the uniforms for the vertex and fragment shaders
-	 */
-	Scan.prototype.updateUniforms = function(backColor, showLines, pointSize, effect, invertEffect, fillWithColor,
-			effectTransparency, lightPosition, time) {
-		var frontMeshUniforms, backMeshUniforms, pointCloudUniforms;
-
-		if (this.mesh) {
+		if (scan && scan.mesh) {
 			// Get the front and back mesh uniforms
-			frontMeshUniforms = this.mesh.getObjectByName("frontMesh").material.uniforms;
-			backMeshUniforms = this.mesh.getObjectByName("backMesh").material.uniforms;
+			frontMeshUniforms = scan.mesh.getObjectByName("frontMesh").material.uniforms;
+			backMeshUniforms = scan.mesh.getObjectByName("backMesh").material.uniforms;
 
 			// Update the uniforms
+			backColor = guiControlKeys["Back side color"];
 			frontMeshUniforms.backColor.value.setRGB(backColor[0] / 255, backColor[1] / 255, backColor[2] / 255);
 			backMeshUniforms.backColor.value.setRGB(backColor[0] / 255, backColor[1] / 255, backColor[2] / 255);
-			frontMeshUniforms.showLines.value = showLines;
-			backMeshUniforms.showLines.value = showLines;
-			frontMeshUniforms.effect.value = effect;
-			backMeshUniforms.effect.value = effect;
-			frontMeshUniforms.invertEffect.value = invertEffect;
-			backMeshUniforms.invertEffect.value = invertEffect;
-			frontMeshUniforms.fillWithColor.value = fillWithColor;
-			backMeshUniforms.fillWithColor.value = fillWithColor;
-			frontMeshUniforms.effectTransparency.value = effectTransparency;
-			backMeshUniforms.effectTransparency.value = effectTransparency;
-			frontMeshUniforms.lightPosition.value = lightPosition;
-			backMeshUniforms.lightPosition.value = lightPosition;
+			frontMeshUniforms.showLines.value = guiControlKeys["Show lines"];
+			backMeshUniforms.showLines.value = guiControlKeys["Show lines"];
+			frontMeshUniforms.effect.value = guiControlKeys["Effect"];
+			backMeshUniforms.effect.value = guiControlKeys["Effect"];
+			frontMeshUniforms.invertEffect.value = guiControlKeys["Invert effect"];
+			backMeshUniforms.invertEffect.value = guiControlKeys["Invert effect"];
+			frontMeshUniforms.fillWithColor.value = guiControlKeys["Fill with color"];
+			backMeshUniforms.fillWithColor.value = guiControlKeys["Fill with color"];
+			frontMeshUniforms.effectTransparency.value = guiControlKeys["Transparency"];
+			backMeshUniforms.effectTransparency.value = guiControlKeys["Transparency"];
+			frontMeshUniforms.lightPosition.value = camera.position;
+			backMeshUniforms.lightPosition.value = camera.position;
+			frontMeshUniforms.cursor.value = mouseWorldPosition;
+			backMeshUniforms.cursor.value = mouseWorldPosition;
 			frontMeshUniforms.time.value = time;
 			backMeshUniforms.time.value = time;
 
@@ -1217,17 +376,18 @@ function runSketch() {
 			}
 		}
 
-		if (this.pointCloud) {
+		if (scan && scan.pointCloud) {
 			// Get the point cloud uniforms
-			pointCloudUniforms = this.pointCloud.material.uniforms;
+			pointCloudUniforms = scan.pointCloud.material.uniforms;
 
 			// Update the uniforms
-			pointCloudUniforms.pointSize.value = pointSize;
-			pointCloudUniforms.effect.value = effect;
-			pointCloudUniforms.invertEffect.value = invertEffect;
-			pointCloudUniforms.fillWithColor.value = fillWithColor;
-			pointCloudUniforms.effectTransparency.value = effectTransparency;
-			pointCloudUniforms.lightPosition.value = lightPosition;
+			pointCloudUniforms.pointSize.value = guiControlKeys["Point size"];
+			pointCloudUniforms.effect.value = guiControlKeys["Effect"];
+			pointCloudUniforms.invertEffect.value = guiControlKeys["Invert effect"];
+			pointCloudUniforms.fillWithColor.value = guiControlKeys["Fill with color"];
+			pointCloudUniforms.effectTransparency.value = guiControlKeys["Transparency"];
+			pointCloudUniforms.lightPosition.value = camera.position;
+			pointCloudUniforms.cursor.value = mouseWorldPosition;
 			pointCloudUniforms.time.value = time;
 
 			// Update the mask texture only if the sketch is running
@@ -1244,11 +404,12 @@ function runSketch() {
 		var i, ang, vel;
 
 		// Class parameters
+		this.nBalls = nBalls;
+		this.ballDiameter = ballDiameter;
 		this.p5 = p5Canvas;
 		this.fillColor = fillColor;
 		this.bgColor = bgColor;
 		this.clearCanvas = clearCanvas;
-		this.nBalls = nBalls;
 		this.balls = [];
 
 		// Initialize the balls
@@ -1261,7 +422,6 @@ function runSketch() {
 				y : this.p5.height * Math.random(),
 				vx : vel * Math.cos(ang),
 				vy : vel * Math.sin(ang),
-				diameter : ballDiameter
 			};
 		}
 
@@ -1272,12 +432,14 @@ function runSketch() {
 
 		// The update method
 		this.update = function() {
-			var i, ball;
+			var w, h, i, ball;
+
+			w = this.p5.width;
+			h = this.p5.height;
 
 			for (i = 0; i < this.nBalls; i++) {
-				ball = this.balls[i];
-
 				// Update the ball position
+				ball = this.balls[i];
 				ball.x += ball.vx;
 				ball.y += ball.vy;
 
@@ -1285,16 +447,16 @@ function runSketch() {
 				if (ball.x < 0) {
 					ball.x = 0;
 					ball.vx *= -1;
-				} else if (ball.x > this.p5.width) {
-					ball.x = this.p5.width;
+				} else if (ball.x > w) {
+					ball.x = w;
 					ball.vx *= -1;
 				}
 
 				if (ball.y < 0) {
 					ball.y = 0;
 					ball.vy *= -1;
-				} else if (ball.y > this.p5.height) {
-					ball.y = this.p5.height;
+				} else if (ball.y > h) {
+					ball.y = h;
 					ball.vy *= -1;
 				}
 			}
@@ -1302,7 +464,7 @@ function runSketch() {
 
 		// The paint method
 		this.paint = function() {
-			var i, ball;
+			var i;
 
 			// Clear the canvas if necessary
 			if (this.clearCanvas) {
@@ -1311,8 +473,7 @@ function runSketch() {
 
 			// Draw the balls
 			for (i = 0; i < this.nBalls; i++) {
-				ball = this.balls[i];
-				this.p5.ellipse(ball.x, ball.y, ball.diameter, ball.diameter);
+				this.p5.ellipse(this.balls[i].x, this.balls[i].y, this.ballDiameter, this.ballDiameter);
 			}
 		};
 	}
@@ -1330,6 +491,7 @@ function runSketch() {
 		this.clearCanvas = clearCanvas;
 		this.nParticles = 0.1 * this.p5.width * this.p5.height;
 		this.particles = [];
+		this.particleDiameter = 3;
 		this.buffer = new Int32Array(this.p5.width * this.p5.height);
 
 		// Initialize the particles
@@ -1339,20 +501,19 @@ function runSketch() {
 				y : Math.floor(this.p5.height * Math.random()),
 				xPrev : 0,
 				yPrev : 0,
-				diameter : 3,
 				aggregated : false
 			};
 		}
 
 		// Initialize the buffer
+		this.buffer.w = this.p5.width;
+		this.buffer.h = this.p5.height;
+
 		for (i = 0; i < this.buffer.length; i++) {
 			this.buffer[i] = this.bgColor;
 		}
 
 		// The buffer draw function
-		this.buffer.w = this.p5.width;
-		this.buffer.h = this.p5.height;
-
 		this.buffer.draw = function(x, y, color) {
 			if (x >= 0 && x < this.w && y >= 0 && y < this.h) {
 				this[x + y * this.w] = color;
@@ -1453,7 +614,7 @@ function runSketch() {
 					// Check if the particle should be aggregated
 					if (this.buffer[p.x + p.y * this.buffer.w] == this.fillColor) {
 						if (this.buffer[p.xPrev + p.yPrev * this.buffer.w] != this.fillColor) {
-							this.p5.ellipse(p.xPrev, p.yPrev, p.diameter, p.diameter);
+							this.p5.ellipse(p.xPrev, p.yPrev, this.particleDiameter, this.particleDiameter);
 							this.buffer.draw(p.xPrev, p.yPrev, this.fillColor);
 						}
 
@@ -1461,6 +622,44 @@ function runSketch() {
 					}
 				}
 			}
+		};
+	}
+
+	/*
+	 * The paint with cursor Sketch class
+	 */
+	function PaintWithCursorSketch(cursor, cursorDiameter, p5Canvas, fillColor, bgColor, clearCanvas) {
+		// Class parameters
+		this.cursor = cursor;
+		this.cursorDiameter = cursorDiameter;
+		this.p5 = p5Canvas;
+		this.fillColor = fillColor;
+		this.bgColor = bgColor;
+		this.clearCanvas = clearCanvas;
+
+		// Processing setup
+		this.p5.background(this.bgColor);
+		this.p5.fill(this.fillColor);
+		this.p5.noStroke();
+
+		// The update method
+		this.update = function() {
+			// The cursor position updates automatically because we passed the reference
+		};
+
+		// The paint method
+		this.paint = function() {
+			var x, y;
+
+			// Clear the canvas if necessary
+			if (this.clearCanvas) {
+				this.p5.background(this.bgColor);
+			}
+
+			// Draw an ellipse at the cursor position
+			x = this.p5.width / 2 - this.cursor.x;
+			y = this.p5.height / 2 - this.cursor.y;
+			this.p5.ellipse(x, y, this.cursorDiameter, this.cursorDiameter);
 		};
 	}
 }
