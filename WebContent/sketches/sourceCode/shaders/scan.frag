@@ -155,8 +155,15 @@ bool maskEffect() {
 // Calculates the diffuse factor produced by the light illumination
 //
 float diffuseFactor() {
-	vec4 lightDirection = viewMatrix * vec4(lightPosition, 0.0);
-	return dot(normalize(vNormal), normalize(lightDirection.xyz));
+	// Check if the vertex fragment changed the vertex world position
+	if(effect == 1 || (effect == 12 && backScan != 1)) {
+		// The varying normal is no longer correct. Calculate the new normal
+		vec3 newNormal = cross(dFdx(vNormCoord), dFdy(vNormCoord));
+		return dot(normalize(newNormal), normalize(lightPosition));
+	} else {
+		vec4 lightDirection = viewMatrix * vec4(lightPosition, 0.0);
+		return dot(normalize(vNormal), normalize(lightDirection.xyz));
+	}
 }
 
 //
