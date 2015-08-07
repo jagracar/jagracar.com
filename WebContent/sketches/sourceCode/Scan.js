@@ -26,7 +26,7 @@ Scan.prototype.clone = function() {
 
 	scanClone = new Scan();
 
-	if (this.width != 0 || this.height != 0) {
+	if (this.width !== 0 || this.height !== 0) {
 		scanClone.width = this.width;
 		scanClone.height = this.height;
 		scanClone.points = [];
@@ -59,7 +59,7 @@ Scan.prototype.clone = function() {
 	}
 
 	return scanClone;
-}
+};
 
 /*
  * Initialize the scan from a file
@@ -72,8 +72,8 @@ Scan.prototype.initFromFile = function(fileData) {
 
 	// Get the scan dimensions
 	dimensions = scanLines[0].split(" ");
-	this.width = parseInt(dimensions[0]);
-	this.height = parseInt(dimensions[1]);
+	this.width = parseInt(dimensions[0], 10);
+	this.height = parseInt(dimensions[1], 10);
 
 	// Fill the scan arrays
 	this.points = [];
@@ -811,7 +811,7 @@ Scan.prototype.addFace = function(pixel1, pixel2, pixel3, order, faces, faceNorm
 		// Add the barycentric coordinates
 		barycentricCoord.push([ new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1) ]);
 	}
-}
+};
 
 /*
  * Creates the appropriate scan shader material
@@ -826,24 +826,24 @@ Scan.prototype.createShaderMaterial = function(vertexShader, fragmentShader, can
 	// Define the fragment attributes
 	attributes = {};
 
-	attributes['aColor'] = {
+	attributes.aColor = {
 		type : 'c',
 		value : verticesColors
 	};
 
-	attributes['aNormal'] = {
+	attributes.aNormal = {
 		type : 'v3',
 		value : verticesNormals
 	};
 
 	if (!pointMaterial) {
-		attributes['aFaceNormal'] = {
+		attributes.aFaceNormal = {
 			type : 'v3',
 			boundTo : 'faceVertices',
 			value : faceNormal
 		};
 
-		attributes['aBarycentricCoord'] = {
+		attributes.aBarycentricCoord = {
 			type : 'v3',
 			boundTo : 'faceVertices',
 			value : barycentricCoord
@@ -853,67 +853,67 @@ Scan.prototype.createShaderMaterial = function(vertexShader, fragmentShader, can
 	// Define the fragment uniforms
 	uniforms = {};
 
-	uniforms['pointCloud'] = {
+	uniforms.pointCloud = {
 		type : 'i',
 		value : pointMaterial
 	};
 
-	uniforms['backScan'] = {
+	uniforms.backScan = {
 		type : 'i',
 		value : pointMaterial ? 0 : backScan
 	};
 
-	uniforms['backColor'] = {
+	uniforms.backColor = {
 		type : 'c',
 		value : new THREE.Color(1, 1, 1)
 	};
 
-	uniforms['showLines'] = {
+	uniforms.showLines = {
 		type : 'i',
 		value : 0
 	};
 
-	uniforms['pointSize'] = {
+	uniforms.pointSize = {
 		type : 'f',
 		value : 2
 	};
 
-	uniforms['effect'] = {
+	uniforms.effect = {
 		type : 'i',
 		value : 0
 	};
 
-	uniforms['invertEffect'] = {
+	uniforms.invertEffect = {
 		type : 'i',
 		value : 0
 	};
 
-	uniforms['fillWithColor'] = {
+	uniforms.fillWithColor = {
 		type : 'i',
 		value : 0
 	};
 
-	uniforms['effectColor'] = {
+	uniforms.effectColor = {
 		type : 'c',
 		value : new THREE.Color(1, 1, 1)
 	};
 
-	uniforms['effectTransparency'] = {
+	uniforms.effectTransparency = {
 		type : 'f',
 		value : 1
 	};
 
-	uniforms['lightPosition'] = {
+	uniforms.lightPosition = {
 		type : 'v3',
 		value : new THREE.Vector3(0)
 	};
 
-	uniforms['cursor'] = {
+	uniforms.cursor = {
 		type : 'v3',
 		value : new THREE.Vector2(0)
-	}
+	};
 
-	uniforms['time'] = {
+	uniforms.time = {
 		type : 'f',
 		value : 0
 	};
@@ -925,7 +925,7 @@ Scan.prototype.createShaderMaterial = function(vertexShader, fragmentShader, can
 		texture.magFilter = THREE.LinearFilter;
 		texture.minFilter = THREE.LinearFilter;
 
-		uniforms['mask'] = {
+		uniforms.mask = {
 			type : 't',
 			value : texture
 		};
@@ -942,4 +942,4 @@ Scan.prototype.createShaderMaterial = function(vertexShader, fragmentShader, can
 	});
 
 	return material;
-}
+};

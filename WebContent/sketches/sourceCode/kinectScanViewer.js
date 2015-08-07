@@ -1,17 +1,6 @@
 function runSketch() {
-	var scene = undefined;
-	var renderer = undefined;
-	var camera = undefined;
-	var rayCaster = undefined;
-	var mouseCanvasPosition = undefined;
-	var mouseWorldPosition = undefined;
-	var guiControlKeys = undefined;
-	var p5Canvas = undefined;
-	var p5Sketch = undefined;
-	var vertexShader = undefined;
-	var fragmentShader = undefined;
-	var scan = undefined;
-	var originalScan = undefined;
+	var scene, renderer, camera, rayCaster, mouseCanvasPosition, mouseWorldPosition, guiControlKeys;
+	var p5Canvas, p5Sketch, vertexShader, fragmentShader, scan, originalScan;
 	var time = 0;
 
 	init();
@@ -85,7 +74,7 @@ function runSketch() {
 		requestAnimationFrame(animate);
 
 		// If necessary, calculate the mouse position on world coordinate units
-		if (guiControlKeys["Effect"] >= 12) {
+		if (guiControlKeys.Effect >= 12) {
 			// Calculate the rayCaster intersections with the scene objects
 			rayCaster.setFromCamera(mouseCanvasPosition, camera);
 			intersections = rayCaster.intersectObjects(scene.children, true);
@@ -111,7 +100,7 @@ function runSketch() {
 		renderer.render(scene, camera);
 
 		// Advance the time
-		time += guiControlKeys["Speed"];
+		time += guiControlKeys.Speed;
 	}
 
 	/*
@@ -144,7 +133,7 @@ function runSketch() {
 			"Fill with color" : true,
 			"Color" : [ 50, 50, 50 ],
 			"Transparency" : 1.0,
-			"Speed" : 0.5,
+			"Speed" : 0.5
 		};
 
 		// Create the GUI
@@ -287,10 +276,10 @@ function runSketch() {
 		scan.fillHoles(guiControlKeys["Fill holes"]);
 
 		// Smooth the scan points
-		scan.gaussianSmooth(guiControlKeys["Smoothness"]);
+		scan.gaussianSmooth(guiControlKeys.Smoothness);
 
 		// Reduce the resolution
-		scan.reduceResolution(guiControlKeys["Resolution"]);
+		scan.reduceResolution(guiControlKeys.Resolution);
 
 		// Create the scan mesh and the point cloud
 		scan.createMesh(vertexShader, fragmentShader, p5Canvas);
@@ -323,10 +312,10 @@ function runSketch() {
 			scan.fillHoles(guiControlKeys["Fill holes"]);
 
 			// Smooth the scan points
-			scan.gaussianSmooth(guiControlKeys["Smoothness"]);
+			scan.gaussianSmooth(guiControlKeys.Smoothness);
 
 			// Reduce the resolution
-			scan.reduceResolution(guiControlKeys["Resolution"]);
+			scan.reduceResolution(guiControlKeys.Resolution);
 
 			// Create the scan mesh and the point cloud
 			scan.createMesh(vertexShader, fragmentShader, p5Canvas);
@@ -354,13 +343,13 @@ function runSketch() {
 
 			// Update the uniforms
 			backColor = guiControlKeys["Back side color"];
-			effectColor = guiControlKeys["Color"];
+			effectColor = guiControlKeys.Color;
 			frontMeshUniforms.backColor.value.setRGB(backColor[0] / 255, backColor[1] / 255, backColor[2] / 255);
 			backMeshUniforms.backColor.value.setRGB(backColor[0] / 255, backColor[1] / 255, backColor[2] / 255);
 			frontMeshUniforms.showLines.value = guiControlKeys["Show lines"];
 			backMeshUniforms.showLines.value = guiControlKeys["Show lines"];
-			frontMeshUniforms.effect.value = guiControlKeys["Effect"];
-			backMeshUniforms.effect.value = guiControlKeys["Effect"];
+			frontMeshUniforms.effect.value = guiControlKeys.Effect;
+			backMeshUniforms.effect.value = guiControlKeys.Effect;
 			frontMeshUniforms.invertEffect.value = guiControlKeys["Invert effect"];
 			backMeshUniforms.invertEffect.value = guiControlKeys["Invert effect"];
 			frontMeshUniforms.fillWithColor.value = guiControlKeys["Fill with color"];
@@ -368,8 +357,8 @@ function runSketch() {
 			frontMeshUniforms.effectColor.value
 					.setRGB(effectColor[0] / 255, effectColor[1] / 255, effectColor[2] / 255);
 			backMeshUniforms.effectColor.value.setRGB(effectColor[0] / 255, effectColor[1] / 255, effectColor[2] / 255);
-			frontMeshUniforms.effectTransparency.value = guiControlKeys["Transparency"];
-			backMeshUniforms.effectTransparency.value = guiControlKeys["Transparency"];
+			frontMeshUniforms.effectTransparency.value = guiControlKeys.Transparency;
+			backMeshUniforms.effectTransparency.value = guiControlKeys.Transparency;
 			frontMeshUniforms.lightPosition.value = camera.position;
 			backMeshUniforms.lightPosition.value = camera.position;
 			frontMeshUniforms.cursor.value = mouseWorldPosition;
@@ -389,14 +378,14 @@ function runSketch() {
 			pointCloudUniforms = scan.pointCloud.material.uniforms;
 
 			// Update the uniforms
-			effectColor = guiControlKeys["Color"];
+			effectColor = guiControlKeys.Color;
 			pointCloudUniforms.pointSize.value = guiControlKeys["Point size"];
-			pointCloudUniforms.effect.value = guiControlKeys["Effect"];
+			pointCloudUniforms.effect.value = guiControlKeys.Effect;
 			pointCloudUniforms.invertEffect.value = guiControlKeys["Invert effect"];
 			pointCloudUniforms.fillWithColor.value = guiControlKeys["Fill with color"];
 			pointCloudUniforms.effectColor.value.setRGB(effectColor[0] / 255, effectColor[1] / 255,
 					effectColor[2] / 255);
-			pointCloudUniforms.effectTransparency.value = guiControlKeys["Transparency"];
+			pointCloudUniforms.effectTransparency.value = guiControlKeys.Transparency;
 			pointCloudUniforms.lightPosition.value = camera.position;
 			pointCloudUniforms.cursor.value = mouseWorldPosition;
 			pointCloudUniforms.time.value = time;
@@ -432,7 +421,7 @@ function runSketch() {
 				x : this.p5.width * Math.random(),
 				y : this.p5.height * Math.random(),
 				vx : vel * Math.cos(ang),
-				vy : vel * Math.sin(ang),
+				vy : vel * Math.sin(ang)
 			};
 		}
 
