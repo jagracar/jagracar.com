@@ -416,6 +416,24 @@ nav {
 			color: $general-text-color;
 		}
 	}
+	
+	&__info {
+		position: absolute; 
+		top: 0;
+		margin: $sketches-list-margin;
+		padding: $sketches-list-padding;
+		color: lighten($general-text-color, 80%);
+ 		background-color: rgba(darken($sketches-list-bg-color, 30%), 0.7);
+    	@include border-radius($sketches-list-border-radius);
+    
+		@include breakpoint(max-width $M) {
+			font-size: 0.9em;
+		}
+    
+		@include breakpoint(max-width $S) {
+			font-size: 0.8em;
+		}
+ 	}
 }
 
 .video-container {

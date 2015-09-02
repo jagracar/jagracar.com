@@ -88,6 +88,7 @@ function runSketch() {
 		});
 		gui.close();
 
+		// Add the GUI controllers
 		controller = gui.addColor(guiControlKeys, "Color");
 		controller.onChange(function(value) {
 			if (trace) {

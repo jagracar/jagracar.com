@@ -22,26 +22,26 @@ varying vec3 vBarycentricCoord;
 //
 // The pulsation effect 
 //
-vec3 pulsationEffect(vec3 normalVector){
+vec3 pulsationEffect(vec3 normalVector) {
 	return 7.0 * normalVector * (1.0 - cos(0.08 * time));
 }
 
 //
 // The second pulsation effect 
 //
-vec3 pulsationEffect2(vec3 normalVector){
+vec3 pulsationEffect2(vec3 normalVector) {
 	return 70.0 * normalVector * sin(0.08 * time);
 }
 
 //
 // The ball effect 
 //
-vec3 ballEffect(vec3 normalVector){
+vec3 ballEffect(vec3 normalVector) {
 	vec3 diff = position - cursor; 
 	float distSq = dot(diff, diff);
 	float ballRadiusSq = 400.0;
 
-	if(distSq < ballRadiusSq){
+	if(distSq < ballRadiusSq) {
 		float a = 1.0;
 		float b = 2.0 * dot(normalVector, diff);
 		float c = distSq - ballRadiusSq;
@@ -54,7 +54,7 @@ vec3 ballEffect(vec3 normalVector){
 //
 // Normalizes the vector coordinates to have values between -0.5 and 0.5 
 //
-vec3 normalizeCoordinates(vec3 vector){
+vec3 normalizeCoordinates(vec3 vector) {
 	return vec3(vector)/500.0;
 }
 
@@ -83,7 +83,7 @@ void main() {
 	}
 
 	// Use the face normal instead of the vertex normal for the second pulsation effect
-	if(effect == 2 || showLines == 1){
+	if(effect == 2 || showLines == 1) {
 		normal = faceNormal;
 	}
 

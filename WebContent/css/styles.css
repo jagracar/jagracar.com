@@ -849,6 +849,27 @@ nav a:hover, nav a:focus {
 .sketch__gui select {
   color: #333333;
 }
+.sketch__info {
+  position: absolute;
+  top: 0;
+  margin: 0.3em;
+  padding: 0.4em;
+  color: white;
+  background-color: rgba(153, 153, 153, 0.7);
+  -moz-border-radius: 0.3em;
+  -webkit-border-radius: 0.3em;
+  border-radius: 0.3em;
+}
+@media (max-width: 43em) {
+  .sketch__info {
+    font-size: 0.9em;
+  }
+}
+@media (max-width: 30em) {
+  .sketch__info {
+    font-size: 0.8em;
+  }
+}
 
 .video-container {
   position: relative;
