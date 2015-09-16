@@ -2,7 +2,7 @@
 	// General php variables
 	$page = 'threejs';
 	$homeDir = '../';
-	$sketch = 'postprocessing';
+	$sketch = 'webcam';
 ?>
 
 <!DOCTYPE html>
@@ -11,10 +11,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="keywords" content="three.js, javaScript, examples, 3D, postprocessing, dat.GUI">
-<meta name="description" content="three.js Trace 3D sketch">
+<meta name="keywords" content="three.js, javaScript, examples, webcam, shaders, dat.GUI">
+<meta name="description" content="three.js webcam sketch">
 <meta name="author" content="Javier Graciá Carpio">
-<title>Postprocessing sketch - jagracar</title>
+<title>Webcam sketch - jagracar</title>
 
 <!-- CSS files -->
 <link rel="stylesheet" href="<?php echo $homeDir;?>css/styles.css" />
@@ -40,6 +40,9 @@
 		<!-- Sketches list -->
 		<?php include_once $homeDir . 'threejsSketchesList.php';?>
 
+		<script id="vertexShader" type="x-shader/x-vertex"><?php include_once 'sourceCode/shaders/star.vert';?></script>
+		<script id="fragmentShader" type="x-shader/x-fragment"><?php include_once 'sourceCode/shaders/star.frag';?></script>
+
 		<div class="sketch-container">
 			<div class="sketch" id="widthRef">
 				<div class="sketch__wrapper">
@@ -49,7 +52,7 @@
 				</div>
 
 				<div class="sketch__description">
-					<p>...</p>
+					<p></p>
 
 					<p>
 						If the sketch doesn't work, you probably need to change your browser to one that <a
@@ -57,7 +60,9 @@
 					</p>
 
 					<p>
-						For more details, check the <a href="sourceCode/postprocessing.js">sketch source code</a>.
+						For more details, check the <a href="sourceCode/webcam.js">sketch source code</a> and the <a
+							href="sourceCode/shaders/pointOnSphere.vert">vertex</a> and <a href="sourceCode/shaders/pointOnSphere.frag">fragment</a>
+						shaders.
 					</p>
 				</div>
 			</div>
@@ -70,16 +75,7 @@
 	<!-- JavaScript files -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r72/three.js"></script>
-	<script src="<?php echo $homeDir;?>js/orbitControls.js"></script>
-	<script src="<?php echo $homeDir;?>js/ShaderPass.js"></script>
-	<script src="<?php echo $homeDir;?>js/CopyShader.js"></script>
-	<script src="<?php echo $homeDir;?>js/EffectComposer.js"></script>
-	<script src="<?php echo $homeDir;?>js/MaskPass.js"></script>
-	<script src="<?php echo $homeDir;?>js/FilmPass.js"></script>
-	<script src="<?php echo $homeDir;?>js/ColorifyShader.js"></script>
-	<script src="<?php echo $homeDir;?>js/FilmShader.js"></script>
-	<script src="<?php echo $homeDir;?>js/RenderPass.js"></script>
-	<script src="sourceCode/postprocessing.js"></script>
+	<script src="sourceCode/webcam.js"></script>
 
 	<!-- Run the sketch -->
 	<script>

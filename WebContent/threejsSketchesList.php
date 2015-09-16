@@ -9,5 +9,9 @@
 			class="<?php if($sketch == 'trace3d') { echo $activeSketch; }?>">Trace 3D</a></li>
 		<li><a href="<?php echo $homeDir;?>sketches/visitedCities.php"
 			class="<?php if($sketch == 'visitedCities') { echo $activeSketch; }?>">Visited cities</a></li>
+		<li><a href="<?php echo $homeDir;?>sketches/galacticCenter.php"
+			class="<?php if($sketch == 'galacticCenter') { echo $activeSketch; }?>">Galactic center</a></li>
+		<li><a href="<?php echo $homeDir;?>sketches/star.php"
+			class="<?php if($sketch == 'star') { echo $activeSketch; }?>">Star</a></li>
 	</ul>
 </div>

@@ -112,7 +112,7 @@ function runSketch() {
 		controller.onFinishChange(function(value) {
 			if (trace) {
 				trace.mesh.material.shading = value ? THREE.FlatShading : THREE.SmoothShading;
-				trace.mesh.geometry.normalsNeedUpdate = true;
+				trace.mesh.material.needsUpdate = true;
 			}
 		});
 

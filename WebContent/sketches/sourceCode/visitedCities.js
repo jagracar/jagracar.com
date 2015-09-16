@@ -1,6 +1,6 @@
 function runSketch() {
 	var scene, renderer, camera, light, guiControlKeys;
-	var earthRadius, earth, visitedCities, selectedCity, informationPanel;
+	var earthRadius, earth, textureFinishedLoading, visitedCities, selectedCity, informationPanel;
 
 	init();
 	animate();
@@ -46,6 +46,10 @@ function runSketch() {
 
 		// Initialize the camera controls
 		controls = new THREE.OrbitControls(camera, renderer.domElement);
+		controls.noPan = true;
+		controls.zoomSpeed = 0.6;
+		controls.minDistance = 250;
+		controls.maxDistance = 1000;
 
 		// Initialize the directional light
 		light = new THREE.DirectionalLight();
@@ -68,14 +72,16 @@ function runSketch() {
 		// Request the next animation frame
 		requestAnimationFrame(animate);
 
-		// Update the light position
-		light.position.copy(camera.position);
+		if (textureFinishedLoading) {
+			// Update the light position
+			light.position.copy(camera.position);
 
-		// Update the visited cities uniforms
-		updateVisitedCitiesUniforms();
+			// Update the visited cities uniforms
+			updateVisitedCitiesUniforms();
 
-		// Render the scene
-		renderer.render(scene, camera);
+			// Render the scene
+			renderer.render(scene, camera);
+		}
 	}
 
 	/*
@@ -178,6 +184,7 @@ function runSketch() {
 		earth = new THREE.Mesh(geometry, material);
 
 		// Update The Earth texture
+		textureFinishedLoading = false;
 		updateEarthTexture(guiControlKeys.Month);
 
 		// Add the Earth mesh to the scene
@@ -199,6 +206,7 @@ function runSketch() {
 			texture.minFilter = THREE.NearestFilter;
 			earth.material.map = texture;
 			earth.material.needsUpdate = true;
+			textureFinishedLoading = true;
 		});
 	}
 
