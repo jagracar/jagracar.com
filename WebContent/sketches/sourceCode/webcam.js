@@ -1,5 +1,5 @@
 function runSketch() {
-	var scene, renderer, camera, clock, guiControlKeys, informationPanel, camvideo, plane;
+	var scene, renderer, camera, composer, webcamPass, clock, guiControlKeys, informationPanel, videoElement, webcamPlane;
 
 	init();
 	animate();
@@ -8,17 +8,11 @@ function runSketch() {
 	 * Initializes the sketch
 	 */
 	function init() {
-		var canvasWidth, canvasHeight;
-
 		// Scene setup
 		scene = new THREE.Scene();
 
-		// Set the optimal sketch dimensions
-		canvasWidth = 540;
-		canvasHeight = 360;
-
 		// Get the WebGL renderer
-		renderer = getWebGLRenderer(canvasWidth, canvasHeight);
+		renderer = getWebGLRenderer(640, 480);
 
 		// Add the renderer to the sketch container
 		document.getElementById(sketchContainer).appendChild(renderer.domElement);
@@ -26,38 +20,29 @@ function runSketch() {
 		// Camera setup
 		camera = new THREE.Camera();
 
+		// Setup the effect composer
+		setupEffectComposer()
+
 		// Initialize the clock
 		clock = new THREE.Clock(true);
 
 		// Create the GUI and initialize the GUI control keys
 		createGUI();
 
-		// Add the information panel if it's not yet present
+		// Add the information panel, but don't display it unless there is a problem
 		informationPanel = document.createElement("p");
 		informationPanel.className = "sketch__info";
+		informationPanel.style.display = "none";
 		document.getElementById(sketchContainer).appendChild(informationPanel);
 
-		// Get the video element
-		camvideo = document.createElement("video");
-		camvideo.autoplay = true;
+		// Create the video element, but don't add it to the document
+		videoElement = document.createElement("video");
+		videoElement.autoplay = true;
 
-		videoTexture = new THREE.Texture(camvideo);
-		videoTexture.minFilter = THREE.LinearFilter;
-		videoTexture.magFilter = THREE.LinearFilter;
-		videoTexture.format = THREE.RGBFormat;
-		videoTexture.generateMipmaps = false;
-		videoMaterial = new THREE.MeshBasicMaterial();
-		videoMaterial.depthTest = false;
-		videoMaterial.depthWrite = false;
-		videoMaterial.map = videoTexture;
-		planeGeometry = new THREE.PlaneGeometry(2, 2, 1, 1);
-		planeGeometry.faceVertexUvs = [ [
-				[ new THREE.Vector2(1, 1), new THREE.Vector2(1, 0), new THREE.Vector2(0, 1) ],
-				[ new THREE.Vector2(1, 0), new THREE.Vector2(0, 0), new THREE.Vector2(0, 1) ] ] ];
-		plane = new THREE.Mesh(planeGeometry, videoMaterial);
-		console.log(plane);
-		// scene.add(plane);
+		// Create the webcam plane and add it to the scene
+		createWebcamPlane();
 
+		// Start the user webcam
 		startWebcam();
 	}
 
@@ -68,51 +53,12 @@ function runSketch() {
 		// Request the next animation frame
 		requestAnimationFrame(animate);
 
-		if (camvideo.readyState === camvideo.HAVE_ENOUGH_DATA) {
-			plane.material.map.needsUpdate = true;
-		}
-		// Render the scene
-		renderer.render(scene, camera);
-	}
+		// Update the webcam plane texture if necessary
+		if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
+			webcamPlane.material.map.needsUpdate = true;
 
-	function startWebcam() {
-		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
-				|| navigator.msGetUserMedia;
-		window.URL = window.URL || window.webkitURL;
-
-		if (!navigator.getUserMedia) {
-			informationPanel.textContent = 'getUserMedia() is not supported in your browser';
-		} else {
-			navigator.getUserMedia({
-				video : true
-			}, handleWebcam, onWebcamError);
-		}
-	}
-
-	function handleWebcam(mediaStream) {
-		if (window.URL) {
-			camvideo.src = window.URL.createObjectURL(mediaStream);
-			console.log(camvideo.height);
-			informationPanel.textContent = 'Everthing went ok.';
-		} else {
-			informationPanel.textContent = 'window.URL is not supported in your browser';
-		}
-
-		camvideo.onerror = function(e) {
-			informationPanel.textContent = 'stream error';
-			mediaStream.stop();
-		};
-
-		mediaStream.onended = onWebcamError;
-	}
-
-	function onWebcamError(e) {
-		console.log(e);
-
-		if (e.name == "PermissionDeniedError" || e.code == 1) {
-			informationPanel.textContent = 'User denied access to use camera.';
-		} else {
-			informationPanel.textContent = 'No camera available.';
+			// Render the scene
+			composer.render();
 		}
 	}
 
@@ -136,9 +82,40 @@ function runSketch() {
 			antialias : true
 		});
 		webGLRenderer.setSize(canvasWidth, canvasHeight);
-		webGLRenderer.setClearColor(new THREE.Color(0, 0, 0));
 
 		return webGLRenderer;
+	}
+
+	/*
+	 * Setups the effect composer
+	 */
+	function setupEffectComposer() {
+		var renderPass, uniforms;
+
+		// Create the effect composer
+		composer = new THREE.EffectComposer(renderer);
+
+		// Create the render pass
+		renderPass = new THREE.RenderPass(scene, camera);
+
+		// Create the webcam effect pass
+		uniforms = {
+			tDiffuse : {
+				type : 't',
+				value : null
+			},
+		};
+
+		webcamPass = new THREE.ShaderPass({
+			uniforms : uniforms,
+			vertexShader : document.getElementById("vertexShader").textContent,
+			fragmentShader : document.getElementById("fragmentShader").textContent
+		});
+		webcamPass.renderToScreen = true;
+
+		// Define the render sequence
+		composer.addPass(renderPass);
+		composer.addPass(webcamPass);
 	}
 
 	/*
@@ -149,7 +126,7 @@ function runSketch() {
 
 		// Initialize the control keys
 		guiControlKeys = {
-			"Rotation velocity" : 0.5,
+			"Effect" : "Effect 1",
 		};
 
 		// Create the GUI
@@ -159,12 +136,100 @@ function runSketch() {
 		gui.close();
 
 		// Add the GUI controllers
-		controller = gui.add(guiControlKeys, "Rotation velocity", 0, 5);
+		controller = gui.add(guiControlKeys, "Effect", [ "Effect 1", "Effect 2", "Effect 3" ]);
 		controller.onFinishChange(function(value) {
-			star.rotationVelocity = value;
 		});
 
 		// Add the GUI to the correct DOM element
 		document.getElementById(guiContainer).appendChild(gui.domElement);
+	}
+
+	/*
+	 * Creates the plane that will show the webcam video output
+	 */
+	function createWebcamPlane() {
+		var geometry, texture, material;
+
+		// Create the webcam plane geometry
+		geometry = new THREE.PlaneGeometry(2, 2, 1, 1);
+
+		// Switch the vertex uvs to flip the x webcam axis
+		geometry.faceVertexUvs = [ [ [ new THREE.Vector2(1, 1), new THREE.Vector2(1, 0), new THREE.Vector2(0, 1) ],
+				[ new THREE.Vector2(1, 0), new THREE.Vector2(0, 0), new THREE.Vector2(0, 1) ] ] ];
+
+		// Create the texture that will contain the webcam video output
+		texture = new THREE.Texture(videoElement);
+		texture.format = THREE.RGBFormat;
+		texture.generateMipmaps = false;
+		texture.minFilter = THREE.LinearFilter;
+		texture.magFilter = THREE.LinearFilter;
+
+		// Create the webcam plane material
+		material = new THREE.MeshBasicMaterial();
+		material.depthTest = false;
+		material.depthWrite = false;
+		material.map = texture;
+
+		// Create the webcam plane mesh
+		webcamPlane = new THREE.Mesh(geometry, material);
+
+		// Add it to the scene
+		scene.add(webcamPlane);
+	}
+
+	/*
+	 * Starts the user's webcam
+	 */
+	function startWebcam() {
+		// Browser fallback
+		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
+				|| navigator.msGetUserMedia;
+
+		// Try to access the local webcam
+		if (!navigator.getUserMedia) {
+			informationPanel.textContent = "navigator.getUserMedia() is not supported in your browser";
+			informationPanel.style.display = "block";
+		} else {
+			navigator.getUserMedia({
+				video : true
+			}, webcamSuccessCallback, webcamErrorCallback);
+		}
+	}
+
+	/*
+	 * Handles the webcam media stream
+	 */
+	function webcamSuccessCallback(mediaStream) {
+		// Browser fallback
+		window.URL = window.URL || window.webkitURL;
+
+		// Read the media stream with the video element
+		videoElement.src = window.URL ? window.URL.createObjectURL(mediaStream) : mediaStream;
+
+		// Modify the renderer size when the video metadata information finished loading
+		videoElement.onloadedmetadata = function() {
+			if (this.videoWidth > 0) {
+				if (renderer.domElement.width > this.videoWidth) {
+					renderer.setSize(this.videoWidth, this.videoHeight);
+				} else {
+					renderer.setSize(renderer.domElement.width, renderer.domElement.width * this.videoHeight
+							/ this.videoWidth);
+				}
+			}
+		};
+
+	}
+
+	/*
+	 * Indicates the user that the webcam video cannot be displayed
+	 */
+	function webcamErrorCallback(e) {
+		if (e.name == "PermissionDeniedError" || e.code == 1) {
+			informationPanel.textContent = "User denied access to the camera";
+			informationPanel.style.display = "block";
+		} else {
+			informationPanel.textContent = "No camera available";
+			informationPanel.style.display = "block";
+		}
 	}
 }

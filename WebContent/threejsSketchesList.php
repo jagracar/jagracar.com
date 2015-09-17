@@ -13,5 +13,7 @@
 			class="<?php if($sketch == 'galacticCenter') { echo $activeSketch; }?>">Galactic center</a></li>
 		<li><a href="<?php echo $homeDir;?>sketches/star.php"
 			class="<?php if($sketch == 'star') { echo $activeSketch; }?>">Star</a></li>
+		<li><a href="<?php echo $homeDir;?>sketches/webcam.php"
+			class="<?php if($sketch == 'webcam') { echo $activeSketch; }?>">Webcam</a></li>
 	</ul>
 </div>

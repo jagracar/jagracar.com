@@ -1,5 +1,5 @@
 function runSketch() {
-	var backScene, frontScene, renderer, camera, clock, backComposer, finalComposer, blackHolePass, guiControlKeys;
+	var backScene, frontScene, renderer, camera, controls, clock, backComposer, finalComposer, blackHolePass, guiControlKeys;
 	var informationPanel, blackHole, stars, trajectories, sky, elapsedTime, textureFinishedLoading;
 
 	init();
@@ -9,7 +9,7 @@ function runSketch() {
 	 * Initializes the sketch
 	 */
 	function init() {
-		var canvasWidth, canvasHeight, controls;
+		var canvasWidth, canvasHeight;
 
 		// Scenes setup
 		backScene = new THREE.Scene();
@@ -30,18 +30,18 @@ function runSketch() {
 		camera.position.set(0, 0, 50);
 		camera.up.set(0, 1, 0);
 
-		// Effect composers setup
-		setupEffectComposers();
-
 		// Initialize the camera controls
-		controls = new THREE.OrbitControls(camera, renderer.domElement);
+		controls = new THREE.TrackballControls(camera, renderer.domElement);
 		controls.noPan = true;
-		controls.zoomSpeed = 1.0;
+		controls.zoomSpeed = 0.5;
 		controls.minDistance = 10;
 		controls.maxDistance = 500;
 
 		// Initialize the clock
 		clock = new THREE.Clock(true);
+
+		// Effect composers setup
+		setupEffectComposers();
 
 		// Create the GUI and initialize the GUI control keys
 		createGUI();
@@ -74,6 +74,10 @@ function runSketch() {
 
 		// Wait until the stars and the background texture are loaded
 		if (stars && textureFinishedLoading) {
+			// Update the camera controls
+			controls.rotateSpeed = Math.min(0.8 * camera.position.length() / controls.minDistance, 1.0);
+			controls.update();
+
 			// Update the stars properties
 			updateStars();
 

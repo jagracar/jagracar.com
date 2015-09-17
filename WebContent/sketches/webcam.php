@@ -40,8 +40,8 @@
 		<!-- Sketches list -->
 		<?php include_once $homeDir . 'threejsSketchesList.php';?>
 
-		<script id="vertexShader" type="x-shader/x-vertex"><?php include_once 'sourceCode/shaders/star.vert';?></script>
-		<script id="fragmentShader" type="x-shader/x-fragment"><?php include_once 'sourceCode/shaders/star.frag';?></script>
+		<script id="vertexShader" type="x-shader/x-vertex"><?php include_once 'sourceCode/shaders/webcam.vert';?></script>
+		<script id="fragmentShader" type="x-shader/x-fragment"><?php include_once 'sourceCode/shaders/webcam.frag';?></script>
 
 		<div class="sketch-container">
 			<div class="sketch" id="widthRef">
@@ -75,6 +75,13 @@
 	<!-- JavaScript files -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r72/three.js"></script>
+	<script src="<?php echo $homeDir;?>js/MaskPass.js"></script>
+	<script src="<?php echo $homeDir;?>js/RenderPass.js"></script>
+	<script src="<?php echo $homeDir;?>js/FilmPass.js"></script>
+	<script src="<?php echo $homeDir;?>js/ShaderPass.js"></script>
+	<script src="<?php echo $homeDir;?>js/CopyShader.js"></script>
+	<script src="<?php echo $homeDir;?>js/FilmShader.js"></script>
+	<script src="<?php echo $homeDir;?>js/EffectComposer.js"></script>
 	<script src="sourceCode/webcam.js"></script>
 
 	<!-- Run the sketch -->

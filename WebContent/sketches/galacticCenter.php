@@ -107,7 +107,7 @@
 	<!-- JavaScript files -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r72/three.js"></script>
-	<script src="<?php echo $homeDir;?>js/orbitControls.js"></script>
+	<script src="<?php echo $homeDir;?>js/TrackballControls.js"></script>
 	<script src="<?php echo $homeDir;?>js/MaskPass.js"></script>
 	<script src="<?php echo $homeDir;?>js/RenderPass.js"></script>
 	<script src="<?php echo $homeDir;?>js/ShaderPass.js"></script>

@@ -1,5 +1,5 @@
 function runSketch() {
-	var scene, renderer, camera, clock, guiControlKeys, star;
+	var scene, renderer, camera, controls, clock, guiControlKeys, star;
 
 	init();
 	animate();
@@ -8,7 +8,7 @@ function runSketch() {
 	 * Initializes the sketch
 	 */
 	function init() {
-		var canvasWidth, canvasHeight, controls, radius, position, rotationVelocity;
+		var canvasWidth, canvasHeight, radius, position, rotationVelocity;
 		var atmosphereSize, cellsSize, spotsSize, color, pulsationChange;
 
 		// Scene setup
@@ -30,7 +30,7 @@ function runSketch() {
 
 		// Initialize the camera controls
 		controls = new THREE.OrbitControls(camera, renderer.domElement);
-		controls.noPan = true;
+		controls.enablePan = false;
 		controls.zoomSpeed = 0.7;
 		controls.minDistance = 20;
 		controls.maxDistance = 200;
@@ -64,6 +64,9 @@ function runSketch() {
 	function animate() {
 		// Request the next animation frame
 		requestAnimationFrame(animate);
+
+		// Update the camera controls rotation speed
+		controls.rotateSpeed = Math.min(0.15 * camera.position.length() / controls.minDistance, 2.0);
 
 		// Update the star
 		star.update(clock, camera);

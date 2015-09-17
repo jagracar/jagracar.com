@@ -1,5 +1,5 @@
 function runSketch() {
-	var scene, renderer, camera, rayCaster, mouseCanvasPosition, mouseWorldPosition, guiControlKeys;
+	var scene, renderer, camera, controls, rayCaster, mouseCanvasPosition, mouseWorldPosition, guiControlKeys;
 	var p5Canvas, p5Sketch, vertexShader, fragmentShader, scan, originalScan;
 	var time = 0;
 
@@ -10,7 +10,7 @@ function runSketch() {
 	 * Initializes the sketch
 	 */
 	function init() {
-		var maxCanvasWidth, canvasWidth, canvasHeight, controls;
+		var maxCanvasWidth, canvasWidth, canvasHeight;
 
 		// Resize the canvas if necessary
 		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
@@ -41,6 +41,10 @@ function runSketch() {
 
 		// Initialize the camera controls
 		controls = new THREE.OrbitControls(camera, renderer.domElement);
+		controls.enablePan = false;
+		controls.zoomSpeed = 0.7;
+		controls.minDistance = 130;
+		controls.maxDistance = 1000;
 
 		// Ray caster setup
 		rayCaster = new THREE.Raycaster();
@@ -72,6 +76,9 @@ function runSketch() {
 
 		// Request the next animation frame
 		requestAnimationFrame(animate);
+
+		// Update the camera controls rotation speed
+		controls.rotateSpeed = Math.min(0.15 * camera.position.length() / controls.minDistance, 2.0);
 
 		// If necessary, calculate the mouse position on world coordinate units
 		if (guiControlKeys.Effect >= 12) {

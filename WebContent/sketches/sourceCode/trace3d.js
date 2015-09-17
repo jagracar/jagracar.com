@@ -1,5 +1,5 @@
 function runSketch() {
-	var scene, renderer, camera, light, guiControlKeys, trace;
+	var scene, renderer, camera, controls, light, guiControlKeys, trace;
 
 	init();
 	animate();
@@ -8,7 +8,7 @@ function runSketch() {
 	 * Initializes the sketch
 	 */
 	function init() {
-		var maxCanvasWidth, canvasWidth, canvasHeight, controls;
+		var maxCanvasWidth, canvasWidth, canvasHeight;
 
 		// Resize the canvas if necessary
 		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
@@ -38,7 +38,12 @@ function runSketch() {
 		camera.position.set(300, 200, -400);
 
 		// Initialize the camera controls
-		controls = new THREE.OrbitControls(camera, renderer.domElement);
+		controls = new THREE.TrackballControls(camera, renderer.domElement);
+		controls.noPan = true;
+		controls.rotateSpeed = 2.0;
+		controls.zoomSpeed = 0.6;
+		controls.minDistance = 10;
+		controls.maxDistance = 1500;
 
 		// Initialize the directional light
 		light = new THREE.DirectionalLight();
@@ -58,6 +63,10 @@ function runSketch() {
 		// Request the next animation frame
 		requestAnimationFrame(animate);
 
+		// Update the camera controls
+		controls.rotateSpeed = Math.min(0.15 * camera.position.length() / controls.minDistance, 2.0);
+		controls.update();
+		
 		// Update the light position
 		light.position.copy(camera.position);
 

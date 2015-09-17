@@ -1,5 +1,5 @@
 function runSketch() {
-	var scene, renderer, camera, light, guiControlKeys;
+	var scene, renderer, camera, controls, light, guiControlKeys;
 	var earthRadius, earth, textureFinishedLoading, visitedCities, selectedCity, informationPanel;
 
 	init();
@@ -9,7 +9,7 @@ function runSketch() {
 	 * Initializes the sketch
 	 */
 	function init() {
-		var maxCanvasWidth, canvasWidth, canvasHeight, controls;
+		var maxCanvasWidth, canvasWidth, canvasHeight;
 
 		// Resize the canvas if necessary
 		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
@@ -46,7 +46,7 @@ function runSketch() {
 
 		// Initialize the camera controls
 		controls = new THREE.OrbitControls(camera, renderer.domElement);
-		controls.noPan = true;
+		controls.enablePan = false;
 		controls.zoomSpeed = 0.6;
 		controls.minDistance = 250;
 		controls.maxDistance = 1000;
@@ -73,6 +73,9 @@ function runSketch() {
 		requestAnimationFrame(animate);
 
 		if (textureFinishedLoading) {
+			// Update the camera controls rotation speed
+			controls.rotateSpeed = Math.min(0.08 * camera.position.length() / controls.minDistance, 2.0);
+
 			// Update the light position
 			light.position.copy(camera.position);
 
