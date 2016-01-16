@@ -38,8 +38,8 @@ function runSketch() {
 		camera.position.set(300, 200, -400);
 
 		// Initialize the camera controls
-		controls = new THREE.TrackballControls(camera, renderer.domElement);
-		controls.noPan = true;
+		controls = new THREE.OrbitControls(camera, renderer.domElement);
+		controls.enablePan = false;
 		controls.rotateSpeed = 2.0;
 		controls.zoomSpeed = 0.6;
 		controls.minDistance = 10;
@@ -64,8 +64,7 @@ function runSketch() {
 		requestAnimationFrame(animate);
 
 		// Update the camera controls
-		controls.rotateSpeed = Math.min(0.15 * camera.position.length() / controls.minDistance, 2.0);
-		controls.update();
+		controls.rotateSpeed = Math.min(0.02 * camera.position.length() / controls.minDistance, 0.5);
 		
 		// Update the light position
 		light.position.copy(camera.position);

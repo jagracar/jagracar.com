@@ -82,6 +82,8 @@
 	<script src="<?php echo $homeDir;?>js/CopyShader.js"></script>
 	<script src="<?php echo $homeDir;?>js/FilmShader.js"></script>
 	<script src="<?php echo $homeDir;?>js/EffectComposer.js"></script>
+	<script src="<?php echo $homeDir;?>js/objectdetect.js"></script>
+	<script src="<?php echo $homeDir;?>js/objectdetect.frontalface_alt.js"></script>
 	<script src="sourceCode/webcam.js"></script>
 
 	<!-- Run the sketch -->
