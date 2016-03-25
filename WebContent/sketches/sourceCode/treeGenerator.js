@@ -1,4 +1,7 @@
 var treeGeneratorSketch = function(p) {
+	// Global variables
+	var tree = undefined;
+
 	// Initial setup
 	p.setup = function() {
 		var maxCanvasWidth, canvasWidth, canvasHeight, canvas;
@@ -16,44 +19,60 @@ var treeGeneratorSketch = function(p) {
 		// Create the canvas
 		canvas = p.createCanvas(canvasWidth, canvasHeight);
 
-		// Paint a new tree each time the mouse is pressed inside the canvas
-		canvas.mousePressed(paintNewTree);
+		// Create and paint a new tree each time the mouse is pressed inside the canvas
+		canvas.mousePressed(createAndPaintNewTree);
 
 		// We will just paint the tree once
 		p.noLoop();
-		p.noStroke();
 
-		// Paint the tree
-		paintNewTree();
+		// Create the tree
+		tree = createTree();
 	};
 
-	/*
-	 * This function creates a tree iteratively and paints it in the canvas
-	 */
-	function paintNewTree() {
-		var position = p.createVector(0.5 * p.width, 0.95 * p.height, 0);
-		var length = p.height / 7;
-		var diameter = length / 4.5;
-		var angle = -p.HALF_PI + (p.PI / 180) * p.random(-5, 5);
-		var color = p.color(130, 80, 20);
-		var level = 1;
-		var tree = new Branch(position, length, diameter, angle, color, level);
-
-		// Paint the tree
+	// Execute the sketch
+	p.draw = function() {
 		p.background(245);
 		tree.paint();
 	}
 
 	/*
+	 * This function creates a new tree recursively
+	 */
+	function createTree() {
+		var position = p.createVector(0.5 * p.width, 0.95 * p.height, 0);
+		var length = p.height / 7;
+		var diameter = length / 4.5;
+		var angle = p.radians(p.random(-5, 5));
+		var accumulatedAngle = 0;
+		var color = p.color(130, 80, 20);
+		var level = 1;
+		return new Branch(position, length, diameter, angle, accumulatedAngle, color, level);
+	}
+
+	/*
+	 * This function creates a new tree and paints it on the canvas
+	 */
+	function createAndPaintNewTree() {
+		// Create a new tree
+		tree = createTree();
+
+		// Paint the tree
+		p.redraw();
+	}
+
+	/*
 	 * The Branch class
 	 */
-	function Branch(position, length, diameter, angle, color, level) {
+	function Branch(position, length, diameter, angle, accumulatedAngle, color, level) {
 		this.position = position;
 		this.length = length;
 		this.diameter = diameter;
 		this.angle = angle;
+		this.accumulatedAngle = accumulatedAngle;
 		this.color = color;
 		this.level = level;
+
+		// Create the sub branches
 		this.middleBranch = this.createSubBranch(true);
 		this.extremeBranch = this.createSubBranch(false);
 	}
@@ -62,6 +81,14 @@ var treeGeneratorSketch = function(p) {
 	 * This method paints the branch and its sub-branches in the canvas
 	 */
 	Branch.prototype.paint = function() {
+		// Calculate the diameter at the branch top
+		var topDiameter = this.extremeBranch ? this.extremeBranch.diameter : 0.65 * this.diameter;
+
+		// Apply the coordinate transformations
+		p.push();
+		p.translate(this.position.x, this.position.y);
+		p.rotate(this.angle);
+
 		// Paint the middle branch
 		if (this.middleBranch) {
 			this.middleBranch.paint();
@@ -72,24 +99,16 @@ var treeGeneratorSketch = function(p) {
 			this.extremeBranch.paint();
 		}
 
-		// Calculate the diameter at the branch top
-		var topDiameter = 0.65 * this.diameter;
-
-		if (this.extremeBranch) {
-			topDiameter = this.extremeBranch.diameter;
-		}
-
 		// Paint the branch
-		p.push();
 		p.fill(this.color);
-		p.translate(this.position.x, this.position.y);
-		p.rotate(this.angle);
+		p.noStroke();
 		p.beginShape();
-		p.vertex(0, -this.diameter / 2);
-		p.vertex(1.04 * this.length, -topDiameter / 2);
-		p.vertex(1.04 * this.length, topDiameter / 2);
-		p.vertex(0, this.diameter / 2, 0);
+		p.vertex(-this.diameter / 2, 0);
+		p.vertex(-topDiameter / 2, -1.04 * this.length);
+		p.vertex(topDiameter / 2, -1.04 * this.length);
+		p.vertex(this.diameter / 2, 0);
 		p.endShape();
+
 		p.pop();
 	};
 
@@ -119,61 +138,35 @@ var treeGeneratorSketch = function(p) {
 
 		if (createBranch) {
 			// Calculate the starting position of the new branch
-			var newPosition = p.createVector(p.cos(this.angle), p.sin(this.angle), 0);
-			newPosition.mult(this.length);
-
-			if (isMiddleBranch) {
-				newPosition.mult(p.random(0.5, 0.9));
-			}
-
-			newPosition.add(this.position);
+			var newPosition = p.createVector(0, isMiddleBranch ? -p.random(0.5, 0.9) * this.length : -this.length);
 
 			// Calculate the length of the new branch
 			var newLength = p.random(0.8, 0.9) * this.length;
 
 			// Calculate the diameter of the new branch
-			var newDiameter = this.diameter;
-
-			if (this.level < 5) {
-				newDiameter *= p.random(0.8, 0.9);
-			} else {
-				newDiameter *= p.random(0.65, 0.75);
-			}
+			var newDiameter = (this.level < 5) ? p.random(0.8, 0.9) * this.diameter : p.random(0.65, 0.75)
+					* this.diameter;
 
 			// Calculate the inclination angle of the new branch
-			var newAngle = this.angle;
+			var newAngle;
 
 			if (isMiddleBranch) {
 				var sign = (p.random() < 0.5) ? -1 : 1;
-				var deltaAngle = (p.PI / 180) * p.random(20, 40);
-				newAngle += sign * deltaAngle;
-
-				if (this.level < 8) {
-					// Don't let the branches fall too much
-					if (newAngle < -p.PI) {
-						newAngle += 2 * deltaAngle;
-					} else if (newAngle > 0) {
-						newAngle -= 2 * deltaAngle;
-					}
-				}
+				newAngle = sign * p.radians(p.random(20, 40));
 			} else {
-				newAngle += (p.PI / 180) * p.random(-15, 15);
+				newAngle = p.radians(p.random(-15, 15));
+			}
 
-				if (this.level < 8) {
-					// Don't let the branches fall too much
-					if (newAngle < -p.PI) {
-						newAngle += (p.PI / 180) * p.random(10, 30);
-					} else if (newAngle > 0) {
-						newAngle -= (p.PI / 180) * p.random(10, 30);
-					}
-				}
+			// Don't let the branches fall too much
+			if (this.level < 8 && (p.abs(this.accumulatedAngle + this.angle + newAngle) > 0.9 * p.HALF_PI)) {
+				newAngle *= -1;
 			}
 
 			// Calculate the color of the new branch
 			var newColor;
 
 			if (newDiameter > 1) {
-				var deltaColor = p.round(0, 20);
+				var deltaColor = p.random(0, 10);
 				newColor = p
 						.color(p.red(this.color) + deltaColor, p.green(this.color) + deltaColor, p.blue(this.color));
 			} else {
@@ -188,7 +181,8 @@ var treeGeneratorSketch = function(p) {
 			}
 
 			// Return the new branch
-			return new Branch(newPosition, newLength, newDiameter, newAngle, newColor, newLevel);
+			return new Branch(newPosition, newLength, newDiameter, newAngle, this.accumulatedAngle + this.angle,
+					newColor, newLevel);
 		} else {
 			// Return undefined
 			return;

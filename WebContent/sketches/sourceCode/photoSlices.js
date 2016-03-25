@@ -34,14 +34,32 @@ var photoSlicesSketch = function(p) {
 
 	// Execute the sketch
 	p.draw = function() {
+		var i, pushVel;
+
 		// Clean the canvas
 		p.background(0);
 
-		// Update the slides positions and check if the mouse pushed them
-		for (var i = 0; i < slices.length; i++) {
-			slices[i].checkPush();
+		// Update the slices positions and paint them on the screen
+		for (i = 0; i < slices.length; i++) {
 			slices[i].update();
 			slices[i].paint();
+		}
+
+		// Check if the user pushed the slices
+		if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY < p.height
+				&& p.abs(p.mouseX - p.pmouseX) > 2) {
+			pushVel = p.mouseX - p.pmouseX > 0 ? 5 : -5;
+
+			for (i = 0; i < slices.length; i++) {
+				slices[i].checkPush(p.mouseX, pushVel);
+			}
+		} else if (p.touchX >= 0 && p.touchX <= p.width && p.touchY >= 0 && p.touchY < p.height
+				&& p.abs(p.touchX - p.ptouchX) > 2) {
+			pushVel = p.touchX - p.ptouchX > 0 ? 5 : -5;
+
+			for (i = 0; i < slices.length; i++) {
+				slices[i].checkPush(p.touchX, pushVel);
+			}
 		}
 	};
 
@@ -89,25 +107,24 @@ var photoSlicesSketch = function(p) {
 		this.vel = 0;
 
 		// Define the noise properties
-		this.noiseRange = 400;
-		this.noiseSeed = p.random(0, 100);
-		this.noiseDelta = 0;
-		this.noiseStep = 0.002;
-		this.noiseSmallRange = 200;
-		this.noiseSmallSeed = p.random(0, 100);
-		this.noiseSmallDelta = 0;
-		this.noiseSmallStep = 0.002;
+		this.noiseDelta = p.random(0, 100);
+		this.noiseSmallDelta = p.random(0, 100);
 	}
 
 	//
 	// The update method
 	//
 	Slice.prototype.update = function() {
+		// Move the global position
 		this.xWithoutNoise += this.vel;
-		this.x = this.xWithoutNoise + this.noiseRange * (p.noise(this.noiseSeed + this.noiseDelta) - 0.5)
-				+ this.noiseSmallRange * (p.noise(this.noiseSmallSeed + this.noiseSmallDelta) - 0.5);
-		this.noiseDelta += this.noiseStep;
-		this.noiseSmallDelta += this.noiseSmallStep;
+
+		// Add the noise
+		this.x = this.xWithoutNoise + 400 * (p.noise(this.noiseDelta) - 0.5) + 200
+				* (p.noise(this.noiseSmallDelta) - 0.5);
+		this.noiseDelta += 0.002;
+		this.noiseSmallDelta += 0.002;
+
+		// Slow down the velocity
 		this.vel *= 0.95;
 	};
 
@@ -121,13 +138,9 @@ var photoSlicesSketch = function(p) {
 	//
 	// This method checks if the cursor is near the slice, and if it is, it gives it a push
 	//
-	Slice.prototype.checkPush = function() {
-		if (p.mouseY >= 0 && p.mouseY < p.height && p.mouseX >= this.x && p.mouseX <= (this.x + this.imgSlice.width)
-				&& p.abs(p.mouseX - p.pmouseX) > 2) {
-			this.vel = (p.mouseX - p.pmouseX > 0) ? 5 : -5;
-		} else if (p.touchY >= 0 && p.touchY < p.height && p.touchX >= this.x
-				&& p.touchX <= (this.x + this.imgSlice.width) && p.abs(p.touchX - p.ptouchX) > 2) {
-			this.vel = (p.touchX - p.ptouchX > 0) ? 5 : -5;
+	Slice.prototype.checkPush = function(xPush, velPush) {
+		if (xPush >= this.x && xPush <= (this.x + this.imgSlice.width)) {
+			this.vel = velPush;
 		}
 	};
 };

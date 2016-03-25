@@ -46,8 +46,8 @@ var drawingBallsSketch = function(p) {
 		if (balls.length < 2.5 * Math.sqrt(p.width * p.height)) {
 			r = 30 * Math.random();
 			alpha = p.TWO_PI * Math.random();
-			pos = p.createVector(0.55 * p.width + r * Math.cos(alpha), 0.4 * p.height + r * Math.sin(alpha), 0);
-			vel = p.createVector(0, 0, 0);
+			pos = p.createVector(0.55 * p.width + r * Math.cos(alpha), 0.4 * p.height + r * Math.sin(alpha));
+			vel = p.createVector(0, 0);
 			balls[balls.length] = new Ball(pos, vel);
 		}
 
@@ -128,18 +128,32 @@ var drawingBallsSketch = function(p) {
 	// positions and velocities
 	//
 	Ball.prototype.checkContact = function(b) {
-		var contactDist, xDiff, yDiff, diffSq, c;
-		contactDist = this.rad + b.rad;
+		var xDiff, yDiff, diffSq, weight, xCenter, yCenter, diff;
+
+		// Obtain the positions difference vector
 		xDiff = b.pos.x - this.pos.x;
 		yDiff = b.pos.y - this.pos.y;
 		diffSq = p.sq(xDiff) + p.sq(yDiff);
+	
+		// Check if the balls are in contact
+		if (diffSq < p.sq(this.rad + b.rad)) {
+			// Calculate the center of gravity weighted by the ball radius
+			weight = this.rad / (this.rad + b.rad);
+			xCenter = this.pos.x + xDiff * weight;
+			yCenter = this.pos.y + yDiff * weight;
 
-		if (diffSq < p.sq(contactDist - 1)) {
-			c = contactDist / (2 * p.sqrt(diffSq));
-			b.pos.set(this.pos.x + xDiff * (0.5 + c), this.pos.y + yDiff * (0.5 + c), 0);
-			this.pos.set(this.pos.x + xDiff * (0.5 - c), this.pos.y + yDiff * (0.5 - c), 0);
-			b.vel.set(0, 0, 0);
-			this.vel.set(0, 0, 0);
+			// Normalize the positions difference vector
+			diff = Math.sqrt(diffSq);
+			xDiff /= diff;
+			yDiff /= diff;
+
+			// Update the balls positions
+			this.pos.set(xCenter - this.rad * xDiff, yCenter - this.rad * yDiff);
+			b.pos.set(xCenter + b.rad * xDiff, yCenter + b.rad * yDiff);
+
+			// Set the velocities to zero
+			this.vel.set(0, 0);
+			b.vel.set(0, 0);
 		}
 	};
 
