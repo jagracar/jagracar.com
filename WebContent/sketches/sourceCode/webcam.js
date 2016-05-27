@@ -51,7 +51,6 @@ function runSketch() {
 				rectangles = detector.detect(videoElement, false);
 
 				if (rectangles.length > 0) {
-					console.log(rectangles[0][4]);
 					// Calculate the main face relative coordinates
 					mainFaceRectangle = rectangles[0];//smoother.smooth(rectangles[0]);
 					x = guiControlKeys["flipped"] ? 1 - (mainFaceRectangle[0] + mainFaceRectangle[2])

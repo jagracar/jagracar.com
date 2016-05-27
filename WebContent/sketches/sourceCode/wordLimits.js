@@ -11,9 +11,6 @@ var wordLimitsSketch = function(p) {
 	p.setup = function() {
 		var maxCanvasWidth, canvasWidth, canvasHeight, canvas;
 
-		// Needed for mobile devices with high pixel densities
-		p.devicePixelScaling(false);
-
 		// Resize the canvas if necessary
 		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
 		canvasWidth = 400;
@@ -85,15 +82,16 @@ var wordLimitsSketch = function(p) {
 		// Calculate the obstacle limits
 		var x, y, dx, dy, px, py, pixel, isLimit;
 		var limits = [];
+		var pixelDensity = p.displayDensity();
+		var pixelDensitySq = pixelDensity * pixelDensity;
 
 		p.loadPixels();
 
 		for (y = 0; y < p.height; y++) {
 			for (x = 0; x < p.width; x++) {
-				pixel = x + y * p.width;
 				isLimit = false;
 
-				if (p.pixels[4 * pixel] === obstacleColor) {
+				if (p.pixels[4 * (x * pixelDensity + y * p.width * pixelDensitySq)] === obstacleColor) {
 					// Check the nearby pixels for a color change
 					for (dx = -1; dx <= 1; dx++) {
 						for (dy = -1; dy <= 1; dy++) {
@@ -104,7 +102,7 @@ var wordLimitsSketch = function(p) {
 								py = y + dy;
 
 								if (px >= 0 && px < p.width && py >= 0 && py < p.height) {
-									if (p.pixels[4 * (px + py * p.width)] !== obstacleColor) {
+									if (p.pixels[4 * (px * pixelDensity + py * p.width * pixelDensitySq)] !== obstacleColor) {
 										isLimit = true;
 									}
 								}
@@ -113,7 +111,7 @@ var wordLimitsSketch = function(p) {
 					}
 				}
 
-				limits[pixel] = isLimit;
+				limits[x + y * p.width] = isLimit;
 			}
 		}
 
@@ -162,7 +160,7 @@ var wordLimitsSketch = function(p) {
 		p.textStyle(p.BOLD);
 		p.noStroke();
 		p.fill(p.color(obstacleColor, obstacleColor, obstacleColor));
-		p.text(txt, 0.5 * p.width + 0.5 * p.textWidth("\n"), 0.35 * p.height);
+		p.text(txt, 0.5 * p.width, 0.55 * p.height);
 
 		p.pop();
 	};

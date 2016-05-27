@@ -48,11 +48,11 @@ function runSketch() {
 		controls = new THREE.OrbitControls(camera, renderer.domElement);
 		controls.enablePan = false;
 		controls.zoomSpeed = 0.6;
-		controls.minDistance = 250;
-		controls.maxDistance = 1000;
+		controls.minDistance = 240;
+		controls.maxDistance = 900;
 
 		// Initialize the directional light
-		light = new THREE.DirectionalLight();
+		light = new THREE.DirectionalLight(0xffffff, 1.2);
 		scene.add(light);
 
 		// Create the GUI and initialize the GUI control keys
@@ -327,6 +327,7 @@ function runSketch() {
 		cities.addCity("Cuenca", "Spain", 40.070392, -2.137416);
 		cities.addCity("El Escorial", "Spain", 40.583347, -4.127044);
 		cities.addCity("Granada", "Spain", 37.177336, -3.598557);
+		cities.addCity("Santa Cruz de la Palma", "Spain", 28.683989, -17.764575);
 		cities.addCity("Madrid", "Spain", 40.416775, -3.703790);
 		cities.addCity("Marbella", "Spain", 36.510071, -4.882447);
 		cities.addCity("Mérida", "Spain", 38.914296, -6.349197);
@@ -417,6 +418,7 @@ function runSketch() {
 		cities.addCity("Munich", "Germany", 48.135125, 11.581981);
 		cities.addCity("Nuremberg", "Germany", 49.452030, 11.07675);
 		cities.addCity("Prien am Chiemsee", "Germany", 47.856181, 12.349098);
+		cities.addCity("Regensburg", "Germany", 49.013430, 12.101624);
 		cities.addCity("Schönau am Königssee", "Germany", 47.598379, 12.981548);
 		cities.addCity("Starnberg", "Germany", 47.999961, 11.339009);
 		cities.addCity("Tegernsee", "Germany", 47.705139, 11.764725);
@@ -508,7 +510,9 @@ function runSketch() {
 		cities.addCity("Pasadena", "USA", 34.147785, -118.144516);
 
 		// Australia
+		cities.addCity("Brooklyn on Hawkesbury", "Australia", -33.547946, 151.212277);
 		cities.addCity("Katoomba", "Australia", -33.714955, 150.311407);
+		cities.addCity("Kiama", "Australia", -34.670266, 150.854387);
 		cities.addCity("Sydney", "Australia", -33.867487, 151.20699);
 
 		return cities;

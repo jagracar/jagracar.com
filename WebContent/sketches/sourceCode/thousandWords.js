@@ -18,10 +18,7 @@ var thousandWordsSketch = function(p) {
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth;
-
-		// Needed for mobile devices
-		p.devicePixelScaling(false);
+		var maxCanvasWidth, canvas;
 
 		// Resize the image if necessary
 		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
@@ -31,8 +28,11 @@ var thousandWordsSketch = function(p) {
 		}
 
 		// Create the canvas
-		p.createCanvas(img.width, img.height);
+		canvas = p.createCanvas(img.width, img.height);
 
+		// Change the line separation each time the mouse is pressed inside the canvas
+		canvas.mousePressed(updateLineSeparation);
+	
 		// Set the text properties
 		textSize = 0.17 * p.width;
 		textLeading = textSize;
@@ -91,9 +91,9 @@ var thousandWordsSketch = function(p) {
 	};
 
 	//
-	// Change the line separation if the mouse is pressed inside the canvas
+	// Updates the line separation
 	//
-	p.mousePressed = function() {
+	function updateLineSeparation() {
 		if (p.mouseX >= 0 && p.mouseX < buffer.width && p.mouseY >= 0 && p.mouseY < buffer.height) {
 			if (p.mouseButton === p.LEFT) {
 				textLeading *= 0.8;
@@ -119,8 +119,8 @@ var thousandWordsSketch = function(p) {
 		buffer.background(0);
 
 		// Write the text in red
-		x = 0.5 * buffer.width + 0.5 * buffer.textWidth("\n");
-		y = 0.5 * buffer.height + 0.25 * textSize - 0.5 * nLines * textLeading;
+		x = 0.5 * buffer.width;
+		y = 0.5 * buffer.height + 0.25 * textSize;
 		buffer.fill(buffer.color(255, 0, 0));
 		buffer.text(phrase, x, y);
 

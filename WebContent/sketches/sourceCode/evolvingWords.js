@@ -7,9 +7,6 @@ var evolvingWordsSketch = function(p) {
 	p.setup = function() {
 		var maxCanvasWidth, canvasWidth, canvasHeight;
 
-		// Needed for mobile devices with high pixel densities
-		p.devicePixelScaling(false);
-
 		// Resize the canvas if necessary
 		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
 		canvasWidth = 600;
@@ -22,7 +19,6 @@ var evolvingWordsSketch = function(p) {
 
 		// Create the canvas
 		p.createCanvas(canvasWidth, canvasHeight);
-		p.frameRate(50);
 
 		// Calculate the trajectory positions for every particle
 		positions = calculateTrajectories("This is not a LOVE story", 2 * canvasWidth);
@@ -81,7 +77,7 @@ var evolvingWordsSketch = function(p) {
 	// Calculates the word limits
 	//
 	wordLimits = function(word) {
-		var textSize, limits, x, y, dx, dy, px, py, pixel, isLimit;
+		var textSize, limits, x, y, dx, dy, px, py, pixelDensity, pixelDensitySq, isLimit;
 
 		// Paint the background
 		p.background(0);
@@ -100,15 +96,16 @@ var evolvingWordsSketch = function(p) {
 
 		// Calculate the limits
 		limits = [];
+		pixelDensity = p.displayDensity();
+		pixelDensitySq = pixelDensity * pixelDensity;
 
 		p.loadPixels();
 
 		for (y = 0; y < p.height; y++) {
 			for (x = 0; x < p.width; x++) {
-				pixel = x + y * p.width;
 				isLimit = false;
 
-				if (p.pixels[4 * pixel] === 255) {
+				if (p.pixels[4 * (x * pixelDensity + y * p.width * pixelDensitySq)] === 255) {
 					// Check the nearby pixels for a color change
 					for (dx = -1; dx <= 1; dx++) {
 						for (dy = -1; dy <= 1; dy++) {
@@ -119,7 +116,7 @@ var evolvingWordsSketch = function(p) {
 								py = y + dy;
 
 								if (px >= 0 && px < p.width && py >= 0 && py < p.height) {
-									if (p.pixels[4 * (px + py * p.width)] !== 255) {
+									if (p.pixels[4 * (px * pixelDensity + py * p.width * pixelDensitySq)] !== 255) {
 										isLimit = true;
 									}
 								}

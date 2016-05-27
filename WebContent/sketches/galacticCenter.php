@@ -106,14 +106,14 @@
 
 	<!-- JavaScript files -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r74/three.js"></script>
-	<script src="<?php echo $homeDir;?>js/OrbitControls.js"></script>
-	<script src="<?php echo $homeDir;?>js/MaskPass.js"></script>
-	<script src="<?php echo $homeDir;?>js/RenderPass.js"></script>
-	<script src="<?php echo $homeDir;?>js/ShaderPass.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.js"></script>
+	<script src="<?php echo $homeDir;?>js/TrackballControls.js"></script>
 	<script src="<?php echo $homeDir;?>js/CopyShader.js"></script>
 	<script src="<?php echo $homeDir;?>js/MergeShader.js"></script>
 	<script src="<?php echo $homeDir;?>js/EffectComposer.js"></script>
+	<script src="<?php echo $homeDir;?>js/MaskPass.js"></script>
+	<script src="<?php echo $homeDir;?>js/RenderPass.js"></script>
+	<script src="<?php echo $homeDir;?>js/ShaderPass.js"></script>
 	<script src="sourceCode/galacticCenter.js"></script>
 
 	<!-- Run the sketch -->

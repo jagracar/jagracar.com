@@ -79,7 +79,7 @@
 	<?php include_once $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.4/p5.min.js"></script>
+	<script src="<?php echo $homeDir;?>js/p5.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
 	<script src="sourceCode/seaLife.js"></script>
 

@@ -31,9 +31,9 @@ function runSketch() {
 		camera.up.set(0, 1, 0);
 
 		// Initialize the camera controls
-		controls = new THREE.OrbitControls(camera, renderer.domElement);
-		controls.enablePan = false;
-		controls.zoomSpeed = 0.7;
+		controls = new THREE.TrackballControls(camera, renderer.domElement);
+		controls.noPan = true;
+		controls.zoomSpeed = 1.0;
 		controls.minDistance = 10;
 		controls.maxDistance = 500;
 
@@ -75,7 +75,8 @@ function runSketch() {
 		// Wait until the stars and the background texture are loaded
 		if (stars && textureFinishedLoading) {
 			// Update the camera controls
-			controls.rotateSpeed = Math.min(0.1 * camera.position.length() / controls.minDistance, 0.4);
+			controls.rotateSpeed = Math.min(0.3 * camera.position.length() / controls.minDistance, 0.7);
+			controls.update();
 
 			// Update the stars properties
 			updateStars();

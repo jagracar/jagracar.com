@@ -1,8 +1,8 @@
 <?php
-	// General php variables
-	$page = 'grafica';
-	$homeDir = '../';
-	$sketch = 'defaultPlot';
+// General php variables
+$page = 'grafica';
+$homeDir = '../';
+$sketch = 'lifeExpectancy';
 ?>
 
 <!DOCTYPE html>
@@ -11,10 +11,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="keywords" content="processing, p5.js, P5js, javaScript, grafica, grafica.js, examples, plot">
-<meta name="description" content="p5.js and grafica.js default plot sketch">
+<meta name="keywords"
+	content="processing, p5.js, P5js, javaScript, grafica, grafica.js, examples, plot">
+<meta name="description"
+	content="p5.js and grafica.js life expectancy sketch">
 <meta name="author" content="Javier Graciá Carpio">
-<title>Default plot sketch - jagracar</title>
+<title>Multiple panels sketch - jagracar</title>
 
 <!-- CSS files -->
 <link rel="stylesheet" href="<?php echo $homeDir;?>css/styles.css" />
@@ -47,12 +49,23 @@
 				</div>
 
 				<div class="sketch__description">
-					<p>This example shows how easy is to include a XY plot in your sketches. Create a new GPlot, fill an array with
-						points, add the array to the plot, write the title and axis labels and you are done. It's that simple!</p>
-
 					<p>
-						For more details, check the <a href="sourceCode/defaultPlot.js">source code</a> or play with it at <a
-							href="http://jsfiddle.net/jagracar/vzzkrdej/">JSFiddle</a>.
+						This example was motivated by two <a
+							href="http://lisacharlotterost.github.io/2016/05/17/one-chart-tools/">blog</a>
+						<a
+							href="http://lisacharlotterost.github.io/2016/05/17/one-chart-code/">entries</a>
+						posted by Lisa Charlotte Rost on her <a
+							href="http://lisacharlotterost.github.io">blog</a>. It shows the
+						tight relationship between a country's average personal income
+						and the average life expectancy. The point areas are proportional
+						to the country's population. Left click on a point to see the
+						country name. Drag the plot area with the mouse to pan in any
+						direction. Zoom in and out with the mouse central button.
+					</p>
+					<p>
+						For more details, check the <a href="sourceCode/lifeExpectancy.js">source
+							code</a> or play with it at <a
+							href="http://jsfiddle.net/jagracar/eobueeps/1/">JSFiddle</a>.
 					</p>
 				</div>
 			</div>
@@ -65,11 +78,11 @@
 	<!-- JavaScript files -->
 	<script src="<?php echo $homeDir;?>js/p5.min.js"></script>
 	<script src="<?php echo $homeDir;?>js/grafica.min.js"></script>
-	<script src="sourceCode/defaultPlot.js"></script>
+	<script src="sourceCode/lifeExpectancy.js"></script>
 
 	<!-- Run the sketch -->
 	<script>
-		var sketch = new p5(defaultPlotSketch, "sketch__canvas");
+		var sketch = new p5(lifeExpectancySketch, "sketch__canvas");
 	</script>
 </body>
 </html>

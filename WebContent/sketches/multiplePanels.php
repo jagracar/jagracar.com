@@ -62,7 +62,7 @@
 	<?php include_once $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.4/p5.min.js"></script>
+	<script src="<?php echo $homeDir;?>js/p5.min.js"></script>
 	<script src="<?php echo $homeDir;?>js/grafica.min.js"></script>
 	<script src="sourceCode/multiplePanels.js"></script>
 

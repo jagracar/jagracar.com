@@ -81,10 +81,10 @@
 	<?php include_once $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.7/p5.min.js"></script>
+	<script src="<?php echo $homeDir;?>js/p5.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.js"></script>
-	<script src="<?php echo $homeDir;?>js/OrbitControls.js"></script>
+	<script src="<?php echo $homeDir;?>js/OrbitControlsOld.js"></script>
 	<script src="sourceCode/Scan.js"></script>
 	<script src="sourceCode/kinectScanViewer.js"></script>
 

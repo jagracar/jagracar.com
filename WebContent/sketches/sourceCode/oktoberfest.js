@@ -37,7 +37,7 @@ var oktoberfestSketch = function(p) {
 		// Create the canvas
 		p.createCanvas(canvasWidth, canvasHeight);
 
-		// Save the table data in two GPointsArrays
+		// Save the table data in two arrays
 		pointsOktoberfest = [];
 		pointsElections = [];
 

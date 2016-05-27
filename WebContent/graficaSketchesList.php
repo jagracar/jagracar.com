@@ -15,5 +15,9 @@
 			class="<?php if($sketch == 'oktoberfest') { echo $activeSketch; }?>">Oktoberfest</a></li>
 		<li><a href="<?php echo $homeDir;?>sketches/multiplePlots.php"
 			class="<?php if($sketch == 'multiplePlots') { echo $activeSketch; }?>">Multiple plots</a></li>
+		<li><a href="<?php echo $homeDir;?>sketches/twoVerticalAxes.php"
+			class="<?php if($sketch == 'twoVerticalAxes') { echo $activeSketch; }?>">Two axes</a></li>
+		<li><a href="<?php echo $homeDir;?>sketches/lifeExpectancy.php"
+			class="<?php if($sketch == 'lifeExpectancy') { echo $activeSketch; }?>">Life expectancy</a></li>
 	</ul>
 </div>

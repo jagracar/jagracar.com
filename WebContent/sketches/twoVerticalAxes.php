@@ -1,8 +1,8 @@
 <?php
-	// General php variables
-	$page = 'grafica';
-	$homeDir = '../';
-	$sketch = 'defaultPlot';
+// General php variables
+$page = 'grafica';
+$homeDir = '../';
+$sketch = 'twoVerticalAxes';
 ?>
 
 <!DOCTYPE html>
@@ -11,10 +11,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="keywords" content="processing, p5.js, P5js, javaScript, grafica, grafica.js, examples, plot">
-<meta name="description" content="p5.js and grafica.js default plot sketch">
+<meta name="keywords"
+	content="processing, p5.js, P5js, javaScript, grafica, grafica.js, examples, plot">
+<meta name="description"
+	content="p5.js and grafica.js two vertical axes sketch">
 <meta name="author" content="Javier Graciá Carpio">
-<title>Default plot sketch - jagracar</title>
+<title>Two vertical axes sketch - jagracar</title>
 
 <!-- CSS files -->
 <link rel="stylesheet" href="<?php echo $homeDir;?>css/styles.css" />
@@ -47,12 +49,12 @@
 				</div>
 
 				<div class="sketch__description">
-					<p>This example shows how easy is to include a XY plot in your sketches. Create a new GPlot, fill an array with
-						points, add the array to the plot, write the title and axis labels and you are done. It's that simple!</p>
-
+					<p>This example shows a way to display a plot with two different
+						vertical axes. Drag the plot area with the mouse to pan in any direction.</p>
 					<p>
-						For more details, check the <a href="sourceCode/defaultPlot.js">source code</a> or play with it at <a
-							href="http://jsfiddle.net/jagracar/vzzkrdej/">JSFiddle</a>.
+						For more details, check the <a
+							href="sourceCode/twoVerticalAxes.js">source code</a> or play with
+						it at <a href="https://jsfiddle.net/jagracar/yy20s2mL/4/">JSFiddle</a>.
 					</p>
 				</div>
 			</div>
@@ -65,11 +67,11 @@
 	<!-- JavaScript files -->
 	<script src="<?php echo $homeDir;?>js/p5.min.js"></script>
 	<script src="<?php echo $homeDir;?>js/grafica.min.js"></script>
-	<script src="sourceCode/defaultPlot.js"></script>
+	<script src="sourceCode/twoVerticalAxes.js"></script>
 
 	<!-- Run the sketch -->
 	<script>
-		var sketch = new p5(defaultPlotSketch, "sketch__canvas");
+		var sketch = new p5(twoVerticalAxesSketch, "sketch__canvas");
 	</script>
 </body>
 </html>
