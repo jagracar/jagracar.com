@@ -457,7 +457,13 @@ function runSketch() {
 		cities.addCity("Prague", "Czech Republic", 50.075538, 14.4378);
 
 		// Croatia
+		cities.addCity("Brela", "Croatia", 43.368570, 16.929904);
 		cities.addCity("Cres", "Croatia", 44.960694, 14.40917);
+		cities.addCity("Dubrovnik", "Croatia", 42.650661, 18.094424);
+		cities.addCity("Dugi Otok", "Croatia", 43.966862, 15.090815);
+		cities.addCity("Hvar", "Croatia", 43.172948, 16.441114);
+		cities.addCity("Krk", "Croatia", 45.080936, 14.592586);
+		cities.addCity("Mjlet", "Croatia", 42.747771, 17.515014);
 		cities.addCity("Pula", "Croatia", 44.866623, 13.849579);
 		cities.addCity("Rab", "Croatia", 44.756910, 14.759968);
 		cities.addCity("Rovinj", "Croatia", 45.081166, 13.638707);

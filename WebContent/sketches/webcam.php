@@ -74,14 +74,14 @@
 
 	<!-- JavaScript files -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.js"></script>
+	<script src="<?php echo $homeDir;?>js/CopyShader.js"></script>
+	<script src="<?php echo $homeDir;?>js/FilmShader.js"></script>
+	<script src="<?php echo $homeDir;?>js/EffectComposer.js"></script>
 	<script src="<?php echo $homeDir;?>js/MaskPass.js"></script>
 	<script src="<?php echo $homeDir;?>js/RenderPass.js"></script>
 	<script src="<?php echo $homeDir;?>js/FilmPass.js"></script>
 	<script src="<?php echo $homeDir;?>js/ShaderPass.js"></script>
-	<script src="<?php echo $homeDir;?>js/CopyShader.js"></script>
-	<script src="<?php echo $homeDir;?>js/FilmShader.js"></script>
-	<script src="<?php echo $homeDir;?>js/EffectComposer.js"></script>
 	<script src="<?php echo $homeDir;?>js/objectdetect.js"></script>
 	<script src="<?php echo $homeDir;?>js/objectdetect.frontalface_alt.js"></script>
 	<script src="sourceCode/webcam.js"></script>
@@ -89,7 +89,7 @@
 	<!-- Run the sketch -->
 	<script>
 		var guiContainer = "sketch__gui";
-		var sketchContainer = "sketch__canvas"
+		var sketchContainer = "sketch__canvas";
 		window.onload = runSketch;
 	</script>
 </body>

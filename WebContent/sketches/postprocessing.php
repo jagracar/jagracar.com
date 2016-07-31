@@ -84,7 +84,7 @@
 	<!-- Run the sketch -->
 	<script>
 		var guiContainer = "sketch__gui";
-		var sketchContainer = "sketch__canvas"
+		var sketchContainer = "sketch__canvas";
 		window.onload = runSketch;
 	</script>
 </body>

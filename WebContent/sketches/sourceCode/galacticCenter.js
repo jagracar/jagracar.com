@@ -172,10 +172,11 @@ function runSketch() {
 			fragmentShader : document.getElementById("bh-fragmentShader").textContent
 		};
 		blackHolePass = new THREE.ShaderPass(blackHoleShader);
-
+		blackHolePass.needsSwap = false;
+		
 		// Create the shader pass to merge the two renders
 		mergePass = new THREE.ShaderPass(THREE.MergeShader);
-		mergePass.uniforms["tAdd"].value = backComposer.renderTarget1;
+		mergePass.uniforms["tAdd"].value = backComposer.renderTarget1.texture;
 		mergePass.renderToScreen = true;
 
 		// Define the render sequence

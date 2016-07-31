@@ -1,14 +1,13 @@
 //
-// This sketch takes a picture as input and simulates an oil paint.
-// It has many optional parameters, but only some combinations
-// produce optimal results.
+// This sketch takes a picture as input and simulates an oil paint. It has many optional parameters, 
+// but only some combinations produce optimal results.
 //
 // Credits: Javier Gracia Carpio
 // License: Creative Commons Attribution-ShareAlike (CC BY-SA)
 // Inspiration: Some of the works by Sergio Albiac
 //
 var oilPaintingSketch = function(p) {
-	// The picture file name in the data directory
+	// The picture file name in the img directory
 	var pictureFile = "me.jpg";
 	// The maximum RGB color difference to consider the pixel correctly painted
 	var maxColorDiff = [ 40, 40, 40 ];
@@ -16,56 +15,52 @@ var oilPaintingSketch = function(p) {
 	var comparisonMode = false;
 	// Show additional debug images
 	var debugMode = false;
-	// Draw the traces step by step, or in one go
-	var drawStepByStep = false;
+	// Paint the traces step by step, or in one go
+	var paintStepByStep = false;
 	// The smaller brush size allowed
 	var smallerBrushSize = 4;
 	// The brush size decrement ratio
 	var brushSizeDecrement = 1.3;
-	// The maximum bristle length
-	var maxBristleLength = 12;
-	// The maximum bristle thickness
-	var maxBristleThickness = 10;
-	// The maximum number of invalid traces allowed before the brush size is
-	// reduced
+	// The maximum number of invalid trajectories allowed before the brush size is reduced
+	var maxInvalidTrajectories = 5000;
+	// The maximum number of invalid trajectories allowed for the smaller brush size before the painting is stopped
+	var maxInvalidTrajectoriesForSmallerSize = 10000;
+	// The maximum number of invalid traces allowed before the brush size is reduced
 	var maxInvalidTraces = 250;
-	// The maximum number of invalid traces allowed for the smaller brush size
-	// before the painting is stopped
+	// The maximum number of invalid traces allowed for the smaller brush size before the painting is stopped
 	var maxInvalidTracesForSmallerSize = 350;
 	// The trace speed
 	var traceSpeed = 2;
 	// The typical trace length, relative to the brush size
 	var relativeTraceLength = 2.3;
 	// The minimum trace length allowed
-	var minTraceLength = 8;
-	// The screen background color
-	var bgColor = p.color(255);
+	var minTraceLength = 16;
 
 	// Global variables
 	var originalImg = undefined;
 	var imgWidth = undefined;
 	var imgHeight = undefined;
-	var similarColor = undefined;
+	var backgroundColor = undefined;
+	var similarColorPixels = undefined;
 	var visitedPixels = undefined;
 	var badPaintedPixels = undefined;
 	var nBadPaintedPixels = undefined;
 	var averageBrushSize = undefined;
 	var trace = undefined;
+	var traceStep = undefined;
 	var nTraces = undefined;
-	var invalidTracesCounter = undefined;
-	var newTrace = undefined;
-	var paint = undefined;
 	var startTime = undefined;
-	var lastChangeTime = undefined;
-	var lastChangeFrameCount = undefined;
-	var step = undefined;
 
+	//
 	// Load the image before the sketch is run
+	//
 	p.preload = function() {
 		originalImg = p.loadImage("img/" + pictureFile);
 	};
 
+	//
 	// Initial setup
+	//
 	p.setup = function() {
 		var maxCanvasWidth, nPixels, pixel;
 
@@ -76,23 +71,11 @@ var oilPaintingSketch = function(p) {
 			originalImg.resize(maxCanvasWidth, originalImg.height * maxCanvasWidth / originalImg.width);
 		}
 
-		// Load the original image pixels. This way they will be all the time available
-		originalImg.loadPixels();
 		imgWidth = originalImg.width;
 		imgHeight = originalImg.height;
 
-		// Create the pixel arrays
-		nPixels = imgWidth * imgHeight;
-		similarColor = [];
-		visitedPixels = [];
-		badPaintedPixels = []
-		nBadPaintedPixels = nPixels;
-
-		for (pixel = 0; pixel < nPixels; pixel++) {
-			similarColor[pixel] = false;
-			visitedPixels[pixel] = false;
-			badPaintedPixels[pixel] = pixel;
-		}
+		// Load the original image pixels. This way they will be all the time available
+		originalImg.loadPixels();
 
 		// Create the sketch canvas
 		if (comparisonMode) {
@@ -104,130 +87,58 @@ var oilPaintingSketch = function(p) {
 		}
 
 		// Sketch setup
-		p.background(bgColor);
+		backgroundColor = p.color(255);
 		p.strokeCap(p.SQUARE);
-		p.frameRate(2000);
+		p.background(backgroundColor);
+
+		// Initialize the pixel arrays
+		nPixels = imgWidth * imgHeight;
+		similarColorPixels = [];
+		visitedPixels = [];
+		badPaintedPixels = [];
+		nBadPaintedPixels = nPixels;
+
+		for (pixel = 0; pixel < nPixels; pixel++) {
+			similarColorPixels[pixel] = false;
+			visitedPixels[pixel] = false;
+			badPaintedPixels[pixel] = pixel;
+		}
 
 		// Initialize the rest of the sketch variables
-		averageBrushSize = Math.max(smallerBrushSize, Math.sqrt(imgWidth * imgHeight) / 6);
+		averageBrushSize = Math.max(smallerBrushSize, Math.max(imgWidth, imgHeight) / 6);
 		trace = undefined;
+		traceStep = 0;
 		nTraces = 0;
-		invalidTracesCounter = 0;
-		newTrace = true;
-		paint = true;
 		startTime = p.millis();
-		lastChangeTime = startTime;
-		lastChangeFrameCount = 0;
-		step = 0;
 	};
 
-	// Execute the sketch
+	//
+	// Draw method
+	//
 	p.draw = function() {
-		var totalTime, ellapsedTime, nPixels, pixel, validTrajectory;
-		var initPosition, brushSize, nSteps, nBristles, bristleLength, bristleThickness, brush, i;
+		// Get a new valid trace if we are not painting one already
+		if (typeof trace === "undefined") {
+			trace = getValidTrace();
+			traceStep = 0;
+		}
 
-		// Create a new trace or paint the current one
-		if (newTrace) {
-			// Check if we should stop painting
-			if (averageBrushSize === smallerBrushSize && invalidTracesCounter > maxInvalidTracesForSmallerSize) {
-				totalTime = (p.millis() - startTime) / 1000.0;
-
-				console.log("Total number of painted traces: " + nTraces);
-				console.log("Average frame rate = " + Math.round(p.frameCount / totalTime));
-				console.log("Processing time = " + totalTime + " seconds");
-
-				// Stop painting traces
-				newTrace = false;
-				paint = false;
-
-				// Stop the sketch
-				p.noLoop();
-			} else {
-				// Change the brush size if there were too many invalid traces
-				if (averageBrushSize > smallerBrushSize && invalidTracesCounter > maxInvalidTraces) {
-					averageBrushSize = Math.max(smallerBrushSize, Math.min(averageBrushSize / brushSizeDecrement,
-							averageBrushSize - 2));
-					ellapsedTime = (p.millis() - lastChangeTime) / 1000.0;
-
-					console
-							.log("Frame = " + p.frameCount + ", traces = " + nTraces + ", new brush size = "
-									+ averageBrushSize);
-					console.log("Average frame rate = "
-							+ Math.round((p.frameCount - lastChangeFrameCount) / ellapsedTime));
-					console.log("");
-
-					// Reset some of the sketch variables
-					invalidTracesCounter = 0;
-					lastChangeTime = p.millis();
-					lastChangeFrameCount = p.frameCount;
-
-					// Reset the visited pixels array
-					visitedPixels = [];
-					nPixels = imgWidth * imgHeight;
-
-					for (pixel = 0; pixel < nPixels; pixel++) {
-						visitedPixels[pixel] = false;
-					}
-				}
-
-				// Create new traces until one of them has a valid trajectory
-				validTrajectory = false;
-				initPosition = p.createVector(0, 0);
-				brushSize = Math.max(smallerBrushSize, (0.95 + 0.1 * Math.random()) * averageBrushSize);
-				nSteps = Math.max(minTraceLength, Math.round(relativeTraceLength * brushSize / traceSpeed));
-
-				while (!validTrajectory) {
-					// Create the trace
-					pixel = badPaintedPixels[p.floor(nBadPaintedPixels * Math.random())];
-					initPosition.set(pixel % imgWidth, pixel / imgWidth);
-					trace = new Trace(initPosition, nSteps, traceSpeed);
-
-					// Check if it has a valid trajectory
-					validTrajectory = trace.hasValidTrajectory(similarColor, visitedPixels, imgWidth, imgHeight);
-				}
-
-				// Create the Brush
-				nBristles = Math.round(brushSize * p.random(0.7, 1.0));
-				bristleLength = Math.min(2 * brushSize, maxBristleLength);
-				bristleThickness = Math.min(0.8 * brushSize, maxBristleThickness);
-				brush = new Brush(initPosition, brushSize, nBristles, bristleLength, bristleThickness);
-
-				// Add the brush to the trace
-				trace.setBrush(brush);
-
-				// Calculate the trace colors and check that painting the trace will improve the painting
-				if (trace.calculateColors(maxColorDiff, similarColor, originalImg, bgColor)) {
-					// Test passed, the trace is good enough to be painted
-					newTrace = false;
-					nTraces++;
-					invalidTracesCounter = 0;
-					step = 0;
-				} else {
-					// The trace is not good enough, try again in the next loop
-					invalidTracesCounter++;
-				}
-			}
-		} else if (paint) {
+		// Check if we should stop painting because there are no more valid traces
+		if (typeof trace === "undefined") {
+			// Stop the sketch
+			p.noLoop();
+		} else {
 			// Paint the trace step by step or in one go
-			if (drawStepByStep) {
-				// Paint 2 steps per frame
-				for (i = 0; i < 2; i++) {
-					trace.paintByStep(step, visitedPixels, imgWidth, imgHeight);
-					step++;
+			if (paintStepByStep) {
+				trace.paintStep(traceStep, visitedPixels, imgWidth, imgHeight);
+				traceStep++;
 
-					if (step === trace.getNSteps()) {
-						newTrace = true;
-						break;
-					}
+				// Check if we finished painting the trace
+				if (traceStep === trace.getNSteps()) {
+					trace = undefined;
 				}
 			} else {
 				trace.paint(visitedPixels, imgWidth, imgHeight);
-				newTrace = true;
-			}
-
-			// Update the pixel arrays if we finished to paint the trace
-			if (newTrace) {
-				updatePixelArrays();
+				trace = undefined;
 			}
 
 			// Draw the additional images if necessary
@@ -240,19 +151,119 @@ var oilPaintingSketch = function(p) {
 	};
 
 	//
+	// Obtains a valid trace, ready to be painted
+	//
+	function getValidTrace() {
+		var trace, traceNotFound, invalidTrajectoriesCounter, invalidTracesCounter, startingPosition, nPixels, pixel;
+		var validTrajectory, brushSize, nSteps;
+
+		// Update the similar color and bad painted pixel arrays
+		updatePixelArrays();
+
+		// Obtain a new valid trace
+		trace = undefined;
+		traceNotFound = true;
+		invalidTrajectoriesCounter = 0;
+		invalidTracesCounter = 0;
+		startingPosition = p.createVector(0, 0);
+
+		while (traceNotFound) {
+			// Check if we should stop painting
+			if (averageBrushSize === smallerBrushSize
+					&& (invalidTrajectoriesCounter > maxInvalidTrajectoriesForSmallerSize || invalidTracesCounter > maxInvalidTracesForSmallerSize)) {
+				console.log("Total number of painted traces: " + nTraces);
+				console.log("Processing time = " + (p.millis() - startTime) / 1000 + " seconds");
+
+				// Stop the while loop
+				trace = undefined;
+				traceNotFound = false;
+			} else {
+				// Change the average brush size if there were too many invalid traces
+				if (averageBrushSize > smallerBrushSize
+						&& (invalidTrajectoriesCounter > maxInvalidTrajectories || invalidTracesCounter > maxInvalidTraces)) {
+					averageBrushSize = Math.max(smallerBrushSize, Math.min(averageBrushSize / brushSizeDecrement,
+							averageBrushSize - 2));
+
+					console.log("Frame = " + p.frameCount + ", traces = " + nTraces + ", new average brush size = "
+							+ averageBrushSize);
+
+					// Reset some of the variables
+					invalidTrajectoriesCounter = 0;
+					invalidTracesCounter = 0;
+
+					// Reset the visited pixels array
+					visitedPixels = [];
+					nPixels = imgWidth * imgHeight;
+
+					for (pixel = 0; pixel < nPixels; pixel++) {
+						visitedPixels[pixel] = false;
+					}
+				}
+
+				// Create new traces until one of them has a valid trajectory or we exceed a number of tries
+				validTrajectory = false;
+				brushSize = Math.max(smallerBrushSize, averageBrushSize * p.random(0.95, 1.05));
+				nSteps = Math.round(Math.max(minTraceLength, relativeTraceLength * brushSize * p.random(0.9, 1.1))
+						/ traceSpeed);
+
+				while (!validTrajectory && invalidTrajectoriesCounter % 500 !== 499) {
+					// Create the trace starting from a bad painted pixel
+					pixel = badPaintedPixels[Math.floor(p.random(nBadPaintedPixels))];
+					startingPosition.set(pixel % imgWidth, pixel / imgWidth);
+					trace = new Trace(startingPosition, nSteps, traceSpeed);
+
+					// Check if it has a valid trajectory
+					validTrajectory = trace.hasValidTrajectory(similarColorPixels, visitedPixels, originalImg);
+
+					// Increase the counter
+					invalidTrajectoriesCounter++;
+				}
+
+				// Check if we have a valid trajectory
+				if (validTrajectory) {
+					// Reset the invalid trajectories counter
+					invalidTrajectoriesCounter = 0;
+
+					// Set the trace brush size
+					trace.setBrushSize(brushSize);
+
+					// Calculate the trace colors and check that painting the trace will improve the painting
+					if (trace.calculateColors(maxColorDiff, similarColorPixels, originalImg, backgroundColor)) {
+						// Test passed, the trace is good enough to be painted
+						traceNotFound = false;
+						nTraces++;
+					} else {
+						// The trace is not good enough, try again in the next loop step
+						invalidTracesCounter++;
+					}
+				} else {
+					// The trace is not good enough, try again in the next loop step
+					invalidTrajectoriesCounter++;
+					invalidTracesCounter++;
+				}
+			}
+		}
+
+		// Return the trace
+		return trace;
+	}
+
+	//
 	// Updates the similar color and bad painted pixel arrays
 	//
 	function updatePixelArrays() {
-		var rBg, gBg, bBg, x, y, wellPainted, pixel, imgPixel, canvasPixel, rCanvas, gCanvas, bCanvas, rDiff, gDiff, bDiff;
+		var pixelDensity, redBg, greenBg, blueBg, x, y, wellPainted, pixel, imgPixel, canvasPixel;
+		var redPainted, greenPainted, bluePainted;
 
 		// Load the screen pixels
 		p.loadPixels();
+		pixelDensity = p.displayDensity();
 
 		// Update the arrays
 		nBadPaintedPixels = 0;
-		rBg = p.red(bgColor);
-		gBg = p.green(bgColor);
-		bBg = p.blue(bgColor);
+		redBg = p.red(backgroundColor);
+		greenBg = p.green(backgroundColor);
+		blueBg = p.blue(backgroundColor);
 
 		for (x = 0; x < imgWidth; x++) {
 			for (y = 0; y < imgHeight; y++) {
@@ -260,21 +271,18 @@ var oilPaintingSketch = function(p) {
 				wellPainted = false;
 				pixel = x + y * imgWidth;
 				imgPixel = 4 * pixel;
-				canvasPixel = 4 * (x + y * p.width);
+				canvasPixel = 4 * (x + y * p.width * pixelDensity) * pixelDensity;
+				redPainted = p.pixels[canvasPixel];
+				greenPainted = p.pixels[canvasPixel + 1];
+				bluePainted = p.pixels[canvasPixel + 2];
 
-				// Check if the pixel has been painted before
-				rCanvas = p.pixels[canvasPixel];
-				gCanvas = p.pixels[canvasPixel + 1];
-				bCanvas = p.pixels[canvasPixel + 2];
-
-				if (rCanvas !== rBg && gCanvas !== gBg && bCanvas !== bBg) {
-					rDiff = Math.abs(originalImg.pixels[imgPixel] - rCanvas);
-					gDiff = Math.abs(originalImg.pixels[imgPixel + 1] - gCanvas);
-					bDiff = Math.abs(originalImg.pixels[imgPixel + 2] - bCanvas);
-					wellPainted = (rDiff < maxColorDiff[0]) && (gDiff < maxColorDiff[1]) && (bDiff < maxColorDiff[2]);
+				if (redPainted !== redBg && greenPainted !== greenBg && bluePainted !== blueBg) {
+					wellPainted = (Math.abs(originalImg.pixels[imgPixel] - redPainted) < maxColorDiff[0])
+							&& (Math.abs(originalImg.pixels[imgPixel + 1] - greenPainted) < maxColorDiff[1])
+							&& (Math.abs(originalImg.pixels[imgPixel + 2] - bluePainted) < maxColorDiff[2]);
 				}
 
-				similarColor[pixel] = wellPainted;
+				similarColorPixels[pixel] = wellPainted;
 
 				if (!wellPainted) {
 					badPaintedPixels[nBadPaintedPixels] = pixel;
@@ -291,10 +299,11 @@ var oilPaintingSketch = function(p) {
 	// Draws on the screen the visited pixels and similar color arrays
 	//
 	function drawDebugImages() {
-		var x, y, pixel, visitedCol, similarCol, canvasPixel1, canvasPixel2;
+		var pixelDensity, x, y, pixel, visitedCol, similarCol, canvasPixel1, canvasPixel2;
 
 		// Load the screen pixels
 		p.loadPixels();
+		pixelDensity = p.displayDensity();
 
 		// Draw the arrays
 		for (x = 0; x < imgWidth; x++) {
@@ -302,8 +311,8 @@ var oilPaintingSketch = function(p) {
 				pixel = x + y * imgWidth;
 				visitedCol = visitedPixels[pixel] ? 255 : 0;
 				similarCol = similarPixels[pixel] ? 255 : 0;
-				canvasPixel1 = 4 * (x + y * p.width + imgWidth);
-				canvasPixel2 = 4 * (x + y * p.width + 2 * imgWidth);
+				canvasPixel1 = 4 * (x + y * p.width * pixelDensity + imgWidth) * pixelDensity;
+				canvasPixel2 = 4 * (x + y * p.width * pixelDensity + 2 * imgWidth) * pixelDensity;
 				p.pixels[canvasPixel1] = visitedCol;
 				p.pixels[canvasPixel1 + 1] = visitedCol;
 				p.pixels[canvasPixel1 + 2] = visitedCol;
@@ -323,19 +332,21 @@ var oilPaintingSketch = function(p) {
 	// Credits: Javier Graciá Carpio
 	// License: Creative Commons Attribution-ShareAlike (CC BY-SA)
 	//
-	function Bristle(nParts, initLength, deltaLength, initThickness, deltaThickness) {
-		this.nPositions = nParts + 1;
+	function Bristle(nElements, thickness) {
+		var thicknessDecrement, i;
+
+		this.nPositions = nElements + 1;
 		this.positions = [];
 		this.lengths = [];
 		this.thicknesses = [];
 
 		// Fill the arrays
-		var i;
+		thicknessDecrement = thickness / nElements;
 
 		for (i = 0; i < this.nPositions; i++) {
 			this.positions[i] = p.createVector(0, 0);
-			this.lengths[i] = Math.max(1, initLength - i * deltaLength);
-			this.thicknesses[i] = Math.max(0.1, initThickness - i * deltaThickness);
+			this.lengths[i] = this.nPositions - i;
+			this.thicknesses[i] = thickness - (i - 1) * thicknessDecrement;
 		}
 	}
 
@@ -353,16 +364,15 @@ var oilPaintingSketch = function(p) {
 	};
 
 	//
-	// Updates the position of the bristle elements
+	// Updates the bristle position
 	//
 	Bristle.prototype.updatePosition = function(newPosition) {
-		var i, pos, previousPos, ang, length;
+		var previousPos, i, pos, length, ang;
 
 		// Set the first position to the provided position
-		pos = this.positions[0];
-		pos.x = newPosition.x;
-		pos.y = newPosition.y;
-		previousPos = pos;
+		previousPos = this.positions[0];
+		previousPos.x = newPosition.x;
+		previousPos.y = newPosition.y;
 
 		// Update the other positions
 		for (i = 1; i < this.nPositions; i++) {
@@ -376,9 +386,9 @@ var oilPaintingSketch = function(p) {
 	};
 
 	//
-	// Draws the bristle on the screen
+	// Paints the bristle on the screen
 	//
-	Bristle.prototype.paint = function(col) {
+	Bristle.prototype.paintOnScreen = function(col) {
 		var i, pos, previousPos;
 
 		// Set the stroke color
@@ -403,49 +413,52 @@ var oilPaintingSketch = function(p) {
 	// Credits: Javier Graciá Carpio
 	// License: Creative Commons Attribution-ShareAlike (CC BY-SA)
 	//
-	function Brush(position, size, nBristles, bristleLength, bristleThickness) {
-		// The number of positions to use to calculate the average position
+	function Brush(size) {
+		var bristleLength, nElements, bristleThickness, bristle;
+
+		// The maximum bristle length
+		this.maxBristleLength = 15;
+		// The maximum bristle thickness
+		this.maxBristleThickness = 5;
+		// The number of positions to use to calculate the brush average position
 		this.positionsForAverage = 4;
 		// The noise range to add to the bristles vertical position on the brush
 		this.bristleVerticalNoise = 8;
-		// The noise range to add in each update to the bristles horizontal position on the brush
-		this.bristleHorizontalNoise = 4;
-		// Sets the bristles horizontal noise speed
+		// The maximum noise range to add in each update to the bristles horizontal position on the brush
+		this.maxBristleHorizontalNoise = 4;
+		// Controls the bristles horizontal noise speed
 		this.noiseSpeedFactor = 0.04;
 
-		this.position = position.copy();
-		this.nBristles = nBristles;
+		this.position = p.createVector(0, 0);
+		this.nBristles = Math.round(size * p.random(1.6, 1.9));
 		this.bristles = [];
 		this.bOffsets = [];
 		this.bPositions = [];
 		this.positionsHistory = [];
 		this.averagePosition = this.position.copy();
-		this.noiseSeed = 1000 * Math.random();
+		this.noiseSeed = p.random(1000);
 		this.updatesCounter = 0;
-		this.bristleHorizontalNoise = Math.min(0.3 * size, this.bristleHorizontalNoise);
+		this.bristleHorizontalNoise = Math.min(0.3 * size, this.maxBristleHorizontalNoise);
 
 		// Populate the bristles arrays
-		var nParts, initLength, deltaLength, initThickness, deltaThickness, bristle;
-		nParts = Math.max(3, Math.round(Math.sqrt(2 * bristleLength)));
-		initLength = nParts;
-		deltaLength = 1;
-		initThickness = bristleThickness;
-		deltaThickness = initThickness / nParts;
+		bristleLength = Math.min(size, this.maxBristleLength);
+		nElements = Math.round(Math.sqrt(2 * bristleLength));
+		bristleThickness = Math.min(0.8 * bristleLength, this.maxBristleThickness);
 
 		for (bristle = 0; bristle < this.nBristles; bristle++) {
-			this.bristles[bristle] = new Bristle(nParts, initLength, deltaLength, initThickness, deltaThickness);
-			this.bOffsets[bristle] = p.createVector(size * (Math.random() - 0.5), this.bristleVerticalNoise
-					* (Math.random() - 0.5));
+			this.bristles[bristle] = new Bristle(nElements, bristleThickness);
+			this.bOffsets[bristle] = p.createVector(size * p.random(-0.5, 0.5), this.bristleVerticalNoise
+					* p.random(-0.5, 0.5));
 			this.bPositions[bristle] = p.createVector(0, 0);
 		}
 	}
 
 	//
-	// Reset the brush to its initial state
+	// Moves the brush to a new position and resets some internal counters
 	//
-	Brush.prototype.reset = function(initPosition) {
-		this.position.x = initPosition.x;
-		this.position.y = initPosition.y;
+	Brush.prototype.init = function(newPosition) {
+		this.position.x = newPosition.x;
+		this.position.y = newPosition.y;
 		this.positionsHistory = [];
 		this.averagePosition.x = this.position.x;
 		this.averagePosition.y = this.position.y;
@@ -453,51 +466,60 @@ var oilPaintingSketch = function(p) {
 	};
 
 	//
-	// Update the brush properties (position, direction, etc)
+	// Updates the brush properties
 	//
-	Brush.prototype.update = function(newPosition, updateBristles) {
-		var xAverage, yAverage, historyLength, i, pos, directionAng, bristle;
+	Brush.prototype.update = function(newPosition, updateBristleElements) {
+		var historySize, pos, xNewAverage, yNewAverage, i, directionAngle, bristle;
 
 		// Update the position
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;
 
 		// Add the new position to the positions history
-		this.positionsHistory[Math.floor(this.updatesCounter % this.positionsForAverage)] = newPosition;
+		historySize = this.positionsHistory.length;
 
-		// Calculate the new average position
-		xAverage = 0;
-		yAverage = 0;
-		historyLength = this.positionsHistory.length;
-
-		for (i = 0; i < historyLength; i++) {
-			pos = this.positionsHistory[i];
-			xAverage += pos.x;
-			yAverage += pos.y;
+		if (historySize < this.positionsForAverage) {
+			this.positionsHistory[historySize] = newPosition.copy();
+			historySize++;
+		} else {
+			pos = this.positionsHistory[this.updatesCounter % this.positionsForAverage];
+			pos.x = newPosition.x;
+			pos.y = newPosition.y;
 		}
 
-		xAverage /= historyLength;
-		yAverage /= historyLength;
+		// Calculate the new average position
+		xNewAverage = 0;
+		yNewAverage = 0;
+
+		for (i = 0; i < historySize; i++) {
+			pos = this.positionsHistory[i];
+			xNewAverage += pos.x;
+			yNewAverage += pos.y;
+		}
+
+		xNewAverage /= historySize;
+		yNewAverage /= historySize;
 
 		// Calculate the direction angle
-		directionAng = p.HALF_PI + p.atan2(yAverage - this.averagePosition.y, xAverage - this.averagePosition.x);
+		directionAngle = p.HALF_PI
+				+ p.atan2(yNewAverage - this.averagePosition.y, xNewAverage - this.averagePosition.x);
 
-		// Update the position and the average position
-		this.averagePosition.x = xAverage;
-		this.averagePosition.y = yAverage;
+		// Update the average position
+		this.averagePosition.x = xNewAverage;
+		this.averagePosition.y = yNewAverage;
 
-		// Update the bristles positions
-		this.updateBristlePositions(directionAng);
+		// Update the bristles positions array
+		this.updateBristlePositions(directionAngle);
 
-		// Update the bristles to their new positions
-		if (updateBristles) {
-			if (historyLength < this.positionsForAverage) {
-				for (bristle = 0; bristle < this.nBristles; bristle++) {
-					this.bristles[bristle].setPosition(this.bPositions[bristle]);
-				}
-			} else {
+		// Update the bristles elements to their new positions
+		if (updateBristleElements) {
+			if (historySize === this.positionsForAverage) {
 				for (bristle = 0; bristle < this.nBristles; bristle++) {
 					this.bristles[bristle].updatePosition(this.bPositions[bristle]);
+				}
+			} else if (historySize === this.positionsForAverage - 1) {
+				for (bristle = 0; bristle < this.nBristles; bristle++) {
+					this.bristles[bristle].setPosition(this.bPositions[bristle]);
 				}
 			}
 		}
@@ -509,35 +531,38 @@ var oilPaintingSketch = function(p) {
 	//
 	// Update the bristle positions array
 	//
-	Brush.prototype.updateBristlePositions = function(directionAng) {
-		var cos, sin, noisePos, bristle, bPos, bOffset, x, y;
+	Brush.prototype.updateBristlePositions = function(directionAngle) {
+		var cos, sin, noisePos, bristle, offset, x, y, pos;
 
-		// This saves some calculations
-		cos = Math.cos(directionAng);
-		sin = Math.sin(directionAng);
-		noisePos = this.noiseSeed + this.noiseSpeedFactor * this.updatesCounter;
+		if (this.positionsHistory.length >= this.positionsForAverage - 1) {
+			// This saves some calculations
+			cos = Math.cos(directionAngle);
+			sin = Math.sin(directionAngle);
+			noisePos = this.noiseSeed + this.noiseSpeedFactor * this.updatesCounter;
 
-		for (bristle = 0; bristle < this.nBristles; bristle++) {
-			bOffset = this.bOffsets[bristle];
+			for (bristle = 0; bristle < this.nBristles; bristle++) {
+				// Add some noise to make it look more realistic
+				offset = this.bOffsets[bristle];
+				x = offset.x + this.bristleHorizontalNoise * (p.noise(noisePos + 0.1 * bristle) - 0.5);
+				y = offset.y;
 
-			// Add some noise to make it look more realistic
-			x = bOffset.x + this.bristleHorizontalNoise * (p.noise(noisePos + 0.1 * bristle) - 0.5);
-			y = bOffset.y;
-
-			// Rotate the offset vector and add it to the position
-			bPos = this.bPositions[bristle];
-			bPos.x = this.position.x + (x * cos - y * sin);
-			bPos.y = this.position.y + (x * sin + y * cos);
+				// Rotate the offset vector and add it to the position
+				pos = this.bPositions[bristle];
+				pos.x = this.position.x + (x * cos - y * sin);
+				pos.y = this.position.y + (x * sin + y * cos);
+			}
 		}
 	};
 
 	//
-	// Draws the brush on the screen using the provided bristle colors
+	// Paints the brush on the screen using the provided bristle colors
 	//
-	Brush.prototype.paint = function(colors, alpha) {
-		if (this.positionsHistory.length === this.positionsForAverage && alpha > 0) {
-			for (var bristle = 0; bristle < this.nBristles; bristle++) {
-				this.bristles[bristle].paint(colors[bristle]);
+	Brush.prototype.paintOnScreen = function(colors) {
+		var bristle;
+
+		if (this.positionsHistory.length === this.positionsForAverage) {
+			for (bristle = 0; bristle < this.nBristles; bristle++) {
+				this.bristles[bristle].paintOnScreen(colors[bristle]);
 			}
 		}
 	};
@@ -565,85 +590,95 @@ var oilPaintingSketch = function(p) {
 	// License: Creative Commons Attribution-ShareAlike (CC BY-SA)
 	//
 	function Trace(position, nSteps, speed) {
+		var pos, initAng, noiseSeed, step, ang;
+
 		// Sets how random the trace movement is
 		this.noiseFactor = 0.007;
 		// The maximum allowed fraction of pixels in the trace trajectory with colors similar to the original image
 		this.maxSimilarColorFractionInTrajectory = 0.6;
 		// The maximum allowed fraction of pixels in the trace trajectory that have been visited before
 		this.maxVisitsFractionInTrajectory = 0.35;
-		// The maximum allowed fraction of pixels in the trace trajectory that fall outside the canvas
-		this.maxOutsideFractionInTrajectory = 0.6;
+		// The minimum fraction of pixels in the trace trajectory that should fall inside the canvas
+		this.minInsideFractionInTrajectory = 0.4;
+		// The maximum allowed value of the colors standard deviation along the trace trajectory
+		this.maxColorStDevInTrajectory = 45;
 		// The maximum allowed fraction of pixels in the trace with colors similar to the original image
-		this.maxSimilarColorFraction = 0.85;
-		// The maximum allowed fraction of pixels in the trace that fall outside the canvas
-		this.maxOutsideFraction = 0.3;
+		this.maxSimilarColorFraction = 0.8;
+		// The minimum fraction of pixels in the trace that should fall inside the canvas
+		this.minInsideFraction = 0.7;
 		// The minimum fraction of trace that needs to be painted already to consider it painted
 		this.minPaintedFraction = 0.65;
-		// The trace minimum color improvement factor required to paint it on the canvas
-		this.minColorImprovementFactor = 20;
+		// The minimum color improvement factor of the already painted pixels required to paint the trace on the canvas
+		this.minColorImprovementFactor = 0.6;
 		// The minimum improvement fraction in the number of well painted pixels to consider to paint the trace even if
 		// there is not a significant color improvement
-		this.bigWellPaintedImprovementFraction = 0.35;
+		this.bigWellPaintedImprovementFraction = 0.3;
 		// The minimum reduction fraction in the number of bad painted pixels required to paint the trace on the canvas
-		this.minBadPaintedReductionFraction = 0.3;
+		this.minBadPaintedReductionFraction = 0.45;
 		// The maximum allowed fraction of pixels in the trace that were previously well painted and will be now bad
 		// painted
-		this.maxWellPaintedDestructionFraction = 0.55;
-		// The brightness relative change range between the bristles
-		this.brightnessRelativeChange = 0.09;
-		// The step when the color mixing starts
-		this.mixStartingStep = 5;
+		this.maxWellPaintedDestructionFraction = 0.4;
+		// The maximum color change between the bristles
+		this.colorChange = 12;
+		// The typical step when the color mixing starts
+		this.typicalMixStartingStep = 5;
 		// The color mixing strength
-		this.mixStrength = 0.015;
+		this.mixStrength = 0.012;
 		// The minimum alpha value to be considered for the trace average color calculation
 		this.minAlpha = 20;
 
-		this.nSteps = Math.max(1, nSteps);
+		this.nSteps = nSteps;
 		this.positions = [];
-		this.alphas = [];
 		this.colors = [];
+		this.alphas = [];
 		this.brush = undefined;
 		this.nBristles = 0;
 
-		// A sanity check
-		this.mixStartingStep = Math.min(this.mixStartingStep, this.nSteps);
+		// Fill the positions array
+		pos = position.copy();
+		this.positions[0] = pos;
+		initAng = p.random(p.TWO_PI);
+		noiseSeed = p.random(1000);
 
-		// Fill the arrays
-		var initAng, noiseSeed, pos, alphaDecrement, alpha, step, ang;
-		initAng = p.TWO_PI * Math.random();
-		noiseSeed = 1000 * Math.random();
-		pos = position;
-		alphaDecrement = Math.max(1, Math.min(255 / this.nSteps, 25));
-		alpha = 255 + alphaDecrement;
-
-		for (step = 0; step < this.nSteps; step++) {
+		for (step = 1; step < this.nSteps; step++) {
 			ang = initAng + p.TWO_PI * (p.noise(noiseSeed + this.noiseFactor * step) - 0.5);
 			pos = p.createVector(pos.x + speed * Math.cos(ang), pos.y + speed * Math.sin(ang));
-			alpha = Math.max(0, alpha - alphaDecrement);
 			this.positions[step] = pos;
-			this.alphas[step] = alpha;
 		}
 	}
 
 	//
 	// Checks if the trace trajectory is valid. To be valid it should fall on a region that was not painted correctly
-	// before, the fraction of visited pixels in the trace trajectory should be small, and it should not fall most of
-	// the time outside the canvas.
+	// before, the fraction of visited pixels in the trace trajectory should be small, it should not fall most of the
+	// time outside the canvas, and the color changes should not be too high.
 	//
-	Trace.prototype.hasValidTrajectory = function(similarColor, visitedPixels, width, height) {
-		var similarColorCounter, visitedPixelsCounter, outsideCounter, step, pos, x, y, pixel;
-		var badPainted, notVisited, insideCanvas;
+	Trace.prototype.hasValidTrajectory = function(similarColor, visitedPixels, originalImg) {
+		var insideCounter, similarColorCounter, visitedPixelsCounter, redSum, redSqSum, greenSum, greenSqSum;
+		var blueSum, blueSqSum, width, height, step, pos, x, y, pixel, imgPixel, red, green, blue, redStDev;
+		var greenStDev, blueStDev, insideCanvas, badPainted, notVisited, smallColorChange;
+
+		// Obtain some pixel statistics along the trajectory
+		insideCounter = 0;
 		similarColorCounter = 0;
 		visitedPixelsCounter = 0;
-		outsideCounter = 0;
+		redSum = 0;
+		redSqSum = 0;
+		greenSum = 0;
+		greenSqSum = 0;
+		blueSum = 0;
+		blueSqSum = 0;
+		width = originalImg.width;
+		height = originalImg.height;
 
 		for (step = 0; step < this.nSteps; step++) {
 			pos = this.positions[step];
 			x = Math.round(pos.x);
 			y = Math.round(pos.y);
 
-			// Check if the trace position falls on the canvas
+			// Check that it's inside the picture
 			if (x >= 0 && x < width && y >= 0 && y < height) {
+				// Increase the counters
+				insideCounter++;
 				pixel = x + y * width;
 
 				if (similarColor[pixel]) {
@@ -653,23 +688,48 @@ var oilPaintingSketch = function(p) {
 				if (visitedPixels[pixel]) {
 					visitedPixelsCounter++;
 				}
-			} else {
-				outsideCounter++;
+
+				// Extract the pixel color properties
+				imgPixel = 4 * pixel;
+				red = originalImg.pixels[imgPixel];
+				green = originalImg.pixels[imgPixel + 1];
+				blue = originalImg.pixels[imgPixel + 2];
+				redSum += red;
+				redSqSum += red * red;
+				greenSum += green;
+				greenSqSum += green * green;
+				blueSum += blue;
+				blueSqSum += blue * blue;
 			}
 		}
 
-		badPainted = similarColorCounter <= this.maxSimilarColorFractionInTrajectory * this.nSteps;
-		notVisited = visitedPixelsCounter <= this.maxVisitsFractionInTrajectory * this.nSteps;
-		insideCanvas = outsideCounter <= this.maxOutsideFractionInTrajectory * this.nSteps;
+		// Obtain the colors standard deviation along the trajectory
+		redStDev = 0;
+		greenStDev = 0;
+		blueStDev = 0;
 
-		return badPainted && notVisited && insideCanvas;
+		if (insideCounter > 1) {
+			redStDev = Math.sqrt((redSqSum - redSum * redSum / insideCounter) / (insideCounter - 1));
+			greenStDev = Math.sqrt((greenSqSum - greenSum * greenSum / insideCounter) / (insideCounter - 1));
+			blueStDev = Math.sqrt((blueSqSum - blueSum * blueSum / insideCounter) / (insideCounter - 1));
+		}
+
+		// Check if it's a valid trajectory
+		insideCanvas = insideCounter >= this.minInsideFractionInTrajectory * this.nSteps;
+		badPainted = similarColorCounter <= this.maxSimilarColorFractionInTrajectory * insideCounter;
+		notVisited = visitedPixelsCounter <= this.maxVisitsFractionInTrajectory * insideCounter;
+		smallColorChange = redStDev < this.maxColorStDevInTrajectory && greenStDev < this.maxColorStDevInTrajectory
+				&& blueStDev < this.maxColorStDevInTrajectory;
+
+		return insideCanvas && badPainted && notVisited && smallColorChange;
 	};
 
 	//
-	// Associates a brush to the trace
+	// Defines the brush size that should be used to paint the trace
 	//
-	Trace.prototype.setBrush = function(brush) {
-		this.brush = brush;
+	Trace.prototype.setBrushSize = function(brushSize) {
+		this.brush = new Brush(brushSize);
+		this.brush.init(this.positions[0]);
 		this.nBristles = this.brush.getNBristles();
 	};
 
@@ -677,122 +737,123 @@ var oilPaintingSketch = function(p) {
 	// Calculates the trace colors. Returns false if the region covered by the trace was already painted with similar
 	// colors, most of the trace is outside the canvas, or drawing the trace will not improve considerably the painting.
 	//
-	Trace.prototype.calculateColors = function(maxColorDiff, similarColor, originalImg, bgCol) {
-		var rAverage, gAverage, bAverage, width, height, rBg, gBg, bBg, rOriginal, gOriginal, bOriginal;
-		var highAlpha, insideCounter, outsideCounter, similarColorCounter, similarColorBool, originalColors;
-		var step, bristle, bristlesPositions, x, y, loc, imgPixel, wellPainted, outsideCanvas;
-		var wellPaintedCounter, destroyedWellPaintedCounter, alreadyPaintedCounter, colorImprovement;
-		var rDiff, gDiff, bDiff, rCanvasDiff, gCanvasDiff, bCanvasDiff;
-		var wellPaintedImprovement, previousBadPainted, alreadyPainted, colorImproves;
-		var bigWellPaintedImprovement, reducedBadPainted, lowWellPaintedDestruction, improves;
-		var averageColor, hueAverage, saturationAverage, brightnessAverage, deltaBrightness, bristleColor;
-		var noiseSeed, locPrev;
+	Trace.prototype.calculateColors = function(maxColorDiff, similarColor, originalImg, bgColor) {
+		var alphaDecrement, alpha, step, bristle, pixelDensity, redAverage, greenAverage, blueAverage, insideCounter;
+		var outsideCounter, similarColorCounter, originalColors, similarColorBool, width, height, redBg, greenBg;
+		var blueBg, bristlesPositions, pos, x, y, loc, canvasPixel, redPainted, greenPainted, bluePainted, pixel;
+		var redOriginal, greenOriginal, blueOriginal, wellPainted, outsideCanvas, wellPaintedCounter;
+		var destroyedWellPaintedCounter, alreadyPaintedCounter, colorImprovement, redDiff, greenDiff, blueDiff;
+		var wellPaintedImprovement, previousBadPainted, averageMaxColorDiff, alreadyPainted, colorImproves;
+		var bigWellPaintedImprovement, reducedBadPainted, lowWellPaintedDestruction, improves, noiseSeed, deltaColor;
+		var mixStartingStep, locPrev, f;
 
-		// Load the canvas image pixels
+		// Initialize the colors and alphas arrays
+		alphaDecrement = Math.min(255 / (this.nSteps), 25);
+		alpha = 255 + alphaDecrement;
+
+		for (step = 0; step < this.nSteps; step++) {
+			alpha -= alphaDecrement;
+			this.alphas[step] = p.constrain(Math.round(alpha), 2, 255);
+
+			for (bristle = 0; bristle < this.nBristles; bristle++) {
+				this.colors[3 * (bristle + step * this.nBristles)] = -1;
+			}
+		}
+
+		// Load the screen pixels
 		p.loadPixels();
+		pixelDensity = p.displayDensity();
 
 		// Calculate the trace average color and obtain some trace statistics
-		rAverage = 0;
-		gAverage = 0;
-		bAverage = 0;
+		redAverage = 0;
+		greenAverage = 0;
+		blueAverage = 0;
 		insideCounter = 0;
 		outsideCounter = 0;
 		similarColorCounter = 0;
-		similarColorBool = [];
 		originalColors = [];
+		similarColorBool = [];
 		width = originalImg.width;
 		height = originalImg.height;
-		rBg = p.red(bgCol)
-		gBg = p.green(bgCol)
-		bBg = p.blue(bgCol)
+		redBg = p.red(bgColor);
+		greenBg = p.green(bgColor);
+		blueBg = p.blue(bgColor);
 
 		for (step = 0; step < this.nSteps; step++) {
 			// Move the brush and get the bristles positions
 			this.brush.update(this.positions[step], false);
 			bristlesPositions = this.brush.getBristlesPositions();
 
-			if (typeof bristlesPositions !== "undefined") {
-				// Check if the alpha value is high enough
-				highAlpha = this.alphas[step] > this.minAlpha;
-
+			// Check if the alpha value it's high enough for the average color calculation
+			if (this.alphas[step] > this.minAlpha && typeof bristlesPositions !== "undefined") {
 				for (bristle = 0; bristle < this.nBristles; bristle++) {
-					// Check that the bristle position is inside the canvas
-					x = Math.round(bristlesPositions[bristle].x);
-					y = Math.round(bristlesPositions[bristle].y);
+					loc = 3 * (bristle + step * this.nBristles);
+
+					// Check that the bristle is inside the canvas
+					pos = bristlesPositions[bristle];
+					x = Math.round(pos.x);
+					y = Math.round(pos.y);
 
 					if (x >= 0 && x < width && y >= 0 && y < height) {
-						// Save the canvas color if it's not the background color
-						loc = 3 * (bristle + step * this.nBristles);
-						imgPixel = 4 * (x + y * width);
-						canvasPixel = 4 * (x + y * p.width);
-						rCanvas = p.pixels[canvasPixel];
-						gCanvas = p.pixels[canvasPixel + 1];
-						bCanvas = p.pixels[canvasPixel + 2];
 
-						if (rCanvas !== rBg && gCanvas !== gBg && bCanvas !== bBg) {
-							this.colors[loc] = rCanvas;
-							this.colors[loc + 1] = gCanvas;
-							this.colors[loc + 2] = bCanvas;
-						} else {
-							this.colors[loc] = -1;
+						// Save the already painted color if it's not the background color
+						canvasPixel = 4 * (x + y * p.width * pixelDensity) * pixelDensity;
+						redPainted = p.pixels[canvasPixel];
+						greenPainted = p.pixels[canvasPixel + 1];
+						bluePainted = p.pixels[canvasPixel + 2];
+
+						if (redPainted !== redBg && greenPainted !== greenBg && bluePainted !== blueBg) {
+							this.colors[loc] = redPainted;
+							this.colors[loc + 1] = greenPainted;
+							this.colors[loc + 2] = bluePainted;
 						}
 
 						// Save the original image color
-						rOriginal = originalImg.pixels[imgPixel];
-						gOriginal = originalImg.pixels[imgPixel + 1];
-						bOriginal = originalImg.pixels[imgPixel + 2];
-						originalColors[loc] = rOriginal;
-						originalColors[loc + 1] = gOriginal;
-						originalColors[loc + 2] = bOriginal;
+						pixel = 4 * (x + y * width);
+						redOriginal = originalImg.pixels[pixel];
+						greenOriginal = originalImg.pixels[pixel + 1];
+						blueOriginal = originalImg.pixels[pixel + 2];
+						originalColors[loc] = redOriginal;
+						originalColors[loc + 1] = greenOriginal;
+						originalColors[loc + 2] = blueOriginal;
 
-						// Add the original image color to the average if alpha is high
-						if (highAlpha) {
-							rAverage += rOriginal;
-							gAverage += gOriginal;
-							bAverage += bOriginal;
+						// Add the original image color to the average
+						redAverage += redOriginal;
+						greenAverage += greenOriginal;
+						blueAverage += blueOriginal;
 
-							// Increment the counters
-							insideCounter++;
+						// Increment the counters
+						insideCounter++;
 
-							if (similarColor[imgPixel / 4]) {
-								similarColorBool[loc / 3] = true;
-								similarColorCounter++;
-							}
+						if (similarColor[pixel / 4]) {
+							similarColorBool[loc / 3] = true;
+							similarColorCounter++;
+						} else {
+							similarColorBool[loc / 3] = false;
 						}
 					} else {
-						loc = 3 * (bristle + step * this.nBristles);
 						originalColors[loc] = -1;
-						this.colors[loc] = -1;
-
-						if (highAlpha) {
-							outsideCounter++;
-						}
+						outsideCounter++;
 					}
-				}
-			} else {
-				for (bristle = 0; bristle < this.nBristles; bristle++) {
-					loc = 3 * (bristle + step * this.nBristles);
-					originalColors[loc] = -1;
-					this.colors[loc] = -1;
 				}
 			}
 		}
 
 		if (insideCounter > 0) {
-			rAverage /= insideCounter;
-			gAverage /= insideCounter;
-			bAverage /= insideCounter;
+			redAverage /= insideCounter;
+			greenAverage /= insideCounter;
+			blueAverage /= insideCounter;
 		}
 
 		// Update the screen pixels
 		p.updatePixels();
 
-		// Reset the brush
-		this.brush.reset(this.positions[0]);
+		// Reset the brush to the initial position
+		this.brush.init(this.positions[0]);
 
 		// Check if the trace region was painted before with similar colors or falls outside the image
 		wellPainted = similarColorCounter >= this.maxSimilarColorFraction * insideCounter;
-		outsideCanvas = outsideCounter >= this.maxOutsideFraction * (insideCounter + outsideCounter);
+		outsideCanvas = insideCounter < this.minInsideFraction * (insideCounter + outsideCounter);
 
 		if (wellPainted || outsideCanvas) {
 			// The trace is not valid, don't paint it
@@ -809,19 +870,20 @@ var oilPaintingSketch = function(p) {
 			// Check if the alpha value is high enough
 			if (this.alphas[step] >= this.minAlpha) {
 				for (bristle = 0; bristle < this.nBristles; bristle++) {
-					// Check that the bristle position is inside the canvas (it should have an original image color)
+					// Check that the bristle position is inside the canvas
 					loc = 3 * (bristle + step * this.nBristles);
 
 					if (originalColors[loc] >= 0) {
 						// Count the number of well painted pixels, and how many are not well painted anymore
-						rOriginal = originalColors[loc];
-						gOriginal = originalColors[loc + 1];
-						bOriginal = originalColors[loc + 2];
-						rDiff = Math.abs(rOriginal - rAverage);
-						gDiff = Math.abs(gOriginal - gAverage);
-						bDiff = Math.abs(bOriginal - bAverage);
+						redOriginal = originalColors[loc];
+						greenOriginal = originalColors[loc + 1];
+						blueOriginal = originalColors[loc + 2];
+						redDiff = Math.abs(redOriginal - redAverage);
+						greenDiff = Math.abs(greenOriginal - greenAverage);
+						blueDiff = Math.abs(blueOriginal - blueAverage);
 
-						if (rDiff < maxColorDiff[0] && gDiff < maxColorDiff[1] && bDiff < maxColorDiff[2]) {
+						if ((redDiff < maxColorDiff[0]) && (greenDiff < maxColorDiff[1])
+								&& (blueDiff < maxColorDiff[2])) {
 							wellPaintedCounter++;
 						} else if (similarColorBool[loc / 3]) {
 							destroyedWellPaintedCounter++;
@@ -829,11 +891,12 @@ var oilPaintingSketch = function(p) {
 
 						// Count previously painted pixels and calculate their color improvement
 						if (this.colors[loc] >= 0) {
-							rCanvasDiff = Math.abs(rOriginal - this.colors[loc]);
-							gCanvasDiff = Math.abs(gOriginal - this.colors[loc + 1]);
-							bCanvasDiff = Math.abs(bOriginal - this.colors[loc + 2]);
-							colorImprovement += rCanvasDiff - rDiff + gCanvasDiff - gDiff + bCanvasDiff - bDiff;
 							alreadyPaintedCounter++;
+
+							// Calculate the color improvement
+							colorImprovement += Math.abs(redOriginal - this.colors[loc]) - redDiff
+									+ Math.abs(greenOriginal - this.colors[loc + 1]) - greenDiff
+									+ Math.abs(blueOriginal - this.colors[loc + 2]) - blueDiff;
 						}
 					}
 				}
@@ -842,9 +905,11 @@ var oilPaintingSketch = function(p) {
 
 		wellPaintedImprovement = wellPaintedCounter - similarColorCounter;
 		previousBadPainted = insideCounter - similarColorCounter;
+		averageMaxColorDiff = (maxColorDiff[0] + maxColorDiff[1] + maxColorDiff[2]) / 3;
 
 		alreadyPainted = alreadyPaintedCounter >= this.minPaintedFraction * insideCounter;
-		colorImproves = colorImprovement >= this.minColorImprovementFactor * alreadyPaintedCounter;
+		colorImproves = colorImprovement >= this.minColorImprovementFactor * averageMaxColorDiff
+				* alreadyPaintedCounter;
 		bigWellPaintedImprovement = wellPaintedImprovement >= this.bigWellPaintedImprovementFraction * insideCounter;
 		reducedBadPainted = wellPaintedImprovement >= this.minBadPaintedReductionFraction * previousBadPainted;
 		lowWellPaintedDestruction = destroyedWellPaintedCounter <= this.maxWellPaintedDestructionFraction
@@ -858,31 +923,21 @@ var oilPaintingSketch = function(p) {
 
 		// The trace is good enough for painting!
 		// Set the first step bristle colors to the original image average color
-		averageColor = p.color(rAverage, gAverage, bAverage);
-		hueAverage = p.hue(averageColor);
-		saturationAverage = p.saturation(averageColor);
-		brightnessAverage = p.brightness(averageColor);
-		noiseSeed = 1000 * Math.random();
-
-		p.colorMode(p.HSB, 255);
+		noiseSeed = p.random(1000);
 
 		for (bristle = 0; bristle < this.nBristles; bristle++) {
-			// Add some brightness changes to make it more realistic
-			deltaBrightness = this.brightnessRelativeChange * brightnessAverage
-					* (p.noise(noiseSeed + 0.4 * bristle) - 0.5);
-			bristleColor = p.color(hueAverage, saturationAverage, p.constrain(brightnessAverage + deltaBrightness, 0,
-					255));
-
+			// Add some color changes to make it more realistic
 			loc = 3 * bristle;
-			this.colors[loc] = p.red(bristleColor);
-			this.colors[loc + 1] = p.green(bristleColor);
-			this.colors[loc + 2] = p.blue(bristleColor);
+			deltaColor = this.colorChange * (p.noise(noiseSeed + 0.4 * bristle) - 0.5);
+			this.colors[loc] = p.constrain(redAverage + deltaColor, 0, 255);
+			this.colors[loc + 1] = p.constrain(greenAverage + deltaColor, 0, 255);
+			this.colors[loc + 2] = p.constrain(blueAverage + deltaColor, 0, 255);
 		}
 
-		p.colorMode(p.RGB, 255);
-
 		// Extend the colors to the step where the mixing starts
-		for (step = 1; step < this.mixStartingStep; step++) {
+		mixStartingStep = p.constrain(this.typicalMixStartingStep, 1, this.nSteps);
+
+		for (step = 1; step < mixStartingStep; step++) {
 			for (bristle = 0; bristle < this.nBristles; bristle++) {
 				loc = 3 * (bristle + step * this.nBristles);
 				locPrev = loc - 3 * this.nBristles;
@@ -892,21 +947,34 @@ var oilPaintingSketch = function(p) {
 			}
 		}
 
-		// Mix the previous step colors with the canvas colors
-		for (step = this.mixStartingStep; step < this.nSteps; step++) {
-			for (bristle = 0; bristle < this.nBristles; bristle++) {
-				loc = 3 * (bristle + step * this.nBristles);
-				locPrev = loc - 3 * this.nBristles;
-				f = 1 - this.mixStrength;
+		// Mix the previous step colors with the already painted colors
+		f = 1 - this.mixStrength;
 
-				// Check if there is a canvas color at that position
-				if (this.colors[loc] >= 0) {
-					// Mix the previous step color with the canvas color
-					this.colors[loc] = f * this.colors[locPrev] + this.mixStrength * this.colors[loc];
-					this.colors[loc + 1] = f * this.colors[locPrev + 1] + this.mixStrength * this.colors[loc + 1];
-					this.colors[loc + 2] = f * this.colors[locPrev + 2] + this.mixStrength * this.colors[loc + 2];
-				} else {
-					// Use the previous step colors
+		for (step = mixStartingStep; step < this.nSteps; step++) {
+			// Check if the alpha value is high enough for mixing
+			if (this.alphas[step] >= this.minAlpha) {
+				for (bristle = 0; bristle < this.nBristles; bristle++) {
+					loc = 3 * (bristle + step * this.nBristles);
+					locPrev = loc - 3 * this.nBristles;
+
+					// Check if there is a canvas color at that position
+					if (this.colors[loc] >= 0) {
+						// Mix the previous step color with the canvas color
+						this.colors[loc] = f * this.colors[locPrev] + this.mixStrength * this.colors[loc];
+						this.colors[loc + 1] = f * this.colors[locPrev + 1] + this.mixStrength * this.colors[loc + 1];
+						this.colors[loc + 2] = f * this.colors[locPrev + 2] + this.mixStrength * this.colors[loc + 2];
+					} else {
+						// Use the previous step colors
+						this.colors[loc] = this.colors[locPrev];
+						this.colors[loc + 1] = this.colors[locPrev + 1];
+						this.colors[loc + 2] = this.colors[locPrev + 2];
+					}
+				}
+			} else {
+				// Copy the previous step colors
+				for (bristle = 0; bristle < this.nBristles; bristle++) {
+					loc = 3 * (bristle + step * this.nBristles);
+					locPrev = loc - 3 * this.nBristles;
 					this.colors[loc] = this.colors[locPrev];
 					this.colors[loc + 1] = this.colors[locPrev + 1];
 					this.colors[loc + 2] = this.colors[locPrev + 2];
@@ -914,17 +982,19 @@ var oilPaintingSketch = function(p) {
 			}
 		}
 
+		// The trace is ready for painting
 		return true;
 	};
 
 	//
-	// Draws the trace on the canvas
+	// Paints the trace on the screen
 	//
 	Trace.prototype.paint = function(visitedPixels, width, height) {
+		var bristlesColors, step, alpha, bristle, loc, bristlesPositions, pos, x, y;
+
 		// Check that the trace colors have been initialized
-		if (this.colors.length > 0) {
+		if (typeof this.colors !== "undefined") {
 			// Paint the brush step by step
-			var width, height, bristlesColors, alpha, step, bristle, loc, bristlesPositions, x, y;
 			bristlesColors = [];
 
 			for (step = 0; step < this.nSteps; step++) {
@@ -937,18 +1007,19 @@ var oilPaintingSketch = function(p) {
 							alpha);
 				}
 
-				// Update the brush position and paint it
+				// Move the brush position and paint it
 				this.brush.update(this.positions[step], true);
-				this.brush.paint(bristlesColors, alpha);
+				this.brush.paintOnScreen(bristlesColors);
 
-				// Fill the visitCounts array if alpha is high enough
+				// Fill the visited pixels array if alpha is high enough
 				if (alpha > this.minAlpha) {
 					bristlesPositions = this.brush.getBristlesPositions();
 
 					if (typeof bristlesPositions !== "undefined") {
 						for (bristle = 0; bristle < this.nBristles; bristle++) {
-							x = Math.round(bristlesPositions[bristle].x);
-							y = Math.round(bristlesPositions[bristle].y);
+							pos = bristlesPositions[bristle];
+							x = Math.round(pos.x);
+							y = Math.round(pos.y);
 
 							if (x >= 0 && x < width && y >= 0 && y < height) {
 								visitedPixels[x + y * width] = true;
@@ -958,19 +1029,20 @@ var oilPaintingSketch = function(p) {
 				}
 			}
 
-			// Reset the brush
-			this.brush.reset(this.positions[0]);
+			// Reset the brush to the initial position
+			this.brush.init(this.positions[0]);
 		}
 	};
 
 	//
-	// Draws the brush on the canvas for a given trace step
+	// Paints the trace on the screen for a given trace step
 	//
-	Trace.prototype.paintByStep = function(step, visitedPixels, width, height) {
+	Trace.prototype.paintStep = function(step, visitedPixels, width, height) {
+		var bristlesColors, alpha, bristle, loc, bristlesPositions, pos, x, y;
+
 		// Check that the trace colors have been initialized
-		if (this.colors.length > 0) {
+		if (typeof this.colors !== "undefined") {
 			// Calculate the bristles colors
-			var bristlesColors, alpha, bristle, loc, bristlesPositions, width, height, x, y;
 			bristlesColors = [];
 			alpha = this.alphas[step];
 
@@ -979,9 +1051,9 @@ var oilPaintingSketch = function(p) {
 				bristlesColors[bristle] = p.color(this.colors[loc], this.colors[loc + 1], this.colors[loc + 2], alpha);
 			}
 
-			// Update the brush position and paint it
+			// Move the brush position and paint it
 			this.brush.update(this.positions[step], true);
-			this.brush.paint(bristlesColors, alpha);
+			this.brush.paintOnScreen(bristlesColors);
 
 			// Fill the visitCounts array if alpha is high enough
 			if (alpha > this.minAlpha) {
@@ -989,8 +1061,9 @@ var oilPaintingSketch = function(p) {
 
 				if (typeof bristlesPositions !== "undefined") {
 					for (bristle = 0; bristle < this.nBristles; bristle++) {
-						x = Math.round(bristlesPositions[bristle].x);
-						y = Math.round(bristlesPositions[bristle].y);
+						pos = bristlesPositions[bristle];
+						x = Math.round(pos.x);
+						y = Math.round(pos.y);
 
 						if (x >= 0 && x < width && y >= 0 && y < height) {
 							visitedPixels[x + y * width] = true;
@@ -998,9 +1071,15 @@ var oilPaintingSketch = function(p) {
 					}
 				}
 			}
+
+			// Check if we are at the last step
+			if (step === this.nSteps - 1) {
+				// Reset the brush to the initial position
+				this.brush.init(this.positions[0]);
+			}
 		}
 	};
-	
+
 	//
 	// Returns the number of steps in the trace trajectory
 	//

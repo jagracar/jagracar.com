@@ -78,14 +78,14 @@
 
 	<!-- JavaScript files -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.js"></script>
 	<script src="<?php echo $homeDir;?>js/OrbitControls.js"></script>
 	<script src="sourceCode/visitedCities.js"></script>
 
 	<!-- Run the sketch -->
 	<script>
 		var guiContainer = "sketch__gui";
-		var sketchContainer = "sketch__canvas"
+		var sketchContainer = "sketch__canvas";
 		window.onload = runSketch;
 	</script>
 </body>
