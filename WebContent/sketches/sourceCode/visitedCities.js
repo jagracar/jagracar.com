@@ -360,6 +360,7 @@ function runSketch() {
 		cities.addCity("Bastia", "France", 42.697283, 9.450881);
 		cities.addCity("Beauvais", "France", 49.429539, 2.080712);
 		cities.addCity("Bonifacio", "France", 41.387174, 9.159269);
+		cities.addCity("Calvi", "France", 42.567651, 8.757222);
 		cities.addCity("Cannes", "France", 43.552847, 7.017369);
 		cities.addCity("Castellane", "France", 43.846242, 6.5137);
 		cities.addCity("Chambéry", "France", 45.564601, 5.917781);
@@ -371,6 +372,9 @@ function runSketch() {
 		cities.addCity("Marseille", "France", 43.296482, 5.36978);
 		cities.addCity("Paris", "France", 48.856614, 2.352222);
 		cities.addCity("Saintes-Maries-de-la-Mer", "France", 43.453241, 4.429074);
+		cities.addCity("Sartène", "France", 41.621822, 8.97472);
+		cities.addCity("Solenzara", "France", 41.837115, 9.372646);
+		cities.addCity("Toulouse", "France", 43.604652, 1.444209);
 
 		// Italy
 		cities.addCity("Alberobello", "Italy", 40.786423, 17.24093);
@@ -380,6 +384,7 @@ function runSketch() {
 		cities.addCity("Cannobio", "Italy", 46.059692, 8.698279);
 		cities.addCity("Capri", "Italy", 40.553201, 14.222154);
 		cities.addCity("Finale Ligure", "Italy", 44.168903, 8.341621);
+		cities.addCity("Florence", "Italy", 43.769560, 11.255814);
 		cities.addCity("Frascati", "Italy", 41.808521, 12.676104);
 		cities.addCity("Gallipolli", "Italy", 40.055851, 17.992614);
 		cities.addCity("Lazise", "Italy", 45.506020, 10.735072);
@@ -393,6 +398,8 @@ function runSketch() {
 		cities.addCity("Pisa", "Italy", 43.722839, 10.401689);
 		cities.addCity("Portovenere", "Italy", 44.054126, 9.836628);
 		cities.addCity("Rom", "Italy", 41.902783, 12.496366);
+		cities.addCity("Taormina", "Italy", 37.851637, 15.285313);
+		cities.addCity("Tindary", "Italy", 38.141744, 15.045148);
 
 		// Switzerland
 		cities.addCity("Bern", "Switzerland", 46.947922, 7.444608);
@@ -408,11 +415,13 @@ function runSketch() {
 		// Germany
 		cities.addCity("Ausburg", "Germany", 48.370545, 10.89779);
 		cities.addCity("Berlin", "Germany", 52.520007, 13.404954);
+		cities.addCity("Bonn", "Germany", 50.737430, 7.098207);
 		cities.addCity("Dresden", "Germany", 51.050409, 13.737262);
 		cities.addCity("Eichstätt", "Germany", 48.891251, 11.189986);
 		cities.addCity("Füssen", "Germany", 47.569648, 10.700433);
 		cities.addCity("Garmisch-Partenkirchen", "Germany", 47.491695, 11.095498);
 		cities.addCity("Heidelberg", "Germany", 49.398752, 8.672434);
+		cities.addCity("Karlsruhe", "Germany", 49.006890, 8.403653);
 		cities.addCity("Kochel", "Germany", 47.655882, 11.365602);
 		cities.addCity("Lindau", "Germany", 47.579782, 9.678933);
 		cities.addCity("Munich", "Germany", 48.135125, 11.581981);
@@ -420,6 +429,7 @@ function runSketch() {
 		cities.addCity("Prien am Chiemsee", "Germany", 47.856181, 12.349098);
 		cities.addCity("Regensburg", "Germany", 49.013430, 12.101624);
 		cities.addCity("Schönau am Königssee", "Germany", 47.598379, 12.981548);
+		cities.addCity("Speyer", "Germany", 49.317276, 8.441217);
 		cities.addCity("Starnberg", "Germany", 47.999961, 11.339009);
 		cities.addCity("Tegernsee", "Germany", 47.705139, 11.764725);
 
