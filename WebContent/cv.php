@@ -39,10 +39,7 @@
 			<header class="cv-section__header">
 				<h1>Contact information</h1>
 			</header>
-			<p>
-				Heimeranstraße, 6<br /> 80339, Munich – Germany<br /> Phone: +49 171 647 89 61<br /> Email: jagracar<span
-					class="noSpam-icon"></span>gmail.com
-			</p>
+			<p>Email: jagracar<span	class="noSpam-icon"></span>gmail.com</p>
 		</section>
 
 		<section class="cv-section">
