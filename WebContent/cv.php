@@ -95,7 +95,25 @@
 			</header>
 			<div class="cv-achievement">
 				<div class="cv-achievement__period">
-					<p>Since January 2013</p>
+					<p>Since August 2016</p>
+				</div>
+				<div class="cv-achievement__description">
+					<p>
+						Scientific Software Developer at Max Planck Institute for Extraterrestrial Physics (<a
+							href="http://www.mpe.mpg.de">MPE</a>), Garching, Germany.
+					</p>
+					<p>
+						<em>Programming environment:</em> Python, C++, XML, XSD, Eclipse, redmine, svn, gitlab, Linux.
+					</p>
+					<p>
+						<em>Main tasks:</em> Member of the <a href="https://www.cosmos.esa.int/web/euclid">Euclid</a> collaboration. 
+						Responsible of the definition and maintenance of MER-PF data model.
+					</p>
+				</div>
+			</div>
+			<div class="cv-achievement">
+				<div class="cv-achievement__period">
+					<p>January 2013 – July 2016</p>
 				</div>
 				<div class="cv-achievement__description">
 					<p>
@@ -118,7 +136,7 @@
 			</div>
 			<div class="cv-achievement">
 				<div class="cv-achievement__period">
-					<p>March 2008 – Dec. 2012</p>
+					<p>March 2008 – December 2012</p>
 				</div>
 				<div class="cv-achievement__description">
 					<p>
@@ -137,7 +155,7 @@
 						Herschel and ALMA programmes. Collaboration in several observing large programmes (<a
 							href="http://www.mpa-garching.mpg.de/COLD_GASS/">COLD GASS</a>, <a
 							href="http://www.iram-institute.org/EN/content-page-279-7-158-240-279-0.html">PHIBBS</a>). Publication in
-						scientific journals: currently more than 50 refereed publications with more than 2600 citations. Presentation of
+						scientific journals: currently more than 60 refereed publications with more than 4700 citations. Presentation of
 						scientific results in international conferences. Referee for ApJ, A&amp;A and MNRAS.
 					</p>
 				</div>
@@ -184,8 +202,8 @@
 			<ul class="cv-keyValueList">
 				<li><span class="cv-keyValueList__key">Spanish:</span> <span class="cv-keyValueList__value">Native</span></li>
 				<li><span class="cv-keyValueList__key">English:</span> <span class="cv-keyValueList__value">Fluent</span></li>
+				<li><span class="cv-keyValueList__key">German:</span> <span class="cv-keyValueList__value">Medium</span></li>
 				<li><span class="cv-keyValueList__key">French:</span> <span class="cv-keyValueList__value">Medium</span></li>
-				<li><span class="cv-keyValueList__key">German:</span> <span class="cv-keyValueList__value">Basic</span></li>
 			</ul>
 		</section>
 
@@ -195,8 +213,9 @@
 			</header>
 			<ul class="cv-list">
 				<li>Large experience working with the Unix/Linux and MS Windows operating systems.</li>
-				<li>Programming experience with Java, R, Jython and FORTRAN-77. Basic knowledge of C and C++.</li>
+				<li>Programming experience with Java, R, python, Jython, XML/XSD and FORTRAN-77. Basic knowledge of C, C++ and Matlab.</li>
 				<li>Java development and testing: Eclipse, JUnit, JIRA, CVS, Git.</li>
+				<li>Python development and testing: Eclipse, pytest, Redmine, svn, Git.</li>
 				<li>Web development: HTML5, CSS3, Sass, Compass, JavaScript, jQuery.</li>
 				<li>Text editors: Latex, OpenOffice.org and MS Office.</li>
 				<li>Highly familiarized with astronomical software: HIPE, GILDAS, DS9, XEphem and Cloudy.</li>
