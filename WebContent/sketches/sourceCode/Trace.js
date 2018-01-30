@@ -191,7 +191,7 @@ Trace.prototype.createMesh = function(tightness, subdivissions, radius, sides, c
 		// Define the mesh material
 		material = new THREE.MeshPhongMaterial({
 			color : new THREE.Color(color[0] / 255, color[1] / 255, color[2] / 255),
-			shading : flatShading ? THREE.FlatShading : THREE.SmoothShading,
+			flatShading : flatShading,
 			wireframe : showLines,
 			side : THREE.FrontSide
 		});

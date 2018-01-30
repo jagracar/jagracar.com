@@ -42,7 +42,7 @@ var thousandWordsSketch = function(p) {
 		buffer.textFont("Helvetica");
 		buffer.textSize(textSize);
 		buffer.textLeading(textLeading);
-		buffer.textAlign(p.CENTER);
+		buffer.textAlign(p.CENTER, p.CENTER);
 		buffer.noStroke();
 
 		// Draw only when it's necessary
@@ -55,7 +55,7 @@ var thousandWordsSketch = function(p) {
 		var bufferImg = updateBuffer();
 
 		// Draw the buffer image on the canvas
-		p.image(bufferImg);
+		p.image(bufferImg, 0, 0);
 	};
 
 	//
@@ -120,7 +120,7 @@ var thousandWordsSketch = function(p) {
 
 		// Write the text in red
 		x = 0.5 * buffer.width;
-		y = 0.5 * buffer.height + 0.25 * textSize;
+		y = 0.5 * buffer.height;
 		buffer.fill(buffer.color(255, 0, 0));
 		buffer.text(phrase, x, y);
 

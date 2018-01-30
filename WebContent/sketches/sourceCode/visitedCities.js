@@ -370,6 +370,7 @@ function runSketch() {
 		cities.addCity("Grenoble", "France", 45.188529, 5.724524);
 		cities.addCity("Lyon", "France", 45.764043, 4.835659);
 		cities.addCity("Marseille", "France", 43.296482, 5.36978);
+		cities.addCity("Nice", "France", 43.710173, 7.261953);
 		cities.addCity("Paris", "France", 48.856614, 2.352222);
 		cities.addCity("Saintes-Maries-de-la-Mer", "France", 43.453241, 4.429074);
 		cities.addCity("Sartène", "France", 41.621822, 8.97472);
@@ -400,6 +401,7 @@ function runSketch() {
 		cities.addCity("Rom", "Italy", 41.902783, 12.496366);
 		cities.addCity("Taormina", "Italy", 37.851637, 15.285313);
 		cities.addCity("Tindary", "Italy", 38.141744, 15.045148);
+		cities.addCity("Trieste", "Italy", 45.649526, 13.776818);
 
 		// Switzerland
 		cities.addCity("Bern", "Switzerland", 46.947922, 7.444608);
@@ -408,6 +410,7 @@ function runSketch() {
 
 		// Austria
 		cities.addCity("Kitzbuhel", "Austria", 47.444990, 12.39143);
+		cities.addCity("Neukirchen am Großvenediger", "Austria", 47.249591, 12.276971);
 		cities.addCity("Vienna", "Austria", 48.208174, 16.373819);
 		cities.addCity("Salzburg", "Austria", 47.809490, 13.05501);
 		cities.addCity("Sölden", "Austria", 46.965494, 11.007623);
@@ -420,6 +423,7 @@ function runSketch() {
 		cities.addCity("Eichstätt", "Germany", 48.891251, 11.189986);
 		cities.addCity("Füssen", "Germany", 47.569648, 10.700433);
 		cities.addCity("Garmisch-Partenkirchen", "Germany", 47.491695, 11.095498);
+		cities.addCity("Göttingen", "Germany", 51.541280, 9.915804);
 		cities.addCity("Heidelberg", "Germany", 49.398752, 8.672434);
 		cities.addCity("Karlsruhe", "Germany", 49.006890, 8.403653);
 		cities.addCity("Kochel", "Germany", 47.655882, 11.365602);
@@ -530,6 +534,20 @@ function runSketch() {
 		cities.addCity("Katoomba", "Australia", -33.714955, 150.311407);
 		cities.addCity("Kiama", "Australia", -34.670266, 150.854387);
 		cities.addCity("Sydney", "Australia", -33.867487, 151.20699);
+
+		// Japan
+		cities.addCity("Kamakura", "Japan", 35.319225, 139.546687);
+		cities.addCity("Kyoto", "Japan", 35.011636, 135.768029);
+		cities.addCity("Tokyo", "Japan", 35.689487, 139.691706);
+
+		// Costa Rica
+		cities.addCity("Isla Tortuga", "Costa Rica", 9.770108, -84.891966);
+		cities.addCity("La Fortuna", "Costa Rica", 10.467833, -84.642681);
+		cities.addCity("Puerto Viejo de Talamanca", "Costa Rica", 9.654015, -82.754941);
+		cities.addCity("Puntarenas", "Costa Rica", 9.977844, -84.829421);
+		cities.addCity("Quepos", "Costa Rica", 9.431868, -84.161908);
+		cities.addCity("San José", "Costa Rica", 9.928069, -84.090725);
+		cities.addCity("Santa Elena", "Costa Rica", 10.314260, -84.82502);
 
 		return cities;
 	}

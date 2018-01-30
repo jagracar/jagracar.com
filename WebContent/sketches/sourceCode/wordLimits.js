@@ -154,7 +154,7 @@ var wordLimitsSketch = function(p) {
 		var txt = "Only\nWords\nHave\nLimits";
 		var textSize = 0.25 * p.width;
 		p.textFont("Helvetica");
-		p.textAlign(p.CENTER);
+		p.textAlign(p.CENTER, p.CENTER);
 		p.textSize(textSize);
 		p.textLeading(textSize);
 		p.textStyle(p.BOLD);

@@ -119,7 +119,7 @@ function runSketch() {
 		controller = gui.add(guiControlKeys, "Flat shading");
 		controller.onFinishChange(function(value) {
 			if (trace) {
-				trace.mesh.material.shading = value ? THREE.FlatShading : THREE.SmoothShading;
+				trace.mesh.material.flatShading = value;
 				trace.mesh.material.needsUpdate = true;
 			}
 		});
