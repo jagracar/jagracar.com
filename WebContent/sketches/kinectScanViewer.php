@@ -83,7 +83,7 @@
 	<!-- JavaScript files -->
 	<script src="<?php echo $homeDir;?>js/p5.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/89/three.js"></script>
 	<script src="<?php echo $homeDir;?>js/OrbitControlsOld.js"></script>
 	<script src="sourceCode/Scan.js"></script>
 	<script src="sourceCode/kinectScanViewer.js"></script>

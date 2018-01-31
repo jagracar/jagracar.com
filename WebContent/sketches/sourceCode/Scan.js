@@ -671,7 +671,7 @@ Scan.prototype.shift = function(v) {
  * Creates the scan point cloud
  */
 Scan.prototype.createPointCloud = function(vertexShader, fragmentShader, canvas) {
-	var vertices, verticesColors, verticesNormals, i, geometry, material;
+	var vertices, verticesColors, verticesNormals, i, geometry, attributeArray, material;
 
 	// Calculate the vertices properties
 	vertices = [];
@@ -687,50 +687,38 @@ Scan.prototype.createPointCloud = function(vertexShader, fragmentShader, canvas)
 	}
 
 	// Define the points geometry
-	geometry = new THREE.Geometry();
-	geometry.vertices = vertices;
+	geometry = new THREE.BufferGeometry();
+
+	// Add the geometry attributes
+	attributeArray = new Float32Array(3 * vertices.length);
+	geometry.addAttribute("position", new THREE.BufferAttribute(attributeArray, 3).copyVector3sArray(vertices));
+
+	attributeArray = new Float32Array(3 * vertices.length);
+	geometry.addAttribute("aColor", new THREE.BufferAttribute(attributeArray, 3).copyColorsArray(verticesColors));
+
+	attributeArray = new Float32Array(3 * vertices.length);
+	geometry.addAttribute("aNormal", new THREE.BufferAttribute(attributeArray, 3).copyVector3sArray(verticesNormals));
 
 	// Define the points shader material
-	material = this.createShaderMaterial(vertexShader, fragmentShader, canvas, verticesColors, verticesNormals);
+	material = this.createShaderMaterial(vertexShader, fragmentShader, canvas, true, false);
 
 	// Create the point cloud
-	this.pointCloud = new THREE.PointCloud(geometry, material);
+	this.pointCloud = new THREE.Points(geometry, material);
 };
 
 /*
  * Creates the scan mesh
  */
 Scan.prototype.createMesh = function(vertexShader, fragmentShader, canvas) {
-	var vertices, verticesColors, verticesNormals, order, counter, x, y, pixel, faces, faceNormal, barycentricCoord;
-	var xStart, xEnd, pixel1, pixel2, pixel3, pixel4, geometry, frontMaterial, backMaterial, frontMesh, backMesh;
+	var vertices, verticesColors, verticesNormals, faceNormals, barycentricCoords, x, y, xStart, xEnd;
+	var pixel1, pixel2, pixel3, pixel4, geometry, attributeArray, frontMaterial, backMaterial, frontMesh, backMesh;
 
 	// Calculate the vertices properties
 	vertices = [];
 	verticesColors = [];
 	verticesNormals = [];
-	order = [];
-	counter = 0;
-
-	for (y = 0; y < this.height; y++) {
-		if (!this.empty[y]) {
-			for (x = this.ini[y]; x <= this.end[y]; x++) {
-				pixel = x + y * this.width;
-
-				if (this.points[pixel]) {
-					vertices.push(this.points[pixel]);
-					verticesColors.push(this.colors[pixel]);
-					verticesNormals.push(this.normals[pixel]);
-					order[pixel] = counter;
-					counter++;
-				}
-			}
-		}
-	}
-
-	// Calculate the faces, the faces normal and the barycentric coordinates
-	faces = [];
-	faceNormal = [];
-	barycentricCoord = [];
+	faceNormals = [];
+	barycentricCoords = [];
 
 	for (y = 0; y < this.height - 1; y++) {
 		if (!this.empty[y] && !this.empty[y + 1]) {
@@ -746,18 +734,18 @@ Scan.prototype.createMesh = function(vertexShader, fragmentShader, canvas) {
 				// First triangle
 				if (this.points[pixel1] && this.points[pixel4]) {
 					if (this.points[pixel2]) {
-						this.addFace(pixel1, pixel2, pixel4, order, faces, faceNormal, barycentricCoord);
+						this.addFace(pixel1, pixel2, pixel4, vertices, verticesColors, verticesNormals, faceNormals, barycentricCoords);
 					} else if (this.points[pixel3]) {
-						this.addFace(pixel1, pixel3, pixel4, order, faces, faceNormal, barycentricCoord);
+						this.addFace(pixel1, pixel3, pixel4, vertices, verticesColors, verticesNormals, faceNormals, barycentricCoords);
 					}
 				}
 
 				// Second triangle
 				if (this.points[pixel2] && this.points[pixel3]) {
 					if (this.points[pixel4]) {
-						this.addFace(pixel2, pixel3, pixel4, order, faces, faceNormal, barycentricCoord);
+						this.addFace(pixel2, pixel3, pixel4, vertices, verticesColors, verticesNormals, faceNormals, barycentricCoords);
 					} else if (this.points[pixel1]) {
-						this.addFace(pixel1, pixel2, pixel3, order, faces, faceNormal, barycentricCoord);
+						this.addFace(pixel1, pixel2, pixel3, vertices, verticesColors, verticesNormals, faceNormals, barycentricCoords);
 					}
 				}
 			}
@@ -765,15 +753,27 @@ Scan.prototype.createMesh = function(vertexShader, fragmentShader, canvas) {
 	}
 
 	// Define the mesh geometry
-	geometry = new THREE.Geometry();
-	geometry.vertices = vertices;
-	geometry.faces = faces;
+	geometry = new THREE.BufferGeometry();
+
+	// Add the geometry attributes
+	attributeArray = new Float32Array(3 * vertices.length);
+	geometry.addAttribute("position", new THREE.BufferAttribute(attributeArray, 3).copyVector3sArray(vertices));
+
+	attributeArray = new Float32Array(3 * vertices.length);
+	geometry.addAttribute("aColor", new THREE.BufferAttribute(attributeArray, 3).copyColorsArray(verticesColors));
+
+	attributeArray = new Float32Array(3 * vertices.length);
+	geometry.addAttribute("aNormal", new THREE.BufferAttribute(attributeArray, 3).copyVector3sArray(verticesNormals));
+
+	attributeArray = new Float32Array(3 * vertices.length);
+	geometry.addAttribute("aFaceNormal", new THREE.BufferAttribute(attributeArray, 3).copyVector3sArray(faceNormals));
+
+	attributeArray = new Float32Array(3 * vertices.length);
+	geometry.addAttribute("aBarycentricCoord", new THREE.BufferAttribute(attributeArray, 3).copyVector3sArray(barycentricCoords));
 
 	// Define the front and back shader materials
-	frontMaterial = this.createShaderMaterial(vertexShader, fragmentShader, canvas, verticesColors, verticesNormals,
-			faceNormal, barycentricCoord, false);
-	backMaterial = this.createShaderMaterial(vertexShader, fragmentShader, canvas, verticesColors, verticesNormals,
-			faceNormal, barycentricCoord, true);
+	frontMaterial = this.createShaderMaterial(vertexShader, fragmentShader, canvas, false, false);
+	backMaterial = this.createShaderMaterial(vertexShader, fragmentShader, canvas, false, true);
 
 	// Create the front and back meshes
 	frontMesh = new THREE.Mesh(geometry, frontMaterial);
@@ -788,9 +788,9 @@ Scan.prototype.createMesh = function(vertexShader, fragmentShader, canvas) {
 };
 
 /*
- * Adds a face to the faces, faceNormal and barycentricCoord arrays
+ * Adds a face to the vertices arrays
  */
-Scan.prototype.addFace = function(pixel1, pixel2, pixel3, order, faces, faceNormal, barycentricCoord) {
+Scan.prototype.addFace = function(pixel1, pixel2, pixel3, vertices, verticesColors, verticesNormals, faceNormals, barycentricCoords) {
 	var p1, p2, p3, v1, v2, perp;
 
 	p1 = this.points[pixel1];
@@ -799,68 +799,53 @@ Scan.prototype.addFace = function(pixel1, pixel2, pixel3, order, faces, faceNorm
 
 	if (p1.distanceToSquared(p2) < this.maxSeparationSq && p1.distanceToSquared(p3) < this.maxSeparationSq
 			&& p2.distanceToSquared(p3) < this.maxSeparationSq) {
-		// Add the face
-		faces.push(new THREE.Face3(order[pixel1], order[pixel2], order[pixel3]));
+		// Add the face vertices
+		vertices.push(p1);
+		vertices.push(p2);
+		vertices.push(p3);
 
-		// Add the face normal
+		// Add the face vertices colors
+		verticesColors.push(this.colors[pixel1]);
+		verticesColors.push(this.colors[pixel2]);
+		verticesColors.push(this.colors[pixel3]);
+
+		// Add the face vertices normals
+		verticesNormals.push(this.normals[pixel1]);
+		verticesNormals.push(this.normals[pixel2]);
+		verticesNormals.push(this.normals[pixel3]);
+
+		// Add the face normals
 		v1 = new THREE.Vector3().subVectors(p2, p1);
 		v2 = new THREE.Vector3().subVectors(p3, p1);
 		perp = new THREE.Vector3().crossVectors(v1, v2).normalize();
-		faceNormal.push([ perp, perp, perp ]);
+		faceNormals.push(perp);
+		faceNormals.push(perp);
+		faceNormals.push(perp);
 
-		// Add the barycentric coordinates
-		barycentricCoord.push([ new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1) ]);
+		// Add the face barycentric coordinates
+		barycentricCoords.push(new THREE.Vector3(1, 0, 0));
+		barycentricCoords.push(new THREE.Vector3(0, 1, 0));
+		barycentricCoords.push(new THREE.Vector3(0, 0, 1));
 	}
 };
 
 /*
  * Creates the appropriate scan shader material
  */
-Scan.prototype.createShaderMaterial = function(vertexShader, fragmentShader, canvas, verticesColors, verticesNormals,
-		faceNormal, barycentricCoord, backScan) {
-	var pointMaterial, attributes, uniforms, texture, material;
-
-	// The faceNormal array is not defined for point materials
-	pointMaterial = faceNormal ? false : true;
-
-	// Define the fragment attributes
-	attributes = {};
-
-	attributes.aColor = {
-		type : 'c',
-		value : verticesColors
-	};
-
-	attributes.aNormal = {
-		type : 'v3',
-		value : verticesNormals
-	};
-
-	if (!pointMaterial) {
-		attributes.aFaceNormal = {
-			type : 'v3',
-			boundTo : 'faceVertices',
-			value : faceNormal
-		};
-
-		attributes.aBarycentricCoord = {
-			type : 'v3',
-			boundTo : 'faceVertices',
-			value : barycentricCoord
-		};
-	}
+Scan.prototype.createShaderMaterial = function(vertexShader, fragmentShader, canvas, pointCloud, backScan) {
+	var uniforms, texture, material;
 
 	// Define the fragment uniforms
 	uniforms = {};
 
 	uniforms.pointCloud = {
 		type : 'i',
-		value : pointMaterial
+		value : pointCloud
 	};
 
 	uniforms.backScan = {
 		type : 'i',
-		value : pointMaterial ? 0 : backScan
+		value : backScan
 	};
 
 	uniforms.backColor = {
@@ -933,13 +918,12 @@ Scan.prototype.createShaderMaterial = function(vertexShader, fragmentShader, can
 
 	// Create the shader material
 	material = new THREE.ShaderMaterial({
-		attributes : attributes,
 		uniforms : uniforms,
 		vertexShader : vertexShader,
 		fragmentShader : fragmentShader,
-		side : pointMaterial ? THREE.DoubleSide : backScan ? THREE.BackSide : THREE.FrontSide,
+		side : pointCloud ? THREE.DoubleSide : backScan ? THREE.BackSide : THREE.FrontSide,
 		transparent : true
 	});
-
+	
 	return material;
 };
