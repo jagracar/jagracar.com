@@ -47,8 +47,8 @@ function runSketch() {
 		// Initialize the camera controls
 		controls = new THREE.OrbitControls(camera, renderer.domElement);
 		controls.enablePan = false;
-		controls.zoomSpeed = 0.6;
-		controls.minDistance = 240;
+		controls.zoomSpeed = 0.4;
+		controls.minDistance = 220;
 		controls.maxDistance = 900;
 
 		// Initialize the directional light
