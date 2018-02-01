@@ -80,7 +80,7 @@
 
 	<!-- JavaScript files -->
 	<script src="<?php echo $homeDir;?>js/p5.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.0/dat.gui.min.js"></script>
 	<script src="sourceCode/seaLife.js"></script>
 
 	<!-- Run the sketch -->
