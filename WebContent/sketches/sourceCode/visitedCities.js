@@ -375,6 +375,7 @@ function runSketch() {
 		cities.addCity("Saintes-Maries-de-la-Mer", "France", 43.453241, 4.429074);
 		cities.addCity("Sartène", "France", 41.621822, 8.97472);
 		cities.addCity("Solenzara", "France", 41.837115, 9.372646);
+		cities.addCity("Strasbourg", "France", 48.573405, 7.752111);
 		cities.addCity("Toulouse", "France", 43.604652, 1.444209);
 
 		// Italy
@@ -419,6 +420,7 @@ function runSketch() {
 		cities.addCity("Ausburg", "Germany", 48.370545, 10.89779);
 		cities.addCity("Berlin", "Germany", 52.520007, 13.404954);
 		cities.addCity("Bonn", "Germany", 50.737430, 7.098207);
+		cities.addCity("Cologne", "Germany", 50.937531, 6.960279);
 		cities.addCity("Dresden", "Germany", 51.050409, 13.737262);
 		cities.addCity("Eichstätt", "Germany", 48.891251, 11.189986);
 		cities.addCity("Füssen", "Germany", 47.569648, 10.700433);
@@ -541,10 +543,10 @@ function runSketch() {
 		cities.addCity("Tokyo", "Japan", 35.689487, 139.691706);
 
 		// Costa Rica
-		cities.addCity("Isla Tortuga", "Costa Rica", 9.770108, -84.891966);
+		cities.addCity("Cahuita", "Costa Rica", 9.734786, -82.845215);
+		cities.addCity("Jacó", "Costa Rica", 9.620240,-84.621749);
 		cities.addCity("La Fortuna", "Costa Rica", 10.467833, -84.642681);
 		cities.addCity("Puerto Viejo de Talamanca", "Costa Rica", 9.654015, -82.754941);
-		cities.addCity("Puntarenas", "Costa Rica", 9.977844, -84.829421);
 		cities.addCity("Quepos", "Costa Rica", 9.431868, -84.161908);
 		cities.addCity("San José", "Costa Rica", 9.928069, -84.090725);
 		cities.addCity("Santa Elena", "Costa Rica", 10.314260, -84.82502);
