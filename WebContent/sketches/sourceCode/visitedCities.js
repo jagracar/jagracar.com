@@ -135,7 +135,7 @@ function runSketch() {
 			// Add the information panel if it's not yet present
 			if (!informationPanel) {
 				informationPanel = document.createElement("p");
-				informationPanel.className = "sketch__info";
+				informationPanel.className = infoClass;
 				document.getElementById(sketchContainer).appendChild(informationPanel);
 			}
 

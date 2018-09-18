@@ -1,88 +1,83 @@
 <?php
-	// General php variables
-	$page = 'threejs';
-	$homeDir = '../';
-	$sketch = 'trace3d';
+// General php variables
+$homeDir = '../';
+$page = 'threejs';
+$keywords = 'three.js, javaScript, examples, 3D, trace, dat.GUI, toxiclibs';
+$descriptionText = 'three.js trace 3D sketch';
+$titleText = 'Trace 3D sketch - jagracar';
+$addP5js = false;
+$addThreejs = false;
+$addJQuery = false;
+$sketch = 'trace3d';
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="keywords" content="three.js, javaScript, examples, 3D, trace, dat.GUI, toxiclibs">
-<meta name="description" content="three.js Trace 3D sketch">
-<meta name="author" content="Javier Graciá Carpio">
-<title>Trace 3D sketch - jagracar</title>
-
-<!-- CSS files -->
-<link rel="stylesheet" href="<?php echo $homeDir;?>css/styles.css" />
-
-<!-- Useful JavaScript files -->
-<!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<?php require $homeDir . 'head.php';?>
 </head>
 
 <body>
 	<!-- Navigation bar -->
-	<?php include_once $homeDir . 'navBar.php';?>
+<?php require $homeDir . 'navBar.php';?>
 
-	<div class="main-container">
+	<main class="main-container">
+	<article class="content">
 		<header>
-			<h1>
-				<a href="<?php echo $homeDir;?>threejsSketches.php">Three.js sketches</a>
-			</h1>
+			<h2>
+				<a href="<?php echo $homeDir;?>threejsSketches.php">Three.js
+					sketches</a>
+			</h2>
 		</header>
 
-		<!-- Sketches list -->
-		<?php include_once $homeDir . 'threejsSketchesList.php';?>
+		<div class="sketches-container">
+			<!-- Sketches list -->
+<?php require $homeDir . 'threejsSketchesList.php';?>
 
-		<div class="sketch-container">
-			<div class="sketch" id="widthRef">
-				<div class="sketch__wrapper">
-					<div class="sketch__canvas" id="sketch__canvas">
-						<div class="sketch__gui" id="sketch__gui"></div>
-					</div>
+			<section class="sketch" id="widthRef">
+				<div class="sketch-canvas" id="sketch-canvas">
+					<div class="sketch-gui" id="sketch-gui"></div>
 				</div>
 
-				<div class="sketch__description">
-					<p>
-						A set of points is interpolated with a spline curve using the <a href="http://haptic-data.com/toxiclibsjs">toxiclibs.js</a>
-						library. The 3D trace is built over the points using a simple algorithm.
-					</p>
+				<p>
+					A set of points is interpolated with a spline curve using the <a
+						href="http://haptic-data.com/toxiclibsjs">toxiclibs.js</a>
+					library. The 3D trace is built over the points using a simple
+					algorithm.
+				</p>
 
-					<p>
-						If the sketch doesn't work, you probably need to change your browser to one that <a
-							href="https://en.wikipedia.org/wiki/WebGL#Support">supports WebGL</a>.
-					</p>
+				<p>
+					If the sketch doesn't work, you probably need to change your
+					browser to one that <a
+						href="https://en.wikipedia.org/wiki/WebGL#Support">supports WebGL</a>.
+				</p>
 
-					<p>
-						For more details, check the <a href="sourceCode/trace3d.js">sketch source code</a> and the <a
-							href="sourceCode/Trace.js">Trace.js</a> class.
-					</p>
-				</div>
-			</div>
+				<p>
+					For more details, check the <a href="sourceCode/trace3d.js">sketch
+						source code</a> and the <a href="sourceCode/Trace.js">Trace.js</a>
+					class.
+				</p>
+			</section>
 		</div>
-	</div>
+	</article>
+	</main>
 
 	<!-- Footer -->
-	<?php include_once $homeDir . 'footer.php';?>
+<?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.2/dat.gui.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/95/three.js"></script>
-	<script src="<?php echo $homeDir;?>js/OrbitControls.js"></script>
-	<script src="<?php echo $homeDir;?>js/toxiclibs.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.2/dat.gui.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/three.js/95/three.js"></script>
+	<script src="<?php echo $homeDir;?>js/libs/OrbitControls.js"></script>
+	<script src="<?php echo $homeDir;?>js/libs/toxiclibs.js"></script>
 	<script src="sourceCode/Trace.js"></script>
 	<script src="sourceCode/trace3d.js"></script>
 
 	<!-- Run the sketch -->
 	<script>
-		var guiContainer = "sketch__gui";
-		var sketchContainer = "sketch__canvas"
+		var guiContainer = "sketch-gui";
+		var sketchContainer = "sketch-canvas"
 		window.onload = runSketch;
 	</script>
 </body>

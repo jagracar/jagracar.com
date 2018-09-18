@@ -1,83 +1,76 @@
 <?php
-	// General php variables
-	$page = 'p5js';
-	$homeDir = '../';
-	$sketch = 'leapFrog';
+// General php variables
+$homeDir = '../';
+$page = 'p5js';
+$keywords = 'processing, p5.js, P5js, javaScript, examples, leapfrog algorithm, simulation, image processing';
+$descriptionText = 'p5.js leapfrog sketch';
+$titleText = 'Leapfrog sketch - jagracar';
+$addP5js = false;
+$addThreejs = false;
+$addJQuery = false;
+$sketch = 'leapFrog';
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="keywords"
-	content="processing, p5.js, P5js, javaScript, examples, leapfrog algorithm, simulation, image processing">
-<meta name="description" content="p5.js leapfrog sketch">
-<meta name="author" content="Javier Graciá Carpio">
-<title>Leapfrog sketch - jagracar</title>
-
-<!-- CSS files -->
-<link rel="stylesheet" href="<?php echo $homeDir;?>css/styles.css" />
-
-<!-- Useful JavaScript files -->
-<!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<?php require $homeDir . 'head.php';?>
 </head>
 
 <body>
 	<!-- Navigation bar -->
-	<?php include_once $homeDir . 'navBar.php';?>
+<?php require $homeDir . 'navBar.php';?>
 
-	<div class="main-container">
+	<main class="main-container">
+	<article class="content">
 		<header>
-			<h1>
+			<h2>
 				<a href="<?php echo $homeDir;?>p5jsSketches.php">p5.js sketches</a>
-			</h1>
+			</h2>
 		</header>
 
-		<!-- Sketches list -->
-		<?php include_once $homeDir . 'p5jsSketchesList.php';?>
+		<div class="sketches-container">
+			<!-- Sketches list -->
+<?php require $homeDir . 'p5jsSketchesList.php';?>
 
-		<div class="sketch-container">
-			<div class="sketch" id="widthRef">
-				<div class="sketch__wrapper">
-					<div class="sketch__canvas is-framed" id="sketch__canvas"></div>
-				</div>
+			<section class="sketch" id="widthRef">
+				<div class="sketch-canvas is-framed" id="sketch-canvas"></div>
 
-				<div class="sketch__description">
-					<p>
-						The beauty of the <a href="http://en.wikipedia.org/wiki/Leapfrog_integration">leapfrog algorithm</a>. This sketch
-						simulates the movement of several solar systems. Planets rotate around their respective suns following <a
-							href="http://en.wikipedia.org/wiki/Newton%27s_law_of_universal_gravitation">Newton's law of universal
-							gravitation</a>. As they move, the pixels from the background image are revealed. Click the screen to reset.
-					</p>
+				<p>
+					The beauty of the <a
+						href="http://en.wikipedia.org/wiki/Leapfrog_integration">leapfrog
+						algorithm</a>. This sketch simulates the movement of several solar
+					systems. Planets rotate around their respective suns following <a
+						href="http://en.wikipedia.org/wiki/Newton%27s_law_of_universal_gravitation">Newton's
+						law of universal gravitation</a>. As they move, the pixels from
+					the background image are revealed. Click the screen to reset.
+				</p>
 
-					<p>
-						The background picture is from <a href="https://www.flickr.com/photos/proimos/7810727314">Alex Proimos</a>.
-					</p>
+				<p>
+					The background picture is from <a
+						href="https://www.flickr.com/photos/proimos/7810727314">Alex
+						Proimos</a>.
+				</p>
 
-					<p>
-						For more details, check the <a href="sourceCode/leapFrog.js">source code</a> or play with it at <a
-							href="http://jsfiddle.net/jagracar/Lyncdtdz/">JSFiddle</a>.
-					</p>
-				</div>
-			</div>
+				<p>
+					For more details, check the <a href="sourceCode/leapFrog.js">source
+						code</a> or play with it at <a
+						href="http://jsfiddle.net/jagracar/Lyncdtdz/">JSFiddle</a>.
+				</p>
+			</section>
 		</div>
-	</div>
+	</article>
+	</main>
 
 	<!-- Footer -->
-	<?php include_once $homeDir . 'footer.php';?>
+<?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="<?php echo $homeDir;?>js/p5.min.js"></script>
+	<script src="<?php echo $homeDir;?>js/libs/p5.min.js"></script>
 	<script src="sourceCode/leapFrog.js"></script>
 
 	<!-- Run the sketch -->
 	<script>
-		var sketch = new p5(leapFrogSketch, "sketch__canvas");
+		var sketch = new p5(leapFrogSketch, "sketch-canvas");
 	</script>
 </body>
 </html>

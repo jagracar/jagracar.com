@@ -1,0 +1,26 @@
+{
+	"name": "jagracar.com",
+	"version": "0.2.0",
+	"description": "Personal webpage",
+	"main": "WebContent/index.html",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/jagracar/jagracar.com.git"
+	},
+	"keywords": [
+		"webpage"
+	],
+	"author": "Javier Gracia Carpio",
+	"license": "LGPL-3.0",
+	"bugs": {
+		"url": "https://github.com/jagracar/jagracar.com/issues"
+	},
+	"homepage": "https://jagracar.com",
+	"devDependencies": {
+		"grunt": "^1.0.3",
+		"grunt-autoprefixer": "^3.0.4",
+		"grunt-contrib-jshint": "^1.1.0",
+		"grunt-contrib-sass": "^1.0.0",
+		"grunt-contrib-watch": "^1.1.0"
+	}
+}

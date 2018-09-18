@@ -1,0 +1,115 @@
+/*
+ * Sketch components
+ */
+
+.sketches-container {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+}
+
+.sketches-list {
+	flex: 0 0 $sketches-list-width;
+	margin-right: $sketches-list-margin;
+
+	header {
+		margin-left: 0.5em;
+	}
+
+	ul {
+		padding: 0;
+		margin: 0;
+	}
+
+	li {
+		list-style-type: none;
+	}
+
+	a {
+		display: block;
+		padding: $sketches-list-item-padding;
+		margin-bottom: $sketches-list-item-margin;
+		border-radius: $sketches-list-item-border-radius;
+		text-align: center;
+		white-space: nowrap;
+		color: $sketches-list-item-color;
+		background-color: $sketches-list-item-bg-color;
+		transition: background-color $speed;
+
+		&:hover, &:focus, &.active-sketch {
+			text-decoration: none;
+			color: $sketches-list-item-hover-color;
+			background-color: $sketches-list-item-hover-bg-color;
+		}
+	}
+}
+
+.sketch {
+	flex: 1 1 auto;
+}
+
+.sketch-canvas {
+	display: table;
+	position: relative;
+	margin: 0 auto;
+}
+
+.is-framed canvas {
+	border: 1px dashed $general-text-color;
+}
+
+.sketch-gui {
+	position: absolute;
+	right: 0;
+
+	select {
+		color: $general-text-color;
+	}
+}
+
+.sketch-info {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: $sketches-list-item-padding;
+	margin: $sketches-list-item-margin;
+	border-radius: $sketches-list-item-border-radius;
+	color: $sketches-list-item-hover-color;
+ 	background-color: rgba($sketches-list-item-hover-bg-color, 0.8);
+}
+
+
+// Style for small and medium devices
+
+@media (max-width: $M) {
+	.sketches-container {
+		display: block;
+	}
+
+	.sketches-list {
+		margin: 0 0 $sketches-list-margin-lowres 0;
+
+		header {
+			display: none;
+		}
+
+		ul {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			grid-template-rows: auto;
+			grid-column-gap: $sketches-list-item-margin;
+			overflow: hidden;
+		}
+	}
+}
+
+
+// Style for small devices
+
+@media (max-width: $S) {
+	.sketches-list {
+		ul {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+}
