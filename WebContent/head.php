@@ -6,8 +6,8 @@
 
 <title><?php echo $titleText;?></title>
 
-<link rel="icon" type="image/svg+xml"
-	href="<?php echo $homeDir;?>favicon.svg">
+<link rel="icon" type="image/x-icon"
+	href="<?php echo $homeDir;?>favicon.ico">
 
 <!-- CSS files -->
 <link rel="stylesheet" href="<?php echo $homeDir;?>css/styles.css">
