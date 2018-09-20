@@ -17,12 +17,14 @@ $sketch = 'twoVerticalAxes';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript" src="sourceCode/twoVerticalAxes.js" async></script>
 </head>
 
 <body>
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>
@@ -37,6 +39,13 @@ $sketch = 'twoVerticalAxes';
 
 			<section class="sketch" id="widthRef">
 				<div class="sketch-canvas" id="sketch-canvas"></div>
+
+				<!-- Run the sketch -->
+				<script>
+					window.onload = function() {
+						var sketch = new p5(twoVerticalAxesSketch, "sketch-canvas");
+					};
+				</script>
 
 				<p>This example shows a way to display a plot with two different
 					vertical axes. Drag the plot area with the mouse to pan in any
@@ -54,12 +63,5 @@ $sketch = 'twoVerticalAxes';
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
 
-	<!-- JavaScript files -->
-	<script type="text/javascript" src="sourceCode/twoVerticalAxes.js"></script>
-
-	<!-- Run the sketch -->
-	<script>
-		var sketch = new p5(twoVerticalAxesSketch, "sketch-canvas");
-	</script>
 </body>
 </html>

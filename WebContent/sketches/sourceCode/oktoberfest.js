@@ -1,7 +1,6 @@
 var oktoberfestSketch = function(p) {
 	// Global variables
-	var table = undefined;
-	var plot = undefined;
+	var table, plot;
 	var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September",
 			"October", "November", "December" ];
 	var daysPerMonth = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];

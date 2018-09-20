@@ -1,7 +1,6 @@
 var lifeExpectancySketch = function(p) {
 	// Global variables
-	var table = undefined;
-	var plot = undefined;
+	var table, plot;
 
 	// Load the table before the sketch is run
 	p.preload = function() {

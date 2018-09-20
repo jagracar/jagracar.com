@@ -17,12 +17,14 @@ $sketch = 'wordLimits';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript" src="sourceCode/wordLimits.js" async></script>
 </head>
 
 <body>
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>
@@ -37,6 +39,13 @@ $sketch = 'wordLimits';
 
 			<section class="sketch" id="widthRef">
 				<div class="sketch-canvas" id="sketch-canvas"></div>
+
+				<!-- Run the sketch -->
+				<script>
+					window.onload = function() {
+						var sketch = new p5(wordLimitsSketch, "sketch-canvas");
+					};
+				</script>
 
 				<p>Only words have limits... so don't use them to set yours.</p>
 
@@ -56,12 +65,5 @@ $sketch = 'wordLimits';
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
 
-	<!-- JavaScript files -->
-	<script type="text/javascript" src="sourceCode/wordLimits.js"></script>
-
-	<!-- Run the sketch -->
-	<script>
-		var sketch = new p5(wordLimitsSketch, "sketch-canvas");
-	</script>
 </body>
 </html>

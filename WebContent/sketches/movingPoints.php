@@ -17,12 +17,14 @@ $sketch = 'movingPoints';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript" src="sourceCode/movingPoints.js" async></script>
 </head>
 
 <body>
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>
@@ -37,6 +39,13 @@ $sketch = 'movingPoints';
 
 			<section class="sketch" id="widthRef">
 				<div class="sketch-canvas" id="sketch-canvas"></div>
+
+				<!-- Run the sketch -->
+				<script>
+					window.onload = function() {
+						var sketch = new p5(movingPointsSketch, "sketch-canvas");
+					};
+				</script>
 
 				<p>It's possible to have multiple data sets (layers) in the same
 					plot. It's also possible to display them with different properties.</p>
@@ -60,12 +69,5 @@ $sketch = 'movingPoints';
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
 
-	<!-- JavaScript files -->
-	<script type="text/javascript" src="sourceCode/movingPoints.js"></script>
-
-	<!-- Run the sketch -->
-	<script>
-		var sketch = new p5(movingPointsSketch, "sketch-canvas");
-	</script>
 </body>
 </html>

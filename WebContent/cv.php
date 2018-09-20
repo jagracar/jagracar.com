@@ -20,6 +20,7 @@ $addJQuery = true;
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>

@@ -17,12 +17,17 @@ $sketch = 'trace3d';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/OrbitControls.js" async></script>
+<script type="text/javascript" src="sourceCode/Trace.js" async></script>
+<script type="text/javascript" src="sourceCode/trace3d.js" async></script>
 </head>
 
 <body>
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>
@@ -40,6 +45,16 @@ $sketch = 'trace3d';
 				<div class="sketch-canvas" id="sketch-canvas">
 					<div class="sketch-gui" id="sketch-gui"></div>
 				</div>
+
+				<!-- Run the sketch -->
+				<script>
+					var guiContainer = "sketch-gui";
+					var sketchContainer = "sketch-canvas"
+
+					window.onload =  function() {
+						runSketch();
+					};
+				</script>
 
 				<p>
 					A set of points is interpolated with a spline curve using the <a
@@ -67,16 +82,5 @@ $sketch = 'trace3d';
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
 
-	<!-- JavaScript files -->
-	<script type="text/javascript" src="<?php echo $homeDir;?>js/libs/OrbitControls.js"></script>
-	<script type="text/javascript" src="sourceCode/Trace.js"></script>
-	<script type="text/javascript" src="sourceCode/trace3d.js"></script>
-
-	<!-- Run the sketch -->
-	<script>
-		var guiContainer = "sketch-gui";
-		var sketchContainer = "sketch-canvas"
-		window.onload = runSketch;
-	</script>
 </body>
 </html>

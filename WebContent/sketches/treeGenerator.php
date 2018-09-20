@@ -17,12 +17,14 @@ $sketch = 'treeGenerator';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript" src="sourceCode/treeGenerator.js" async></script>
 </head>
 
 <body>
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>
@@ -37,6 +39,13 @@ $sketch = 'treeGenerator';
 
 			<section class="sketch" id="widthRef">
 				<div class="sketch-canvas is-framed" id="sketch-canvas"></div>
+
+				<!-- Run the sketch -->
+				<script>
+					window.onload = function() {
+						var sketch = new p5(treeGeneratorSketch, "sketch-canvas");
+					};
+				</script>
 
 				<p>
 					A relatively simple tree generator. The tree grows starting from a
@@ -58,12 +67,5 @@ $sketch = 'treeGenerator';
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
 
-	<!-- JavaScript files -->
-	<script type="text/javascript" src="sourceCode/treeGenerator.js"></script>
-
-	<!-- Run the sketch -->
-	<script>
-		var sketch = new p5(treeGeneratorSketch, "sketch-canvas");
-	</script>
 </body>
 </html>

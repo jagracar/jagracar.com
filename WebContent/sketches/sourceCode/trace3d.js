@@ -170,8 +170,8 @@ function runSketch() {
 		trace.scale(0.3);
 
 		// Create the trace mesh
-		trace.createMesh(guiControlKeys["Tightness"], guiControlKeys["Subdivissions"], guiControlKeys["Radius"],
-				guiControlKeys["Sides"], guiControlKeys["Color"], guiControlKeys["Flat shading"],
+		trace.createMesh(guiControlKeys.Tightness, guiControlKeys.Subdivissions, guiControlKeys.Radius,
+				guiControlKeys.Sides, guiControlKeys.Color, guiControlKeys["Flat shading"],
 				guiControlKeys["Show lines"]);
 
 		// Add the mesh to the scene
@@ -187,8 +187,8 @@ function runSketch() {
 			scene.remove(trace.mesh);
 
 			// Create the trace mesh
-			trace.createMesh(guiControlKeys["Tightness"], guiControlKeys["Subdivissions"], guiControlKeys["Radius"],
-					guiControlKeys["Sides"], guiControlKeys["Color"], guiControlKeys["Flat shading"],
+			trace.createMesh(guiControlKeys.Tightness, guiControlKeys.Subdivissions, guiControlKeys.Radius,
+					guiControlKeys.Sides, guiControlKeys.Color, guiControlKeys["Flat shading"],
 					guiControlKeys["Show lines"]);
 
 			// Add the mesh to the scene

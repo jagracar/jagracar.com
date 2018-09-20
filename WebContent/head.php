@@ -17,19 +17,19 @@
 <?php endif ?>
 <?php if($addP5js): ?>
 <script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/p5.min.js"></script>
+	src="<?php echo $homeDir;?>js/libs/p5.min.js" async></script>
 <?php endif ?>
 <?php if($addGrafica): ?>
 <script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/grafica.js"></script>
+	src="<?php echo $homeDir;?>js/libs/grafica.js" async></script>
 <?php endif ?>
 <?php if($addToxiclibs): ?>
 <script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/toxiclibs.min.js"></script>
+	src="<?php echo $homeDir;?>js/libs/toxiclibs.min.js" async></script>
 <?php endif ?>
 <?php if($addDatGui): ?>
 <script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/dat.gui.min.js"></script>
+	src="<?php echo $homeDir;?>js/libs/dat.gui.min.js" async></script>
 <?php endif ?>
 <?php if($addThreejs): ?>
 <script type="text/javascript"
@@ -37,5 +37,5 @@
 <?php endif ?>
 <?php if($addJQuery): ?>
 <script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/jquery-3.3.1.js" async></script>
+	src="<?php echo $homeDir;?>js/libs/jquery-3.3.1.min.js" async></script>
 <?php endif ?>

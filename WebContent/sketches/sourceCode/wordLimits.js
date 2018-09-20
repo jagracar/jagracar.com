@@ -5,7 +5,7 @@ var wordLimitsSketch = function(p) {
 	var bgColor = 255;
 	var obstacleColor = 130;
 	var inclination = p.random(-0.05, 0.05);
-	var limits = undefined;
+	var limits;
 
 	// Initial setup
 	p.setup = function() {

@@ -1,6 +1,6 @@
 var evolvingWordsSketch = function(p) {
 	// Global variables
-	var positions = undefined;
+	var positions;
 	var step = 0;
 
 	// Initial setup

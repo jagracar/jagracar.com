@@ -25,7 +25,7 @@ function runSketch() {
 		createGUI();
 
 		// Setup the effect composer
-		setupEffectComposer()
+		setupEffectComposer();
 
 		// Initialize the clock
 		clock = new THREE.Clock(true);
@@ -52,9 +52,8 @@ function runSketch() {
 
 				if (rectangles.length > 0) {
 					// Calculate the main face relative coordinates
-					mainFaceRectangle = rectangles[0];//smoother.smooth(rectangles[0]);
-					x = guiControlKeys["flipped"] ? 1 - (mainFaceRectangle[0] + mainFaceRectangle[2])
-							/ detector.canvas.width : mainFaceRectangle[0] / detector.canvas.width;
+					mainFaceRectangle = rectangles[0];// smoother.smooth(rectangles[0]);
+					x = guiControlKeys.flipped ? 1 - (mainFaceRectangle[0] + mainFaceRectangle[2]) / detector.canvas.width : mainFaceRectangle[0] / detector.canvas.width;
 					y = 1 - (mainFaceRectangle[1] + mainFaceRectangle[3]) / detector.canvas.height;
 					width = mainFaceRectangle[2] / detector.canvas.width;
 					height = mainFaceRectangle[3] / detector.canvas.height;
@@ -168,11 +167,11 @@ function runSketch() {
 			},
 			flipped : {
 				type : "i",
-				value : guiControlKeys["Flipped"]
+				value : guiControlKeys.Flipped
 			},
 			effect : {
 				type : "i",
-				value : guiControlKeys["Effect"]
+				value : guiControlKeys.Effect
 			},
 			facePosition : {
 				type : "v2",
@@ -205,8 +204,7 @@ function runSketch() {
 	 */
 	function startWebcam() {
 		// Browser compatibility check
-		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
-				|| navigator.msGetUserMedia;
+		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
 
 		// Try to access the user's webcam
 		if (!navigator.getUserMedia) {
@@ -241,8 +239,7 @@ function runSketch() {
 				if (renderer.domElement.width > this.videoWidth) {
 					renderer.setSize(this.videoWidth, this.videoHeight);
 				} else {
-					renderer.setSize(renderer.domElement.width, Math.round(renderer.domElement.width * this.videoHeight
-							/ this.videoWidth));
+					renderer.setSize(renderer.domElement.width, Math.round(renderer.domElement.width * this.videoHeight / this.videoWidth));
 				}
 
 				// Update the webcam pass size uniform
@@ -331,9 +328,10 @@ function runSketch() {
 var Smoother = function(alphas, initialValues, lookAhead) {
 	"use strict";
 
-	var lastUpdate = +new Date(), initialAlphas = alphas.slice(0), alphas = alphas.slice(0), a = initialValues.slice(0), b = initialValues
-			.slice(0), numValues = initialValues.length, lookAhead = (typeof lookAhead !== 'undefined') ? lookAhead
-			: 1.0;
+	var lastUpdate = +new Date(), initialAlphas = alphas.slice(0);
+	var a = initialValues.slice(0), b = initialValues.slice(0), numValues = initialValues.length;
+	alphas = alphas.slice(0);
+	lookAhead = (typeof lookAhead !== 'undefined') ? lookAhead : 1.0;
 
 	this.smooth = function(values) {
 		var smoothedValues = [];

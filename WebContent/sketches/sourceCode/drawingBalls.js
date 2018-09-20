@@ -1,6 +1,6 @@
 var drawingBallsSketch = function(p) {
 	// Global variables
-	var img = undefined;
+	var img;
 	var balls = [];
 
 	// Load the image before the sketch is run
@@ -79,7 +79,6 @@ var drawingBallsSketch = function(p) {
 			balls[i].force(p.mouseX, p.mouseY);
 		}
 	}
-	;
 
 	/*
 	 * The Ball class

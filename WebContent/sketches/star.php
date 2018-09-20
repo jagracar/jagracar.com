@@ -17,12 +17,16 @@ $sketch = 'star';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/OrbitControls.js" async></script>
+<script type="text/javascript" src="sourceCode/star.js" async></script>
 </head>
 
 <body>
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>
@@ -43,6 +47,16 @@ $sketch = 'star';
 
 				<script id="vertexShader" type="x-shader/x-vertex"><?php require 'sourceCode/shaders/star.vert';?></script>
 				<script id="fragmentShader" type="x-shader/x-fragment"><?php require 'sourceCode/shaders/star.frag';?></script>
+
+				<!-- Run the sketch -->
+				<script>
+					var guiContainer = "sketch-gui";
+					var sketchContainer = "sketch-canvas"
+
+					window.onload =  function() {
+						runSketch();
+					};
+				</script>
 
 				<p>
 					This sketch simulates a star using a single sphere and the Ashima <a
@@ -70,15 +84,5 @@ $sketch = 'star';
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
 
-	<!-- JavaScript files -->
-	<script type="text/javascript" src="<?php echo $homeDir;?>js/libs/OrbitControls.js"></script>
-	<script type="text/javascript" src="sourceCode/star.js"></script>
-
-	<!-- Run the sketch -->
-	<script>
-		var guiContainer = "sketch-gui";
-		var sketchContainer = "sketch-canvas"
-		window.onload = runSketch;
-	</script>
 </body>
 </html>

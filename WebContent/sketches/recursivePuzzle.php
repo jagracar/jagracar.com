@@ -17,12 +17,14 @@ $sketch = 'recursivePuzzle';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript" src="sourceCode/recursivePuzzle.js" async></script>
 </head>
 
 <body>
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>
@@ -37,6 +39,13 @@ $sketch = 'recursivePuzzle';
 
 			<section class="sketch" id="widthRef">
 				<div class="sketch-canvas" id="sketch-canvas"></div>
+
+				<!-- Run the sketch -->
+				<script>
+					window.onload = function() {
+						var sketch = new p5(recursivePuzzleSketch, "sketch-canvas");
+					};
+				</script>
 
 				<p>This sketch simulates a recursive sliding puzzle. Click the
 					screen to increase or decrease the level of recursion.</p>
@@ -60,12 +69,5 @@ $sketch = 'recursivePuzzle';
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
 
-	<!-- JavaScript files -->
-	<script type="text/javascript" src="sourceCode/recursivePuzzle.js"></script>
-
-	<!-- Run the sketch -->
-	<script>
-		var sketch = new p5(recursivePuzzleSketch, "sketch-canvas");
-	</script>
 </body>
 </html>

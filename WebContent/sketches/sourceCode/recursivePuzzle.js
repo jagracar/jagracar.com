@@ -2,8 +2,7 @@ var recursivePuzzleSketch = function(p) {
 	// Global variables
 	var pieceSize = 64;
 	var minPieceSize = pieceSize;
-	var img = undefined;
-	var puzzle = undefined;
+	var img, puzzle;
 
 	// Load the image before the sketch is run
 	p.preload = function() {

@@ -19,7 +19,7 @@ var seaLifeSketch = function(p) {
 	var paintLines = false;
 	var paintLimits = false;
 	var paintDetails = true;
-	var bgImg = undefined;
+	var bgImg;
 
 	// Load the image before the sketch is run
 	p.preload = function() {
@@ -502,8 +502,7 @@ var seaLifeSketch = function(p) {
 	Flock.prototype.align = function(forceDir, distSq) {
 		if (distSq > repulsionDistSq && distSq < alignDistSq) {
 			var distance = Math.sqrt(distSq);
-			var forceFactor = 0.05
-					* (1 - Math.cos(p.TWO_PI * (distance - repulsionDist) / (alignDist - repulsionDist))) / distance;
+			var forceFactor = 0.05 * (1 - Math.cos(p.TWO_PI * (distance - repulsionDist) / (alignDist - repulsionDist))) / distance;
 			this.force.x += forceFactor * forceDir.x;
 			this.force.y += forceFactor * forceDir.y;
 		}
@@ -515,8 +514,7 @@ var seaLifeSketch = function(p) {
 	Flock.prototype.attraction = function(forceDir, distSq) {
 		if (distSq > alignDistSq && distSq < attractionDistSq) {
 			var distance = Math.sqrt(distSq);
-			var forceFactor = 0.005 * (1 - Math.cos(p.TWO_PI * (distance - alignDist) / (attractionDist - alignDist)))
-					/ distance;
+			var forceFactor = 0.005 * (1 - Math.cos(p.TWO_PI * (distance - alignDist) / (attractionDist - alignDist))) / distance;
 			this.force.x += forceFactor * forceDir.x;
 			this.force.y += forceFactor * forceDir.y;
 		}

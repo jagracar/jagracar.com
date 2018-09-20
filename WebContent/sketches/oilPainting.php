@@ -17,12 +17,14 @@ $sketch = 'oilPainting';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript" src="sourceCode/oilPainting.js" async></script>
 </head>
 
 <body>
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>
@@ -37,6 +39,13 @@ $sketch = 'oilPainting';
 
 			<section class="sketch" id="widthRef">
 				<div class="sketch-canvas is-framed" id="sketch-canvas"></div>
+
+				<!-- Run the sketch -->
+				<script>
+					window.onload = function() {
+						var sketch = new p5(oilPaintingSketch, "sketch-canvas");
+					};
+				</script>
 
 				<p>
 					This sketch simulates an oil paint using a background picture as a
@@ -102,12 +111,5 @@ $sketch = 'oilPainting';
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
 
-	<!-- JavaScript files -->
-	<script type="text/javascript" src="sourceCode/oilPainting.js"></script>
-
-	<!-- Run the sketch -->
-	<script>
-		var sketch = new p5(oilPaintingSketch, "sketch-canvas");
-	</script>
 </body>
 </html>

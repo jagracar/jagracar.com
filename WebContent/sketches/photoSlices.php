@@ -17,12 +17,14 @@ $sketch = 'photoSlices';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript" src="sourceCode/photoSlices.js" async></script>
 </head>
 
 <body>
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>
@@ -37,6 +39,13 @@ $sketch = 'photoSlices';
 
 			<section class="sketch" id="widthRef">
 				<div class="sketch-canvas" id="sketch-canvas"></div>
+
+				<!-- Run the sketch -->
+				<script>
+					window.onload = function() {
+						var sketch = new p5(photoSlicesSketch, "sketch-canvas");
+					};
+				</script>
 
 				<p>In this sketch an image is cut in vertical slices. Each slice
 					moves independent from the others with some random noise.</p>
@@ -63,12 +72,5 @@ $sketch = 'photoSlices';
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
 
-	<!-- JavaScript files -->
-	<script type="text/javascript" src="sourceCode/photoSlices.js"></script>
-
-	<!-- Run the sketch -->
-	<script>
-		var sketch = new p5(photoSlicesSketch, "sketch-canvas");
-	</script>
 </body>
 </html>

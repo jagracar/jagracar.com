@@ -17,12 +17,32 @@ $sketch = 'postprocessing';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/OrbitControls.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/ShaderPass.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/CopyShader.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/EffectComposer.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/MaskPass.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/FilmPass.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/ColorifyShader.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/FilmShader.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/RenderPass.js" async></script>
+<script type="text/javascript" src="sourceCode/postprocessing.js" async></script>
 </head>
 
 <body>
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>
@@ -40,6 +60,13 @@ $sketch = 'postprocessing';
 				<div class="sketch-canvas" id="sketch-canvas">
 					<div class="sketch-gui" id="sketch-gui"></div>
 				</div>
+
+				<!-- Run the sketch -->
+				<script>
+					var guiContainer = "sketch-gui";
+					var sketchContainer = "sketch-canvas";
+					window.onload = runSketch;
+				</script>
 
 				<p>
 					If the sketch doesn't work, you probably need to change your
@@ -59,32 +86,5 @@ $sketch = 'postprocessing';
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
 
-	<!-- JavaScript files -->
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/OrbitControls.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/ShaderPass.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/CopyShader.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/EffectComposer.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/MaskPass.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/FilmPass.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/ColorifyShader.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/FilmShader.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/RenderPass.js"></script>
-	<script type="text/javascript" src="sourceCode/postprocessing.js"></script>
-
-	<!-- Run the sketch -->
-	<script>
-		var guiContainer = "sketch-gui";
-		var sketchContainer = "sketch-canvas";
-		window.onload = runSketch;
-	</script>
 </body>
 </html>

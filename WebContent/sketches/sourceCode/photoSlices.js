@@ -1,7 +1,6 @@
 var photoSlicesSketch = function(p) {
 	// Global variables
-	var originalImg = undefined;
-	var slices = undefined;
+	var originalImg, slices;
 	var sliceSize = 8;
 
 	// Load the image before the sketch is run
@@ -46,15 +45,13 @@ var photoSlicesSketch = function(p) {
 		}
 
 		// Check if the user pushed the slices
-		if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY < p.height
-				&& p.abs(p.mouseX - p.pmouseX) > 2) {
+		if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY < p.height && p.abs(p.mouseX - p.pmouseX) > 2) {
 			pushVel = p.mouseX - p.pmouseX > 0 ? 5 : -5;
 
 			for (i = 0; i < slices.length; i++) {
 				slices[i].checkPush(p.mouseX, pushVel);
 			}
-		} else if (p.touchX >= 0 && p.touchX <= p.width && p.touchY >= 0 && p.touchY < p.height
-				&& p.abs(p.touchX - p.ptouchX) > 2) {
+		} else if (p.touchX >= 0 && p.touchX <= p.width && p.touchY >= 0 && p.touchY < p.height && p.abs(p.touchX - p.ptouchX) > 2) {
 			pushVel = p.touchX - p.ptouchX > 0 ? 5 : -5;
 
 			for (i = 0; i < slices.length; i++) {
@@ -119,8 +116,7 @@ var photoSlicesSketch = function(p) {
 		this.xWithoutNoise += this.vel;
 
 		// Add the noise
-		this.x = this.xWithoutNoise + 400 * (p.noise(this.noiseDelta) - 0.5) + 200
-				* (p.noise(this.noiseSmallDelta) - 0.5);
+		this.x = this.xWithoutNoise + 400 * (p.noise(this.noiseDelta) - 0.5) + 200 * (p.noise(this.noiseSmallDelta) - 0.5);
 		this.noiseDelta += 0.002;
 		this.noiseSmallDelta += 0.002;
 

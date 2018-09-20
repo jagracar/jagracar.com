@@ -1,16 +1,7 @@
 var multiplePlotsSketch = function(p) {
 	// Global variables
-	var plot1 = undefined;
-	var plot2 = undefined;
-	var plot3 = undefined;
-	var plot4 = undefined;
-	var polygonPoints = undefined;
-	var mug = undefined;
-	var star = undefined;
-	var gaussianStack = undefined;
-	var gaussianCounter = undefined;
-	var uniformStack = undefined;
-	var uniformCounter = undefined;
+	var plot1, plot2, plot3, plot4, polygonPoints, mug, star, gaussianStack;
+	var gaussianCounter, uniformStack, uniformCounter;
 
 	// Load the image before the sketch is run
 	p.preload = function() {
@@ -206,8 +197,7 @@ var multiplePlotsSketch = function(p) {
 		} else {
 			lastPoint = points2[points2.length - 1];
 
-			if (!lastPoint.isValid()
-					|| Math.pow(lastPoint.getX() - p.mouseX, 2) + Math.pow(lastPoint.getY() + p.mouseY, 2) > 2500) {
+			if (!lastPoint.isValid() || Math.pow(lastPoint.getX() - p.mouseX, 2) + Math.pow(lastPoint.getY() + p.mouseY, 2) > 2500) {
 				points2.push(new GPoint(p.mouseX, -p.mouseY, "(" + p.mouseX + " , " + -p.mouseY + ")"));
 				plot2.setPoints(points2);
 			}
@@ -289,8 +279,7 @@ var multiplePlotsSketch = function(p) {
 			points4 = [];
 
 			for (i = 0; i < uniformStack.length; i++) {
-				points4[i] = new GPoint(i + 0.5 - uniformStack.length / 2, uniformStack[i] / uniformCounter, "point "
-						+ i);
+				points4[i] = new GPoint(i + 0.5 - uniformStack.length / 2, uniformStack[i] / uniformCounter, "point " + i);
 			}
 
 			plot4.setPoints(points4);

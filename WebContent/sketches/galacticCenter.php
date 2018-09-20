@@ -17,12 +17,30 @@ $sketch = 'galacticCenter';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/three.js/88/three.js"></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/TrackballControls.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/CopyShader.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/MergeShader.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/EffectComposer.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/MaskPass.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/RenderPass.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/ShaderPass.js" async></script>
+<script type="text/javascript" src="sourceCode/galacticCenter.js" async></script>
 </head>
 
 <body>
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>
@@ -45,6 +63,17 @@ $sketch = 'galacticCenter';
 				<script id="star-fragmentShader" type="x-shader/x-fragment"><?php require 'sourceCode/shaders/star.frag';?></script>
 				<script id="bh-vertexShader" type="x-shader/x-vertex"><?php require 'sourceCode/shaders/blackHole.vert';?></script>
 				<script id="bh-fragmentShader" type="x-shader/x-fragment"><?php require 'sourceCode/shaders/blackHole.frag';?></script>
+
+				<!-- Run the sketch -->
+				<script>
+					var guiContainer = "sketch-gui";
+					var infoClass = "sketch-info";
+					var sketchContainer = "sketch-canvas";
+
+					window.onload =  function() {
+ 						runSketch();
+					};
+				</script>
 
 				<p>
 					Some of my colleagues at the <a href="http://www.mpe.mpg.de/ir">MPE
@@ -109,31 +138,5 @@ $sketch = 'galacticCenter';
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
 
-	<!-- JavaScript files -->
-	<script type="text/javascript"
-		src="https://cdnjs.cloudflare.com/ajax/libs/three.js/88/three.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/TrackballControls.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/CopyShader.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/MergeShader.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/EffectComposer.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/MaskPass.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/RenderPass.js"></script>
-	<script type="text/javascript"
-		src="<?php echo $homeDir;?>js/libs/ShaderPass.js"></script>
-	<script type="text/javascript" src="sourceCode/galacticCenter.js"></script>
-
-	<!-- Run the sketch -->
-	<script>
-		var guiContainer = "sketch-gui";
-		var infoClass = "sketch-info";
-		var sketchContainer = "sketch-canvas";
-		window.onload = runSketch;
-	</script>
 </body>
 </html>

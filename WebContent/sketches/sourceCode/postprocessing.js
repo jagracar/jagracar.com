@@ -59,31 +59,31 @@ function runSketch() {
 
 		var renderPass = new THREE.RenderPass(scene, camera);
 		renderPass.clear = true;
-        renderer.autoClear = false;
+		renderer.autoClear = false;
 
 		var cubeMask = new THREE.MaskPass(scene, camera);
-        cubeMask.inverse = false;
-        var clearMask = new THREE.ClearMaskPass();
-        
+		cubeMask.inverse = false;
+		var clearMask = new THREE.ClearMaskPass();
+
 		var effectFilm = new THREE.FilmPass(0.8, 0.325, 256, false);
 		effectFilm.renderToScreen = false;
 
-        var effectColorify = new THREE.ShaderPass(THREE.ColorifyShader);
-        effectColorify.uniforms[ 'color' ].value.setRGB(0.5, 0.5, 1);
+		var effectColorify = new THREE.ShaderPass(THREE.ColorifyShader);
+		effectColorify.uniforms.color.value.setRGB(0.5, 0.5, 1);
 		effectColorify.renderToScreen = false;
 
-        var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
-        effectCopy.renderToScreen = true;
+		var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
+		effectCopy.renderToScreen = true;
 
 		composer = new THREE.EffectComposer(renderer);
-        composer.renderTarget1.stencilBuffer = true;
-        composer.renderTarget2.stencilBuffer = true;
-		
+		composer.renderTarget1.stencilBuffer = true;
+		composer.renderTarget2.stencilBuffer = true;
+
 		composer.addPass(renderPass);
 		composer.addPass(cubeMask);
 		composer.addPass(effectColorify);
 		composer.addPass(clearMask);
-        composer.addPass(effectCopy);
+		composer.addPass(effectCopy);
 	}
 
 	/*

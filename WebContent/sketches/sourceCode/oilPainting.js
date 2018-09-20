@@ -37,19 +37,19 @@ var oilPaintingSketch = function(p) {
 	var minTraceLength = 16;
 
 	// Global variables
-	var originalImg = undefined;
-	var imgWidth = undefined;
-	var imgHeight = undefined;
-	var backgroundColor = undefined;
-	var similarColorPixels = undefined;
-	var visitedPixels = undefined;
-	var badPaintedPixels = undefined;
-	var nBadPaintedPixels = undefined;
-	var averageBrushSize = undefined;
-	var trace = undefined;
-	var traceStep = undefined;
-	var nTraces = undefined;
-	var startTime = undefined;
+	var originalImg;
+	var imgWidth;
+	var imgHeight;
+	var backgroundColor;
+	var similarColorPixels;
+	var visitedPixels;
+	var badPaintedPixels;
+	var nBadPaintedPixels;
+	var averageBrushSize;
+	var trace;
+	var traceStep;
+	var nTraces;
+	var startTime;
 
 	//
 	// Load the image before the sketch is run
@@ -169,8 +169,7 @@ var oilPaintingSketch = function(p) {
 
 		while (traceNotFound) {
 			// Check if we should stop painting
-			if (averageBrushSize === smallerBrushSize
-					&& (invalidTrajectoriesCounter > maxInvalidTrajectoriesForSmallerSize || invalidTracesCounter > maxInvalidTracesForSmallerSize)) {
+			if (averageBrushSize === smallerBrushSize && (invalidTrajectoriesCounter > maxInvalidTrajectoriesForSmallerSize || invalidTracesCounter > maxInvalidTracesForSmallerSize)) {
 				console.log("Total number of painted traces: " + nTraces);
 				console.log("Processing time = " + (p.millis() - startTime) / 1000 + " seconds");
 
@@ -179,13 +178,11 @@ var oilPaintingSketch = function(p) {
 				traceNotFound = false;
 			} else {
 				// Change the average brush size if there were too many invalid traces
-				if (averageBrushSize > smallerBrushSize
-						&& (invalidTrajectoriesCounter > maxInvalidTrajectories || invalidTracesCounter > maxInvalidTraces)) {
+				if (averageBrushSize > smallerBrushSize && (invalidTrajectoriesCounter > maxInvalidTrajectories || invalidTracesCounter > maxInvalidTraces)) {
 					averageBrushSize = Math.max(smallerBrushSize, Math.min(averageBrushSize / brushSizeDecrement,
 							averageBrushSize - 2));
 
-					console.log("Frame = " + p.frameCount + ", traces = " + nTraces + ", new average brush size = "
-							+ averageBrushSize);
+					console.log("Frame = " + p.frameCount + ", traces = " + nTraces + ", new average brush size = " + averageBrushSize);
 
 					// Reset some of the variables
 					invalidTrajectoriesCounter = 0;
@@ -203,8 +200,7 @@ var oilPaintingSketch = function(p) {
 				// Create new traces until one of them has a valid trajectory or we exceed a number of tries
 				validTrajectory = false;
 				brushSize = Math.max(smallerBrushSize, averageBrushSize * p.random(0.95, 1.05));
-				nSteps = Math.round(Math.max(minTraceLength, relativeTraceLength * brushSize * p.random(0.9, 1.1))
-						/ traceSpeed);
+				nSteps = Math.round(Math.max(minTraceLength, relativeTraceLength * brushSize * p.random(0.9, 1.1)) / traceSpeed);
 
 				while (!validTrajectory && invalidTrajectoriesCounter % 500 !== 499) {
 					// Create the trace starting from a bad painted pixel
@@ -277,9 +273,9 @@ var oilPaintingSketch = function(p) {
 				bluePainted = p.pixels[canvasPixel + 2];
 
 				if (redPainted !== redBg && greenPainted !== greenBg && bluePainted !== blueBg) {
-					wellPainted = (Math.abs(originalImg.pixels[imgPixel] - redPainted) < maxColorDiff[0])
-							&& (Math.abs(originalImg.pixels[imgPixel + 1] - greenPainted) < maxColorDiff[1])
-							&& (Math.abs(originalImg.pixels[imgPixel + 2] - bluePainted) < maxColorDiff[2]);
+					wellPainted = (Math.abs(originalImg.pixels[imgPixel] - redPainted) < maxColorDiff[0]);
+					wellPainted = wellPainted && (Math.abs(originalImg.pixels[imgPixel + 1] - greenPainted) < maxColorDiff[1]);
+					wellPainted = wellPainted && (Math.abs(originalImg.pixels[imgPixel + 2] - bluePainted) < maxColorDiff[2]);
 				}
 
 				similarColorPixels[pixel] = wellPainted;
@@ -447,8 +443,7 @@ var oilPaintingSketch = function(p) {
 
 		for (bristle = 0; bristle < this.nBristles; bristle++) {
 			this.bristles[bristle] = new Bristle(nElements, bristleThickness);
-			this.bOffsets[bristle] = p.createVector(size * p.random(-0.5, 0.5), this.bristleVerticalNoise
-					* p.random(-0.5, 0.5));
+			this.bOffsets[bristle] = p.createVector(size * p.random(-0.5, 0.5), this.bristleVerticalNoise * p.random(-0.5, 0.5));
 			this.bPositions[bristle] = p.createVector(0, 0);
 		}
 	}
@@ -501,8 +496,7 @@ var oilPaintingSketch = function(p) {
 		yNewAverage /= historySize;
 
 		// Calculate the direction angle
-		directionAngle = p.HALF_PI
-				+ p.atan2(yNewAverage - this.averagePosition.y, xNewAverage - this.averagePosition.x);
+		directionAngle = p.HALF_PI + p.atan2(yNewAverage - this.averagePosition.y, xNewAverage - this.averagePosition.x);
 
 		// Update the average position
 		this.averagePosition.x = xNewAverage;
@@ -718,8 +712,7 @@ var oilPaintingSketch = function(p) {
 		insideCanvas = insideCounter >= this.minInsideFractionInTrajectory * this.nSteps;
 		badPainted = similarColorCounter <= this.maxSimilarColorFractionInTrajectory * insideCounter;
 		notVisited = visitedPixelsCounter <= this.maxVisitsFractionInTrajectory * insideCounter;
-		smallColorChange = redStDev < this.maxColorStDevInTrajectory && greenStDev < this.maxColorStDevInTrajectory
-				&& blueStDev < this.maxColorStDevInTrajectory;
+		smallColorChange = redStDev < this.maxColorStDevInTrajectory && greenStDev < this.maxColorStDevInTrajectory && blueStDev < this.maxColorStDevInTrajectory;
 
 		return insideCanvas && badPainted && notVisited && smallColorChange;
 	};
@@ -882,8 +875,7 @@ var oilPaintingSketch = function(p) {
 						greenDiff = Math.abs(greenOriginal - greenAverage);
 						blueDiff = Math.abs(blueOriginal - blueAverage);
 
-						if ((redDiff < maxColorDiff[0]) && (greenDiff < maxColorDiff[1])
-								&& (blueDiff < maxColorDiff[2])) {
+						if ((redDiff < maxColorDiff[0]) && (greenDiff < maxColorDiff[1]) && (blueDiff < maxColorDiff[2])) {
 							wellPaintedCounter++;
 						} else if (similarColorBool[loc / 3]) {
 							destroyedWellPaintedCounter++;
@@ -894,9 +886,9 @@ var oilPaintingSketch = function(p) {
 							alreadyPaintedCounter++;
 
 							// Calculate the color improvement
-							colorImprovement += Math.abs(redOriginal - this.colors[loc]) - redDiff
-									+ Math.abs(greenOriginal - this.colors[loc + 1]) - greenDiff
-									+ Math.abs(blueOriginal - this.colors[loc + 2]) - blueDiff;
+							colorImprovement += Math.abs(redOriginal - this.colors[loc]) - redDiff;
+							colorImprovement += Math.abs(greenOriginal - this.colors[loc + 1]) - greenDiff;
+							colorImprovement += Math.abs(blueOriginal - this.colors[loc + 2]) - blueDiff;
 						}
 					}
 				}
@@ -908,12 +900,10 @@ var oilPaintingSketch = function(p) {
 		averageMaxColorDiff = (maxColorDiff[0] + maxColorDiff[1] + maxColorDiff[2]) / 3;
 
 		alreadyPainted = alreadyPaintedCounter >= this.minPaintedFraction * insideCounter;
-		colorImproves = colorImprovement >= this.minColorImprovementFactor * averageMaxColorDiff
-				* alreadyPaintedCounter;
+		colorImproves = colorImprovement >= this.minColorImprovementFactor * averageMaxColorDiff * alreadyPaintedCounter;
 		bigWellPaintedImprovement = wellPaintedImprovement >= this.bigWellPaintedImprovementFraction * insideCounter;
 		reducedBadPainted = wellPaintedImprovement >= this.minBadPaintedReductionFraction * previousBadPainted;
-		lowWellPaintedDestruction = destroyedWellPaintedCounter <= this.maxWellPaintedDestructionFraction
-				* wellPaintedImprovement;
+		lowWellPaintedDestruction = destroyedWellPaintedCounter <= this.maxWellPaintedDestructionFraction * wellPaintedImprovement;
 		improves = (colorImproves || bigWellPaintedImprovement) && reducedBadPainted && lowWellPaintedDestruction;
 
 		if (alreadyPainted && !improves) {

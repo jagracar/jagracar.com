@@ -7,14 +7,6 @@
 function Scan() {
 	this.width = 0;
 	this.height = 0;
-	this.points = undefined;
-	this.colors = undefined;
-	this.normals = undefined;
-	this.empty = undefined;
-	this.ini = undefined;
-	this.end = undefined;
-	this.mesh = undefined;
-	this.pointCloud = undefined;
 	this.maxSeparationSq = Math.pow(160, 2);
 }
 
@@ -141,8 +133,7 @@ Scan.prototype.calculatePointNormals = function() {
 					averageNormal = new THREE.Vector3();
 					counter = 0;
 
-					if (x + 1 < this.width && y + 1 < this.height && this.points[pixel + 1]
-							&& this.points[pixel + this.width]) {
+					if (x + 1 < this.width && y + 1 < this.height && this.points[pixel + 1] && this.points[pixel + this.width]) {
 						v1.subVectors(this.points[pixel + 1], this.points[pixel]);
 						v2.subVectors(this.points[pixel + this.width], this.points[pixel]);
 						perp.crossVectors(v1, v2).normalize();
@@ -486,8 +477,7 @@ Scan.prototype.reduceResolution = function(n) {
 						yNearby = y * n + j;
 						pixelNearby = xNearby + yNearby * this.width;
 
-						if (xNearby >= 0 && xNearby < this.width && yNearby >= 0 && yNearby < this.height
-								&& this.points[pixelNearby]) {
+						if (xNearby >= 0 && xNearby < this.width && yNearby >= 0 && yNearby < this.height && this.points[pixelNearby]) {
 							point.add(this.points[pixelNearby]);
 							r += this.colors[pixelNearby].r;
 							g += this.colors[pixelNearby].g;
@@ -559,8 +549,7 @@ Scan.prototype.fillHoles = function(maxHoles) {
 
 						for (i = start + 1; i < finish; i++) {
 							this.points[i] = new THREE.Vector3().addVectors(this.points[i - 1], deltaPos);
-							this.colors[i] = new THREE.Color(this.colors[i - 1].r + deltaR, this.colors[i - 1].g
-									+ deltaG, this.colors[i - 1].b + deltaB);
+							this.colors[i] = new THREE.Color(this.colors[i - 1].r + deltaR, this.colors[i - 1].g + deltaG, this.colors[i - 1].b + deltaB);
 						}
 					}
 				}
@@ -797,8 +786,7 @@ Scan.prototype.addFace = function(pixel1, pixel2, pixel3, vertices, verticesColo
 	p2 = this.points[pixel2];
 	p3 = this.points[pixel3];
 
-	if (p1.distanceToSquared(p2) < this.maxSeparationSq && p1.distanceToSquared(p3) < this.maxSeparationSq
-			&& p2.distanceToSquared(p3) < this.maxSeparationSq) {
+	if (p1.distanceToSquared(p2) < this.maxSeparationSq && p1.distanceToSquared(p3) < this.maxSeparationSq && p2.distanceToSquared(p3) < this.maxSeparationSq) {
 		// Add the face vertices
 		vertices.push(p1);
 		vertices.push(p2);

@@ -1,7 +1,6 @@
 var twoVerticalAxesSketch = function(p) {
 	// Global variables
-	var plot1 = undefined;
-	var plot2 = undefined;
+	var plot1, plot2;
 
 	// Initial setup
 	p.setup = function() {

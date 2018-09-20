@@ -544,7 +544,7 @@ function runSketch() {
 
 		// Costa Rica
 		cities.addCity("Cahuita", "Costa Rica", 9.734786, -82.845215);
-		cities.addCity("Jacó", "Costa Rica", 9.620240,-84.621749);
+		cities.addCity("Jacó", "Costa Rica", 9.620240, -84.621749);
 		cities.addCity("La Fortuna", "Costa Rica", 10.467833, -84.642681);
 		cities.addCity("Puerto Viejo de Talamanca", "Costa Rica", 9.654015, -82.754941);
 		cities.addCity("Quepos", "Costa Rica", 9.431868, -84.161908);

@@ -17,12 +17,14 @@ $sketch = 'leapFrog';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript" src="sourceCode/leapFrog.js" async></script>
 </head>
 
 <body>
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>
@@ -37,6 +39,13 @@ $sketch = 'leapFrog';
 
 			<section class="sketch" id="widthRef">
 				<div class="sketch-canvas is-framed" id="sketch-canvas"></div>
+
+				<!-- Run the sketch -->
+				<script>
+					window.onload = function() {
+						var sketch = new p5(leapFrogSketch, "sketch-canvas");
+					};
+				</script>
 
 				<p>
 					The beauty of the <a
@@ -67,12 +76,5 @@ $sketch = 'leapFrog';
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
 
-	<!-- JavaScript files -->
-	<script type="text/javascript" src="sourceCode/leapFrog.js"></script>
-
-	<!-- Run the sketch -->
-	<script>
-		var sketch = new p5(leapFrogSketch, "sketch-canvas");
-	</script>
 </body>
 </html>

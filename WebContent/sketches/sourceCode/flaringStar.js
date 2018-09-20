@@ -1,6 +1,6 @@
 var flaringStarSketch = function(p) {
 	// Global variables
-	var star = undefined;
+	var star;
 
 	// Initial setup
 	p.setup = function() {

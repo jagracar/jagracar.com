@@ -49,7 +49,7 @@ function runSketch() {
 		cellsSize = guiControlKeys["Cells size"];
 		spotsSize = guiControlKeys["Spots size"];
 		color = new THREE.Color(guiControlKeys.Color[0] / 255, guiControlKeys.Color[1] / 255,
-				guiControlKeys.Color[2] / 255)
+				guiControlKeys.Color[2] / 255);
 		pulsationChange = guiControlKeys["Pulsation change"];
 		star = new Star(radius, position, rotationVelocity);
 		star.createMesh(color, atmosphereSize, cellsSize, spotsSize, pulsationChange);

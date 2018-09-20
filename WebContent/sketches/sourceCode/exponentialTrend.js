@@ -1,6 +1,6 @@
 var exponentialTrendSketch = function(p) {
 	// Global variables
-	var plot = undefined;
+	var plot;
 	var logScale = false;
 
 	// Initial setup

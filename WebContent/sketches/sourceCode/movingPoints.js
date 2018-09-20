@@ -1,6 +1,6 @@
 var movingPointsSketch = function(p) {
 	// Global variables
-	var plot = undefined;
+	var plot;
 	var step = 0;
 	var stepsPerCycle = 100;
 	var lastStepTime = 0;

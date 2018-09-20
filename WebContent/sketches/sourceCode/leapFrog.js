@@ -1,6 +1,6 @@
 var leapFrogSketch = function(p) {
 	// Global variables
-	var img = undefined;
+	var img;
 	var solarSystems = [];
 	var stepsPerFrame = 10;
 	var timeStep = 0.02;
@@ -81,8 +81,7 @@ var leapFrogSketch = function(p) {
 	};
 
 	/*
-	 * Simple solar system class. A solar system is composed of a single star
-	 * and set of planets orbiting around it
+	 * Simple solar system class. A solar system is composed of a single star and set of planets orbiting around it
 	 */
 	function SolarSystem(starPos, starMass, nPlanets) {
 		this.star = new Star(starPos, starMass);

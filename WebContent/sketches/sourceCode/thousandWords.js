@@ -1,9 +1,6 @@
 var thousandWordsSketch = function(p) {
 	// Global variables
-	var img = undefined;
-	var buffer = undefined;
-	var textSize = undefined;
-	var textLeading = undefined;
+	var img, buffer, textSize, textLeading;
 	var initPhrase = "Type some\n text...";
 	var phrase = initPhrase;
 	var lastLine = "";
@@ -32,7 +29,7 @@ var thousandWordsSketch = function(p) {
 
 		// Change the line separation each time the mouse is pressed inside the canvas
 		canvas.mousePressed(updateLineSeparation);
-	
+
 		// Set the text properties
 		textSize = 0.17 * p.width;
 		textLeading = textSize;
@@ -107,7 +104,7 @@ var thousandWordsSketch = function(p) {
 			// Redraw the buffer on the canvas
 			p.redraw();
 		}
-	};
+	}
 
 	//
 	// Updates the buffer image

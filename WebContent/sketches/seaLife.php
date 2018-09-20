@@ -17,12 +17,14 @@ $sketch = 'seaLife';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript" src="sourceCode/seaLife.js" async></script>
 </head>
 
 <body>
 	<!-- Navigation bar -->
 <?php require $homeDir . 'navBar.php';?>
 
+	<!-- Main content -->
 	<main class="main-container">
 	<article class="content">
 		<header>
@@ -39,6 +41,15 @@ $sketch = 'seaLife';
 				<div class="sketch-canvas" id="sketch-canvas">
 					<div class="sketch-gui" id="sketch-gui"></div>
 				</div>
+
+				<!-- Run the sketch -->
+				<script>
+					var guiContainer = "sketch-gui";
+
+					window.onload = function() {
+						var sketch = new p5(seaLifeSketch, "sketch-canvas");
+					};
+				</script>
 
 				<p>
 					Everything started from the <a
@@ -76,13 +87,5 @@ $sketch = 'seaLife';
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
 
-	<!-- JavaScript files -->
-	<script type="text/javascript" src="sourceCode/seaLife.js"></script>
-
-	<!-- Run the sketch -->
-	<script>
-		var guiContainer = "sketch-gui";
-		var sketch = new p5(seaLifeSketch, "sketch-canvas");
-	</script>
 </body>
 </html>

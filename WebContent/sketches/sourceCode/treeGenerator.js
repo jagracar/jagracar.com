@@ -1,6 +1,6 @@
 var treeGeneratorSketch = function(p) {
 	// Global variables
-	var tree = undefined;
+	var tree;
 
 	// Initial setup
 	p.setup = function() {
@@ -33,7 +33,7 @@ var treeGeneratorSketch = function(p) {
 	p.draw = function() {
 		p.background(245);
 		tree.paint();
-	}
+	};
 
 	/*
 	 * This function creates a new tree recursively
@@ -144,8 +144,7 @@ var treeGeneratorSketch = function(p) {
 			var newLength = p.random(0.8, 0.9) * this.length;
 
 			// Calculate the diameter of the new branch
-			var newDiameter = (this.level < 5) ? p.random(0.8, 0.9) * this.diameter : p.random(0.65, 0.75)
-					* this.diameter;
+			var newDiameter = (this.level < 5) ? p.random(0.8, 0.9) * this.diameter : p.random(0.65, 0.75) * this.diameter;
 
 			// Calculate the inclination angle of the new branch
 			var newAngle;

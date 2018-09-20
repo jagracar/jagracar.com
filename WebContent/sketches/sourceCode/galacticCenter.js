@@ -173,10 +173,10 @@ function runSketch() {
 		};
 		blackHolePass = new THREE.ShaderPass(blackHoleShader);
 		blackHolePass.needsSwap = false;
-		
+
 		// Create the shader pass to merge the two renders
 		mergePass = new THREE.ShaderPass(THREE.MergeShader);
-		mergePass.uniforms["tAdd"].value = backComposer.renderTarget1.texture;
+		mergePass.uniforms.tAdd.value = backComposer.renderTarget1.texture;
 		mergePass.renderToScreen = true;
 
 		// Define the render sequence
@@ -279,7 +279,7 @@ function runSketch() {
 
 			// Add the star to the array
 			rotationVelocity = 0.015 + 0.01 * Math.random();
-			radius = 1.0 + 0.25 * Math.random()
+			radius = 1.0 + 0.25 * Math.random();
 			stars.push(new Star(position, velocity, rotationVelocity, radius, blackHole));
 		}
 
@@ -374,14 +374,14 @@ function runSketch() {
 			for (i = 0; i < stars.length; i++) {
 				// Remove the star mesh from the scenes
 				star = stars[i];
-				backScene.remove(star.mesh)
-				frontScene.remove(star.mesh)
+				backScene.remove(star.mesh);
+				frontScene.remove(star.mesh);
 
 				// Add the star mesh to the correct scene according to its position with respect to the camera
 				if (star.mesh.position.dot(camera.position) < 0.0) {
-					backScene.add(star.mesh)
+					backScene.add(star.mesh);
 				} else {
-					frontScene.add(star.mesh)
+					frontScene.add(star.mesh);
 				}
 			}
 		}
@@ -414,7 +414,7 @@ function Star(position, velocity, rotationVelocity, radius, blackHole) {
 
 	// Calculate the acceleration at the current position
 	this.buffer.subVectors(this.position, this.blackHole.position);
-	this.buffer.multiplyScalar(-this.G * this.blackHole.mass / Math.pow(this.buffer.length(), 3))
+	this.buffer.multiplyScalar(-this.G * this.blackHole.mass / Math.pow(this.buffer.length(), 3));
 	this.acceleration.copy(this.buffer);
 }
 
@@ -528,7 +528,7 @@ Star.prototype.update = function(dt) {
 
 	// Calculate the acceleration at the new position
 	this.buffer.subVectors(this.position, this.blackHole.position);
-	this.buffer.multiplyScalar(-this.G * this.blackHole.mass / Math.pow(this.buffer.length(), 3))
+	this.buffer.multiplyScalar(-this.G * this.blackHole.mass / Math.pow(this.buffer.length(), 3));
 	this.acceleration.copy(this.buffer);
 
 	// Advance the velocity another half step with the new acceleration
