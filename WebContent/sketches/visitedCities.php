@@ -6,7 +6,10 @@ $keywords = 'three.js, javaScript, examples, 3D, Earth, cities, travel, dat.GUI'
 $descriptionText = 'three.js visited cities sketch';
 $titleText = 'Visited cities sketch - jagracar';
 $addP5js = false;
-$addThreejs = false;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = true;
+$addThreejs = true;
 $addJQuery = false;
 $sketch = 'visitedCities';
 ?>
@@ -71,12 +74,9 @@ $sketch = 'visitedCities';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.2/dat.gui.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/three.js/95/three.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/OrbitControls.js"></script>
-	<script src="sourceCode/visitedCities.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/OrbitControls.js"></script>
+	<script type="text/javascript" src="sourceCode/visitedCities.js"></script>
 
 	<!-- Run the sketch -->
 	<script>

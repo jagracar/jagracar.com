@@ -5,7 +5,10 @@ $page = 'p5js';
 $keywords = 'processing, p5.js, P5js, javaScript, examples, oil painting, simulation';
 $descriptionText = 'p5.js oil painting simulation sketch';
 $titleText = 'Oil painting simulation sketch - jagracar';
-$addP5js = false;
+$addP5js = true;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = false;
 $sketch = 'oilPainting';
@@ -100,12 +103,11 @@ $sketch = 'oilPainting';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="<?php echo $homeDir;?>js/libs/p5.min.js"></script>
-	<script src="sourceCode/oilPainting.js"></script>
+	<script type="text/javascript" src="sourceCode/oilPainting.js"></script>
 
 	<!-- Run the sketch -->
 	<script>
-		//var sketch = new p5(oilPaintingSketch, "sketch-canvas");
+		var sketch = new p5(oilPaintingSketch, "sketch-canvas");
 	</script>
 </body>
 </html>

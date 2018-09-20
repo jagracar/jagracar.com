@@ -5,7 +5,10 @@ $page = 'p5js';
 $keywords = 'processing, p5.js, P5js, javaScript, examples, tree, typography, words, toxiclibs.js';
 $descriptionText = 'p5.js evolving words sketch';
 $titleText = 'Evolving words sketch - jagracar';
-$addP5js = false;
+$addP5js = true;
+$addGrafica = false;
+$addToxiclibs = true;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = false;
 $sketch = 'evolvingWords';
@@ -60,9 +63,7 @@ $sketch = 'evolvingWords';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="<?php echo $homeDir;?>js/libs/p5.min.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/toxiclibs.js"></script>
-	<script src="sourceCode/evolvingWords.js"></script>
+	<script type="text/javascript" src="sourceCode/evolvingWords.js"></script>
 
 	<!-- Run the sketch -->
 	<script>

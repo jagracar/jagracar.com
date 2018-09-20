@@ -6,7 +6,10 @@ $keywords = 'three.js, javaScript, examples, 3D, trace, dat.GUI, toxiclibs';
 $descriptionText = 'three.js trace 3D sketch';
 $titleText = 'Trace 3D sketch - jagracar';
 $addP5js = false;
-$addThreejs = false;
+$addGrafica = false;
+$addToxiclibs = true;
+$addDatGui = true;
+$addThreejs = true;
 $addJQuery = false;
 $sketch = 'trace3d';
 ?>
@@ -65,14 +68,9 @@ $sketch = 'trace3d';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.2/dat.gui.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/three.js/95/three.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/OrbitControls.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/toxiclibs.js"></script>
-	<script src="sourceCode/Trace.js"></script>
-	<script src="sourceCode/trace3d.js"></script>
+	<script type="text/javascript" src="<?php echo $homeDir;?>js/libs/OrbitControls.js"></script>
+	<script type="text/javascript" src="sourceCode/Trace.js"></script>
+	<script type="text/javascript" src="sourceCode/trace3d.js"></script>
 
 	<!-- Run the sketch -->
 	<script>

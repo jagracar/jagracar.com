@@ -13,7 +13,7 @@ $addJQuery = true;
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
-<script src="<?php echo $homeDir; ?>js/cv.js" async></script>
+<script type="text/javascript" src="<?php echo $homeDir; ?>js/cv.js" async></script>
 </head>
 
 <body>

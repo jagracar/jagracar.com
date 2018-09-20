@@ -6,6 +6,9 @@ $keywords = 'three.js, javaScript, examples, 3D, galactic center, astronomy, sci
 $descriptionText = 'three.js Galactic center sketch';
 $titleText = 'Galactic center sketch - jagracar';
 $addP5js = false;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = true;
 $addThreejs = false;
 $addJQuery = false;
 $sketch = 'galacticCenter';
@@ -107,18 +110,23 @@ $sketch = 'galacticCenter';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.2/dat.gui.min.js"></script>
-	<script
+	<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/three.js/88/three.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/TrackballControls.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/CopyShader.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/MergeShader.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/EffectComposer.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/MaskPass.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/RenderPass.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/ShaderPass.js"></script>
-	<script src="sourceCode/galacticCenter.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/TrackballControls.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/CopyShader.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/MergeShader.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/EffectComposer.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/MaskPass.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/RenderPass.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/ShaderPass.js"></script>
+	<script type="text/javascript" src="sourceCode/galacticCenter.js"></script>
 
 	<!-- Run the sketch -->
 	<script>

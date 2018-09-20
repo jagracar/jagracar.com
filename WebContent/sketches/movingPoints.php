@@ -5,7 +5,10 @@ $page = 'grafica';
 $keywords = 'processing, p5.js, P5js, openFrameworks, javaScript, grafica, grafica.js, ofxGrafica, examples, plot';
 $descriptionText = 'p5.js and grafica.js moving points sketch';
 $titleText = 'Moving points sketch - jagracar';
-$addP5js = false;
+$addP5js = true;
+$addGrafica = true;
+$addToxiclibs = false;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = false;
 $sketch = 'movingPoints';
@@ -58,9 +61,7 @@ $sketch = 'movingPoints';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="<?php echo $homeDir;?>js/libs/p5.min.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/grafica.min.js"></script>
-	<script src="sourceCode/movingPoints.js"></script>
+	<script type="text/javascript" src="sourceCode/movingPoints.js"></script>
 
 	<!-- Run the sketch -->
 	<script>

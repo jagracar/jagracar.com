@@ -5,7 +5,10 @@ $page = 'p5js';
 $keywords = 'processing, p5.js, P5js, javaScript, examples, leapfrog algorithm, simulation, image processing';
 $descriptionText = 'p5.js leapfrog sketch';
 $titleText = 'Leapfrog sketch - jagracar';
-$addP5js = false;
+$addP5js = true;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = false;
 $sketch = 'leapFrog';
@@ -65,8 +68,7 @@ $sketch = 'leapFrog';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="<?php echo $homeDir;?>js/libs/p5.min.js"></script>
-	<script src="sourceCode/leapFrog.js"></script>
+	<script type="text/javascript" src="sourceCode/leapFrog.js"></script>
 
 	<!-- Run the sketch -->
 	<script>

@@ -5,8 +5,11 @@ $page = 'threejs';
 $keywords = 'three.js, javaScript, examples, 3D, scan, kinect, dat.GUI';
 $descriptionText = 'three.js Kinect scan viewer sketch';
 $titleText = 'Kinect scan viewer sketch - jagracar';
-$addP5js = false;
-$addThreejs = false;
+$addP5js = true;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = true;
+$addThreejs = true;
 $addJQuery = false;
 $sketch = 'kinectScanViewer';
 ?>
@@ -79,14 +82,10 @@ $sketch = 'kinectScanViewer';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="<?php echo $homeDir;?>js/libs/p5.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.2/dat.gui.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/three.js/95/three.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/OrbitControls.js"></script>
-	<script src="sourceCode/Scan.js"></script>
-	<script src="sourceCode/kinectScanViewer.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/OrbitControls.js"></script>
+	<script type="text/javascript" src="sourceCode/Scan.js"></script>
+	<script type="text/javascript" src="sourceCode/kinectScanViewer.js"></script>
 
 	<!-- Run the sketch -->
 	<script>

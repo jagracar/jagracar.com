@@ -5,7 +5,10 @@ $page = 'grafica';
 $keywords = 'processing, p5.js, P5js, openFrameworks, javaScript, grafica, grafica.js, ofxGrafica, examples, plot';
 $descriptionText = 'p5.js and grafica.js life expectancy sketch';
 $titleText = 'Life expectancy sketch - jagracar';
-$addP5js = false;
+$addP5js = true;
+$addGrafica = true;
+$addToxiclibs = false;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = false;
 $sketch = 'lifeExpectancy';
@@ -62,9 +65,7 @@ $sketch = 'lifeExpectancy';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="<?php echo $homeDir;?>js/libs/p5.min.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/grafica.min.js"></script>
-	<script src="sourceCode/lifeExpectancy.js"></script>
+	<script type="text/javascript" src="sourceCode/lifeExpectancy.js"></script>
 
 	<!-- Run the sketch -->
 	<script>

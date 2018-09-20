@@ -5,7 +5,10 @@ $page = 'grafica';
 $keywords = 'processing, p5.js, P5js, openFrameworks, javaScript, grafica, grafica.js, ofxGrafica, examples, plot';
 $descriptionText = 'p5.js and grafica.js default plot sketch';
 $titleText = 'Default plot sketch - jagracar';
-$addP5js = false;
+$addP5js = true;
+$addGrafica = true;
+$addToxiclibs = false;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = false;
 $sketch = 'defaultPlot';
@@ -54,9 +57,7 @@ $sketch = 'defaultPlot';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="<?php echo $homeDir;?>js/libs/p5.min.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/grafica.min.js"></script>
-	<script src="sourceCode/defaultPlot.js"></script>
+	<script type="text/javascript" src="sourceCode/defaultPlot.js"></script>
 
 	<!-- Run the sketch -->
 	<script>

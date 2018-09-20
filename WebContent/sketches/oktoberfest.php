@@ -5,7 +5,10 @@ $page = 'grafica';
 $keywords = 'processing, p5.js, P5js, openFrameworks, javaScript, grafica, grafica.js, ofxGrafica, examples, plot';
 $descriptionText = 'p5.js and grafica.js Oktoberfest sketch';
 $titleText = 'Oktoberfest sketch - jagracar';
-$addP5js = false;
+$addP5js = true;
+$addGrafica = true;
+$addToxiclibs = false;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = false;
 $sketch = 'oktoberfest';
@@ -64,9 +67,7 @@ $sketch = 'oktoberfest';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="<?php echo $homeDir;?>js/libs/p5.min.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/grafica.min.js"></script>
-	<script src="sourceCode/oktoberfest.js"></script>
+	<script type="text/javascript" src="sourceCode/oktoberfest.js"></script>
 
 	<!-- Run the sketch -->
 	<script>

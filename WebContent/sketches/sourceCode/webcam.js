@@ -227,8 +227,12 @@ function runSketch() {
 		videoElement.autoplay = true;
 
 		// Read the media stream with the video element
-		window.URL = window.URL || window.webkitURL;
-		videoElement.src = window.URL ? window.URL.createObjectURL(mediaStream) : mediaStream;
+		try {
+			videoElement.srcObject = mediaStream;
+		} catch (error) {
+			window.URL = window.URL || window.webkitURL;
+			videoElement.src = window.URL ? window.URL.createObjectURL(mediaStream) : mediaStream;
+		}
 
 		// Run this when the video element metadata information has finished loading (only once)
 		videoElement.onloadedmetadata = function() {

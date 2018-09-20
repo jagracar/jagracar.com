@@ -6,21 +6,36 @@
 
 <title><?php echo $titleText;?></title>
 
-<link rel="icon" type="image/png"
-	href="<?php echo $homeDir;?>favicon.png">
+<link rel="icon" type="image/svg+xml"
+	href="<?php echo $homeDir;?>favicon.svg">
 
 <!-- CSS files -->
 <link rel="stylesheet" href="<?php echo $homeDir;?>css/styles.css">
-<?php if($addP5js || $addThreejs || $addJQuery): ?>
+<?php if($addP5js || $addGrafica || $addToxiclibs || $addDatGui || $addThreejs || $addJQuery): ?>
 
 <!-- JavaScript files -->
 <?php endif ?>
 <?php if($addP5js): ?>
-<script src="<?php echo $homeDir;?>js/libs/leaflet.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/p5.min.js"></script>
+<?php endif ?>
+<?php if($addGrafica): ?>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/grafica.js"></script>
+<?php endif ?>
+<?php if($addToxiclibs): ?>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/toxiclibs.min.js"></script>
+<?php endif ?>
+<?php if($addDatGui): ?>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/dat.gui.min.js"></script>
 <?php endif ?>
 <?php if($addThreejs): ?>
-<script src="<?php echo $homeDir;?>js/libs/leaflet.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/three.min.js"></script>
 <?php endif ?>
 <?php if($addJQuery): ?>
-<script src="<?php echo $homeDir;?>js/libs/jquery-3.3.1.js" async></script>
+<script type="text/javascript"
+	src="<?php echo $homeDir;?>js/libs/jquery-3.3.1.js" async></script>
 <?php endif ?>

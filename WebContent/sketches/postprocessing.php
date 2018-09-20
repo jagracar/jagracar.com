@@ -6,7 +6,10 @@ $keywords = 'three.js, javaScript, examples, 3D, postprocessing, dat.GUI';
 $descriptionText = 'three.js posprocessing sketch';
 $titleText = 'Postprocessing sketch - jagracar';
 $addP5js = false;
-$addThreejs = false;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = true;
+$addThreejs = true;
 $addJQuery = false;
 $sketch = 'postprocessing';
 ?>
@@ -57,20 +60,25 @@ $sketch = 'postprocessing';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.2/dat.gui.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/three.js/95/three.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/OrbitControls.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/ShaderPass.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/CopyShader.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/EffectComposer.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/MaskPass.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/FilmPass.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/ColorifyShader.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/FilmShader.js"></script>
-	<script src="<?php echo $homeDir;?>js/libs/RenderPass.js"></script>
-	<script src="sourceCode/postprocessing.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/OrbitControls.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/ShaderPass.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/CopyShader.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/EffectComposer.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/MaskPass.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/FilmPass.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/ColorifyShader.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/FilmShader.js"></script>
+	<script type="text/javascript"
+		src="<?php echo $homeDir;?>js/libs/RenderPass.js"></script>
+	<script type="text/javascript" src="sourceCode/postprocessing.js"></script>
 
 	<!-- Run the sketch -->
 	<script>

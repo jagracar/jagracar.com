@@ -5,7 +5,10 @@ $page = 'p5js';
 $keywords = 'processing, p5.js, P5js, javaScript, examples, puzzle, recursion, image processing';
 $descriptionText = 'p5.js recursive puzzle sketch';
 $titleText = 'Recursive puzzle sketch - jagracar';
-$addP5js = false;
+$addP5js = true;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = false;
 $sketch = 'recursivePuzzle';
@@ -58,8 +61,7 @@ $sketch = 'recursivePuzzle';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="<?php echo $homeDir;?>js/libs/p5.min.js"></script>
-	<script src="sourceCode/recursivePuzzle.js"></script>
+	<script type="text/javascript" src="sourceCode/recursivePuzzle.js"></script>
 
 	<!-- Run the sketch -->
 	<script>

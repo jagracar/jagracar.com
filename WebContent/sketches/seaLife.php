@@ -5,7 +5,10 @@ $page = 'p5js';
 $keywords = 'processing, p5.js, P5js, javaScript, examples, sea, fish, flocking, simulation, dat.GUI';
 $descriptionText = 'p5.js sea life sketch sketch';
 $titleText = 'Sea life sketch sketch - jagracar';
-$addP5js = false;
+$addP5js = true;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = true;
 $addThreejs = false;
 $addJQuery = false;
 $sketch = 'seaLife';
@@ -74,10 +77,7 @@ $sketch = 'seaLife';
 <?php require $homeDir . 'footer.php';?>
 
 	<!-- JavaScript files -->
-	<script src="<?php echo $homeDir;?>js/libs/p5.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.0/dat.gui.min.js"></script>
-	<script src="sourceCode/seaLife.js"></script>
+	<script type="text/javascript" src="sourceCode/seaLife.js"></script>
 
 	<!-- Run the sketch -->
 	<script>
