@@ -13,7 +13,8 @@ $addJQuery = true;
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
-<script type="text/javascript" src="<?php echo $homeDir; ?>js/cv.js" async></script>
+<script type="text/javascript" src="<?php echo $homeDir; ?>js/cv.js"
+	async></script>
 </head>
 
 <body>
@@ -98,8 +99,8 @@ $addJQuery = true;
 				<dd>
 					<p>
 						Scientific Software Developer at Max Planck Institute for
-						Extraterrestrial Physics (<a href="https://www.mpe.mpg.de"
-							target="_blank" rel="noopener">MPE</a>), Garching, Germany.
+						Extraterrestrial Physics (<a href="https://www.mpe.mpg.de">MPE</a>),
+						Garching, Germany.
 					</p>
 					<p>
 						<em>Programming environment:</em> Python, C++, XML, XSD, Eclipse,
@@ -107,9 +108,9 @@ $addJQuery = true;
 					</p>
 					<p>
 						<em>Main tasks:</em> Member of the <a
-							href="https://www.cosmos.esa.int/web/euclid" target="_blank"
-							rel="noopener">Euclid</a> collaboration. Responsible of the
-						definition and maintenance of MER-PF data model.
+							href="https://www.cosmos.esa.int/web/euclid">Euclid</a>
+						collaboration. Responsible of the definition and maintenance of
+						MER-PF data model.
 					</p>
 				</dd>
 
@@ -117,8 +118,8 @@ $addJQuery = true;
 				<dd>
 					<p>
 						Scientific Software Developer at Max Planck Institute for
-						Extraterrestrial Physics (<a href="https://www.mpe.mpg.de"
-							target="_blank" rel="noopener">MPE</a>), Garching, Germany.
+						Extraterrestrial Physics (<a href="https://www.mpe.mpg.de">MPE</a>),
+						Garching, Germany.
 					</p>
 					<p>
 						<em>Programming environment:</em> Java, Jython, Eclipse, JUnit,
@@ -126,8 +127,7 @@ $addJQuery = true;
 					</p>
 					<p>
 						<em>Main tasks:</em> Development and maintenance of the <a
-							href="https://www.cosmos.esa.int/web/herschel/home"
-							target="_blank" rel="noopener">Herschel</a>/<abbr
+							href="https://www.cosmos.esa.int/web/herschel/home">Herschel</a>/<abbr
 							title="The Photoconductor Array Camera and Spectrometer">PACS</abbr>
 						photometer data reduction pipelines. Implementation of new
 						algorithms and tasks to improve the quality of the final
@@ -136,8 +136,8 @@ $addJQuery = true;
 						extended emission. Improvement of the execution speed and memory
 						efficiency of the most critical pipeline tasks. Regular meetings
 						with the PACS ICC members and the <a
-							href="http://herschel.esac.esa.int/hipe/" target="_blank"
-							rel="noopener">HIPE</a> and PACS software development teams.
+							href="http://herschel.esac.esa.int/hipe/">HIPE</a> and PACS
+						software development teams.
 					</p>
 				</dd>
 
@@ -145,8 +145,8 @@ $addJQuery = true;
 				<dd>
 					<p>
 						Postdoctoral Fellow at Max Planck Institute for Extraterrestrial
-						Physics (<a href="https://www.mpe.mpg.de" target="_blank"
-							rel="noopener">MPE</a>), Garching, Germany.
+						Physics (<a href="https://www.mpe.mpg.de">MPE</a>), Garching,
+						Germany.
 					</p>
 					<p>
 						<em>Research topics:</em> Interstellar medium in galaxies at all
@@ -156,28 +156,28 @@ $addJQuery = true;
 					<p>
 						<em>Main tasks:</em> Adapted the Herschel/PACS spectrometer data
 						reduction pipeline to the special needs of the <a
-							href="https://www.mpe.mpg.de/ir/SHINING" target="_blank"
-							rel="noopener">SHINING</a> Herschel Guaranteed Time Key Program.
-						Data reduction and analysis of most of the observations from the
-						SHINING program. PACS ICC member. Observation with the IRAM radio
-						telescopes. Proposal writing for observing time (Herschel, IRAM,
-						APEX, ALMA). PI and co-PI of various successful Herschel and ALMA
-						programmes. Collaboration in several observing large programmes (<a
-							href="https://www.mpa-garching.mpg.de/COLD_GASS/" target="_blank"
-							rel="noopener">COLD GASS</a>, <a
-							href="http://www.iram-institute.org/EN/content-page-279-7-158-240-279-0.html"
-							target="_blank" rel="noopener">PHIBBS</a>). Publication in
-						scientific journals: currently more than 60 refereed publications
-						with more than 4700 citations. Presentation of scientific results
-						in international conferences. Referee for ApJ, A&amp;A and MNRAS.
+							href="https://www.mpe.mpg.de/ir/SHINING">SHINING</a> Herschel
+						Guaranteed Time Key Program. Data reduction and analysis of most
+						of the observations from the SHINING program. PACS ICC member.
+						Observation with the IRAM radio telescopes. Proposal writing for
+						observing time (Herschel, IRAM, APEX, ALMA). PI and co-PI of
+						various successful Herschel and ALMA programmes. Collaboration in
+						several observing large programmes (<a
+							href="https://www.mpa-garching.mpg.de/COLD_GASS/">COLD GASS</a>,
+						<a
+							href="http://www.iram-institute.org/EN/content-page-279-7-158-240-279-0.html">PHIBBS</a>).
+						Publication in scientific journals: currently more than 60
+						refereed publications with more than 4700 citations. Presentation
+						of scientific results in international conferences. Referee for
+						ApJ, A&amp;A and MNRAS.
 					</p>
 				</dd>
 
 				<dt>May 2007 – March 2008</dt>
 				<dd>
 					<p>
-						Astronomer at <a href="https://www.fractal-es.com" target="_blank"
-							rel="noopener">FRACTAL S.L.N.E.</a>, Madrid, Spain.
+						Astronomer at <a href="https://www.fractal-es.com">FRACTAL
+							S.L.N.E.</a>, Madrid, Spain.
 					</p>
 					<p>
 						<em>Main task:</em> Development of the Internet home page for the
@@ -189,9 +189,8 @@ $addJQuery = true;
 				<dd>
 					<p>
 						Ph.D. student at Observatorio Astronómico Nacional (<a
-							href="http://astronomia.ign.es/" target="_blank" rel="noopener">OAN</a>)
-						with a FPI grant from the Spanish Ministry of Education and
-						Science, Madrid, Spain.
+							href="http://astronomia.ign.es/">OAN</a>) with a FPI grant from
+						the Spanish Ministry of Education and Science, Madrid, Spain.
 					</p>
 					<p>
 						<em>Research topics:</em> Molecular gas in Ultraluminous Infrared
@@ -262,13 +261,11 @@ $addJQuery = true;
 				<li>User interaction applications/installations with the MS Kinect
 					and Leap Motion controllers.</li>
 				<li>Organizer of the <a
-					href="https://www.meetup.com/Creative-Coding" target="_blank"
-					rel="noopener">Creative Coding Munich</a> meetup group.
+					href="https://www.meetup.com/Creative-Coding">Creative Coding
+						Munich</a> meetup group.
 				</li>
-				<li>Personal projects: <a href="https://github.com/jagracar/grafica"
-					target="_blank" rel="noopener">Grafica library</a>, <a
-					href="https://www.openprocessing.org/user/16300" target="_blank"
-					rel="noopener">Processing</a>.
+				<li>Personal projects: <a href="https://github.com/jagracar/grafica">Grafica
+						library</a>, <a href="https://www.openprocessing.org/user/16300">Processing</a>.
 				</li>
 			</ul>
 		</section>
