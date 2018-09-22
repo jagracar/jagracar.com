@@ -6,6 +6,9 @@ $keywords = 'processing, p5.js, P5js, javaScript, examples';
 $descriptionText = 'Some p5.js examples';
 $titleText = 'p5.js sketches - jagracar';
 $addP5js = false;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = false;
 $sketch = '';
@@ -25,7 +28,7 @@ $sketch = '';
 	<article class="content">
 		<header>
 			<h2>
-				<a href="<?php echo $homeDir;?>p5jsSketches.php">p5.js sketches</a>
+				<a href="/p5jsSketches.php">p5.js sketches</a>
 			</h2>
 		</header>
 
@@ -76,6 +79,5 @@ $sketch = '';
 
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
-
 </body>
 </html>

@@ -29,7 +29,7 @@ $sketch = 'drawingBalls';
 	<article class="content">
 		<header>
 			<h2>
-				<a href="<?php echo $homeDir;?>p5jsSketches.php">p5.js sketches</a>
+				<a href="/p5jsSketches.php">p5.js sketches</a>
 			</h2>
 		</header>
 
@@ -76,6 +76,5 @@ $sketch = 'drawingBalls';
 
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
-
 </body>
 </html>

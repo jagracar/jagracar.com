@@ -1,25 +1,23 @@
-<?php $activeSketch = 'active-sketch';?>
+<?php
+function addActiveSketchClass($sketchName) {
+    global $sketch;
+    
+    if ($sketch == $sketchName) {
+        echo ' class="active-sketch"';
+    }
+}
+?>
             <nav class="sketches-list">
             	<header>
             		<h3>Examples</h3>
             	</header>
             
             	<ul>
-            		<li><a href="<?php echo $homeDir;?>sketches/kinectScanViewer.php"
-            			class="<?php if($sketch == 'kinectScanViewer') { echo $activeSketch; }?>">Scan
-            				viewer</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/trace3d.php"
-            			class="<?php if($sketch == 'trace3d') { echo $activeSketch; }?>">Trace
-            				3D</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/visitedCities.php"
-            			class="<?php if($sketch == 'visitedCities') { echo $activeSketch; }?>">Visited
-            				cities</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/galacticCenter.php"
-            			class="<?php if($sketch == 'galacticCenter') { echo $activeSketch; }?>">Galactic
-            				center</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/star.php"
-            			class="<?php if($sketch == 'star') { echo $activeSketch; }?>">Star</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/webcam.php"
-            			class="<?php if($sketch == 'webcam') { echo $activeSketch; }?>">Webcam</a></li>
+            		<li><a href="/sketches/kinectScanViewer.php"<?php addActiveSketchClass('kinectScanViewer');?>>Scan viewer</a></li>
+            		<li><a href="/sketches/trace3d.php"<?php addActiveSketchClass('trace3d');?>>Trace 3D</a></li>
+            		<li><a href="/sketches/visitedCities.php"<?php addActiveSketchClass('visitedCities');?>>Visited cities</a></li>
+            		<li><a href="/sketches/galacticCenter.php"<?php addActiveSketchClass('galacticCenter');?>>Galactic center</a></li>
+            		<li><a href="/sketches/star.php"<?php addActiveSketchClass('star');?>>Star</a></li>
+            		<li><a href="/sketches/webcam.php"<?php addActiveSketchClass('webcam');?>>Webcam</a></li>
             	</ul>
             </nav>

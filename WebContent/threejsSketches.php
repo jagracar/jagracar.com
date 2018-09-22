@@ -6,6 +6,9 @@ $keywords = 'processing, java, three.js, interactive, examples, 3D';
 $descriptionText = 'Three.js experiments';
 $titleText = 'three.js sketches - jagracar';
 $addP5js = false;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = false;
 $sketch = '';
@@ -25,8 +28,7 @@ $sketch = '';
 	<article class="content">
 		<header>
 			<h2>
-				<a href="<?php echo $homeDir;?>threejsSketches.php">Three.js
-					sketches</a>
+				<a href="/threejsSketches.php">Three.js sketches</a>
 			</h2>
 		</header>
 
@@ -50,6 +52,5 @@ $sketch = '';
 
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
-
 </body>
 </html>

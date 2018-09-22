@@ -29,7 +29,7 @@ $sketch = 'oktoberfest';
 	<article class="content">
 		<header>
 			<h2>
-				<a href="<?php echo $homeDir;?>grafica.php">Grafica library</a>
+				<a href="/grafica.php">Grafica library</a>
 			</h2>
 		</header>
 
@@ -74,6 +74,5 @@ $sketch = 'oktoberfest';
 
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
-
 </body>
 </html>

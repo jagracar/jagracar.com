@@ -17,24 +17,15 @@ $sketch = 'postprocessing';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/OrbitControls.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/ShaderPass.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/CopyShader.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/EffectComposer.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/MaskPass.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/FilmPass.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/ColorifyShader.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/FilmShader.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/RenderPass.js" async></script>
+<script type="text/javascript" src="/js/libs/OrbitControls.js" async></script>
+<script type="text/javascript" src="/js/libs/ShaderPass.js" async></script>
+<script type="text/javascript" src="/js/libs/CopyShader.js" async></script>
+<script type="text/javascript" src="/js/libs/EffectComposer.js" async></script>
+<script type="text/javascript" src="/js/libs/MaskPass.js" async></script>
+<script type="text/javascript" src="/js/libs/FilmPass.js" async></script>
+<script type="text/javascript" src="/js/libs/ColorifyShader.js" async></script>
+<script type="text/javascript" src="/js/libs/FilmShader.js" async></script>
+<script type="text/javascript" src="/js/libs/RenderPass.js" async></script>
 <script type="text/javascript" src="sourceCode/postprocessing.js" async></script>
 </head>
 
@@ -47,8 +38,7 @@ $sketch = 'postprocessing';
 	<article class="content">
 		<header>
 			<h2>
-				<a href="<?php echo $homeDir;?>threejsSketches.php">Three.js
-					sketches</a>
+				<a href="/threejsSketches.php">Three.js sketches</a>
 			</h2>
 		</header>
 
@@ -85,6 +75,5 @@ $sketch = 'postprocessing';
 
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
-
 </body>
 </html>

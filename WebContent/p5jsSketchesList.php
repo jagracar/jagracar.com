@@ -1,41 +1,28 @@
-<?php $activeSketch = 'active-sketch';?>
+<?php
+function addActiveSketchClass($sketchName) {
+    global $sketch;
+    
+    if ($sketch == $sketchName) {
+        echo ' class="active-sketch"';
+    }
+}
+?>
             <nav class="sketches-list">
             	<header>
             		<h3>Examples</h3>
             	</header>
             
             	<ul>
-            		<li><a href="<?php echo $homeDir;?>sketches/oilPainting.php"
-            			class="<?php if($sketch == 'oilPainting') { echo $activeSketch; }?>">Oil
-            				painting</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/seaLife.php"
-            			class="<?php if($sketch == 'seaLife') { echo $activeSketch; }?>">Sea
-            				life</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/drawingBalls.php"
-            			class="<?php if($sketch == 'drawingBalls') { echo $activeSketch; }?>">Drawing
-            				balls</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/photoSlices.php"
-            			class="<?php if($sketch == 'photoSlices') { echo $activeSketch; }?>">Photo
-            				slices</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/leapFrog.php"
-            			class="<?php if($sketch == 'leapFrog') { echo $activeSketch; }?>">Leapfrog</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/thousandWords.php"
-            			class="<?php if($sketch == 'thousandWords') { echo $activeSketch; }?>">Thousand
-            				words</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/wordLimits.php"
-            			class="<?php if($sketch == 'wordLimits') { echo $activeSketch; }?>">Word
-            				limits</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/treeGenerator.php"
-            			class="<?php if($sketch == 'treeGenerator') { echo $activeSketch; }?>">Tree
-            				generator</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/flaringStar.php"
-            			class="<?php if($sketch == 'flaringStar') { echo $activeSketch; }?>">Flaring
-            				star</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/recursivePuzzle.php"
-            			class="<?php if($sketch == 'recursivePuzzle') { echo $activeSketch; }?>">Recursive
-            				puzzle</a></li>
-            		<li><a href="<?php echo $homeDir;?>sketches/evolvingWords.php"
-            			class="<?php if($sketch == 'evolvingWords') { echo $activeSketch; }?>">Evolving
-            				words</a></li>
+            		<li><a href="/sketches/oilPainting.php"<?php addActiveSketchClass('oilPainting');?>>Oil painting</a></li>
+            		<li><a href="/sketches/seaLife.php"<?php addActiveSketchClass('seaLife');?>>Sea life</a></li>
+            		<li><a href="/sketches/drawingBalls.php"<?php addActiveSketchClass('drawingBalls');?>>Drawing balls</a></li>
+            		<li><a href="/sketches/photoSlices.php"<?php addActiveSketchClass('photoSlices');?>>Photo slices</a></li>
+            		<li><a href="/sketches/leapFrog.php"<?php addActiveSketchClass('leapFrog');?>>Leapfrog</a></li>
+            		<li><a href="/sketches/thousandWords.php"<?php addActiveSketchClass('thousandWords');?>>Thousand words</a></li>
+            		<li><a href="/sketches/wordLimits.php"<?php addActiveSketchClass('wordLimits');?>>Word limits</a></li>
+            		<li><a href="/sketches/treeGenerator.php"<?php addActiveSketchClass('treeGenerator');?>>Tree generator</a></li>
+            		<li><a href="/sketches/flaringStar.php"<?php addActiveSketchClass('flaringStar');?>>Flaring star</a></li>
+            		<li><a href="/sketches/recursivePuzzle.php"<?php addActiveSketchClass('recursivePuzzle');?>>Recursive puzzle</a></li>
+            		<li><a href="/sketches/evolvingWords.php"<?php addActiveSketchClass('evolvingWords');?>>Evolving words</a></li>
             	</ul>
             </nav>

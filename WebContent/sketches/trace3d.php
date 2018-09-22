@@ -17,8 +17,7 @@ $sketch = 'trace3d';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/OrbitControls.js" async></script>
+<script type="text/javascript" src="/js/libs/OrbitControls.js" async></script>
 <script type="text/javascript" src="sourceCode/Trace.js" async></script>
 <script type="text/javascript" src="sourceCode/trace3d.js" async></script>
 </head>
@@ -32,8 +31,7 @@ $sketch = 'trace3d';
 	<article class="content">
 		<header>
 			<h2>
-				<a href="<?php echo $homeDir;?>threejsSketches.php">Three.js
-					sketches</a>
+				<a href="/threejsSketches.php">Three.js sketches</a>
 			</h2>
 		</header>
 
@@ -81,6 +79,5 @@ $sketch = 'trace3d';
 
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
-
 </body>
 </html>

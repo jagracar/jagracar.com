@@ -19,20 +19,13 @@ $sketch = 'galacticCenter';
 <?php require $homeDir . 'head.php';?>
 <script type="text/javascript"
 	src="https://cdnjs.cloudflare.com/ajax/libs/three.js/88/three.js"></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/TrackballControls.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/CopyShader.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/MergeShader.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/EffectComposer.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/MaskPass.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/RenderPass.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/ShaderPass.js" async></script>
+<script type="text/javascript" src="/js/libs/TrackballControls.js" async></script>
+<script type="text/javascript" src="/js/libs/CopyShader.js" async></script>
+<script type="text/javascript" src="/js/libs/MergeShader.js" async></script>
+<script type="text/javascript" src="/js/libs/EffectComposer.js" async></script>
+<script type="text/javascript" src="/js/libs/MaskPass.js" async></script>
+<script type="text/javascript" src="/js/libs/RenderPass.js" async></script>
+<script type="text/javascript" src="/js/libs/ShaderPass.js" async></script>
 <script type="text/javascript" src="sourceCode/galacticCenter.js" async></script>
 </head>
 
@@ -45,8 +38,7 @@ $sketch = 'galacticCenter';
 	<article class="content">
 		<header>
 			<h2>
-				<a href="<?php echo $homeDir;?>threejsSketches.php">Three.js
-					sketches</a>
+				<a href="/threejsSketches.php">Three.js sketches</a>
 			</h2>
 		</header>
 
@@ -137,6 +129,5 @@ $sketch = 'galacticCenter';
 
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
-
 </body>
 </html>

@@ -6,6 +6,9 @@ $keywords = 'astronomy, science, galaxies, gas, molecular gas, infrared, radio a
 $descriptionText = 'Astronomy related interests and science';
 $titleText = 'Astronomy - jagracar';
 $addP5js = false;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = false;
 ?>
@@ -32,6 +35,5 @@ $addJQuery = false;
 
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
-
 </body>
 </html>

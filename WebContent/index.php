@@ -6,6 +6,9 @@ $keywords = 'index, home page';
 $descriptionText = 'Home page of Javier Graciá Carpio';
 $titleText = 'Home page - jagracar';
 $addP5js = false;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = false;
 ?>
@@ -39,6 +42,5 @@ $addJQuery = false;
 
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
-
 </body>
 </html>

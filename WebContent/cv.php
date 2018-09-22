@@ -6,6 +6,9 @@ $keywords = 'CV, curriculum, astronomy, software, developer, job, interests';
 $descriptionText = 'Curriculum Vitae of Javier Graciá Carpio';
 $titleText = 'Curriculum Vitae - jagracar';
 $addP5js = false;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = true;
 ?>
@@ -13,8 +16,7 @@ $addJQuery = true;
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
-<script type="text/javascript" src="<?php echo $homeDir; ?>js/cv.js"
-	async></script>
+<script type="text/javascript" src="/js/cv.js" async></script>
 </head>
 
 <body>
@@ -274,6 +276,5 @@ $addJQuery = true;
 
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
-
 </body>
 </html>

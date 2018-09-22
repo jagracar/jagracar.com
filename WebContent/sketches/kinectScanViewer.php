@@ -17,8 +17,7 @@ $sketch = 'kinectScanViewer';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/OrbitControls.js" async></script>
+<script type="text/javascript" src="/js/libs/OrbitControls.js" async></script>
 <script type="text/javascript" src="sourceCode/Scan.js" async></script>
 <script type="text/javascript" src="sourceCode/kinectScanViewer.js"
 	async></script>
@@ -33,8 +32,7 @@ $sketch = 'kinectScanViewer';
 	<article class="content">
 		<header>
 			<h2>
-				<a href="<?php echo $homeDir;?>threejsSketches.php">Three.js
-					sketches</a>
+				<a href="/threejsSketches.php">Three.js sketches</a>
 			</h2>
 		</header>
 
@@ -96,6 +94,5 @@ $sketch = 'kinectScanViewer';
 
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
-
 </body>
 </html>

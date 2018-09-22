@@ -17,25 +17,16 @@ $sketch = 'webcam';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
+<script type="text/javascript" src="/js/libs/CopyShader.js" async></script>
+<script type="text/javascript" src="/js/libs/FilmShader.js" async></script>
+<script type="text/javascript" src="/js/libs/EffectComposer.js" async></script>
+<script type="text/javascript" src="/js/libs/MaskPass.js" async></script>
+<script type="text/javascript" src="/js/libs/RenderPass.js" async></script>
+<script type="text/javascript" src="/js/libs/FilmPass.js" async></script>
+<script type="text/javascript" src="/js/libs/ShaderPass.js" async></script>
+<script type="text/javascript" src="/js/libs/objectdetect.js" async></script>
 <script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/CopyShader.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/FilmShader.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/EffectComposer.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/MaskPass.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/RenderPass.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/FilmPass.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/ShaderPass.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/objectdetect.js" async></script>
-<script type="text/javascript"
-	src="<?php echo $homeDir;?>js/libs/objectdetect.frontalface_alt.js"
-	async></script>
+	src="/js/libs/objectdetect.frontalface_alt.js" async></script>
 <script type="text/javascript" src="sourceCode/webcam.js" async></script>
 </head>
 
@@ -48,8 +39,7 @@ $sketch = 'webcam';
 	<article class="content">
 		<header>
 			<h2>
-				<a href="<?php echo $homeDir;?>threejsSketches.php">Three.js
-					sketches</a>
+				<a href="/threejsSketches.php">Three.js sketches</a>
 			</h2>
 		</header>
 
@@ -94,6 +84,5 @@ $sketch = 'webcam';
 
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
-
 </body>
 </html>

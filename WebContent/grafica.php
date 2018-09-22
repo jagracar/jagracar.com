@@ -6,6 +6,9 @@ $keywords = 'grafica, grafica.js, ofxGrafica, library, processing, p5.js, openFr
 $descriptionText = 'The grafica library home page';
 $titleText = 'Grafica library - jagracar';
 $addP5js = false;
+$addGrafica = false;
+$addToxiclibs = false;
+$addDatGui = false;
 $addThreejs = false;
 $addJQuery = false;
 $sketch = '';
@@ -25,7 +28,7 @@ $sketch = '';
 	<article class="content">
 		<header>
 			<h2>
-				<a href="<?php echo $homeDir; ?>grafica.php">Grafica library</a>
+				<a href="/grafica.php">Grafica library</a>
 			</h2>
 		</header>
 
@@ -111,6 +114,5 @@ $sketch = '';
 
 	<!-- Footer -->
 <?php require $homeDir . 'footer.php';?>
-
 </body>
 </html>
