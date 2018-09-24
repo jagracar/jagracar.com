@@ -48,10 +48,14 @@
 	flex: 1 1 auto;
 }
 
+.sketch-wrapper {
+	overflow: auto;
+	text-align: center;
+}
+
 .sketch-canvas {
-	display: table;
+	display: inline-block;
 	position: relative;
-	margin: 0 auto;
 }
 
 .is-framed canvas {

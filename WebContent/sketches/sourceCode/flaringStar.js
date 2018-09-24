@@ -2,23 +2,38 @@ var flaringStarSketch = function(p) {
 	// Global variables
 	var star;
 
-	// Initial setup
-	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight;
-		var position, radius, fadingFactor, flaresActivity, imageWidth;
+	// Creates and adds the canvas element
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth, canvas;
 
-		// Resize the canvas if necessary
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
-		canvasWidth = 300;
-		canvasHeight = 300;
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = referenceElement.clientWidth - 1;
 
 		if (canvasWidth > maxCanvasWidth) {
-			canvasHeight = canvasHeight * maxCanvasWidth / canvasWidth;
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
 			canvasWidth = maxCanvasWidth;
 		}
 
 		// Create the canvas
-		p.createCanvas(canvasWidth, canvasHeight);
+		canvas = p.createCanvas(canvasWidth, canvasHeight);
+
+		// Resize the canvas if necessary
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			p.resizeCanvas(maxCanvasWidth, maxCanvasWidth * canvasHeight / canvasWidth, true);
+		}
+
+		return canvas;
+	}
+
+	// Initial setup
+	p.setup = function() {
+		var position, radius, fadingFactor, flaresActivity, imageWidth;
+
+		// Add the canvas element
+		addCanvas(300, 300);
 
 		// Create the star
 		position = p.createVector(p.width / 2, p.height / 2);

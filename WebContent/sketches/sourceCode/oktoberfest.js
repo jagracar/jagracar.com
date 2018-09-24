@@ -6,6 +6,23 @@ var oktoberfestSketch = function(p) {
 	var daysPerMonth = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
 	var daysPerMonthLeapYear = [ 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
 
+	// Creates and adds the canvas element
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth;
+
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = Math.max(referenceElement.clientWidth - 1, 450);
+
+		if (canvasWidth > maxCanvasWidth) {
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
+			canvasWidth = maxCanvasWidth;
+		}
+
+		// Create the canvas
+		return p.createCanvas(canvasWidth, canvasHeight);
+	}
+
 	// Load the table before the sketch is run
 	p.preload = function() {
 		// Load the Oktoberfest vs. Bundestagswahl (German elections day) Google
@@ -19,22 +36,11 @@ var oktoberfestSketch = function(p) {
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight;
 		var pointsOktoberfest, pointsElections, row, data, year, month, day, date;
 		var oktoberfestCount, electionsCount;
 
-		// Resize the canvas if necessary
-		maxCanvasWidth = Math.max(document.getElementById("widthRef").clientWidth - 20, 450);
-		canvasWidth = 800;
-		canvasHeight = 0.6 * canvasWidth;
-
-		if (canvasWidth > maxCanvasWidth) {
-			canvasHeight = canvasHeight * maxCanvasWidth / canvasWidth;
-			canvasWidth = maxCanvasWidth;
-		}
-
-		// Create the canvas
-		p.createCanvas(canvasWidth, canvasHeight);
+		// Add the canvas element
+		addCanvas(800, 500);
 
 		// Save the table data in two arrays
 		pointsOktoberfest = [];

@@ -3,6 +3,32 @@ var photoSlicesSketch = function(p) {
 	var originalImg, slices;
 	var sliceSize = 8;
 
+	// Creates and adds the canvas element
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth, canvas;
+
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
+			canvasWidth = maxCanvasWidth;
+		}
+
+		// Create the canvas
+		canvas = p.createCanvas(canvasWidth, canvasHeight);
+
+		// Resize the canvas if necessary
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			p.resizeCanvas(maxCanvasWidth, maxCanvasWidth * canvasHeight / canvasWidth, true);
+		}
+
+		return canvas;
+	}
+
 	// Load the image before the sketch is run
 	p.preload = function() {
 		// Picture by Sukanto Debnath
@@ -12,17 +38,13 @@ var photoSlicesSketch = function(p) {
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvas;
+		// Add the canvas element
+		var canvas = addCanvas(1.5 * originalImg.width, originalImg.height);
 
 		// Resize the image if necessary
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
-
-		if (originalImg.width > maxCanvasWidth / 1.5) {
-			originalImg.resize(maxCanvasWidth / 1.5, originalImg.height * maxCanvasWidth / (1.5 * originalImg.width));
+		if (1.5 * originalImg.width > p.width) {
+			originalImg.resize(p.width / 1.5, p.height);
 		}
-
-		// Create the canvas
-		canvas = p.createCanvas(1.5 * originalImg.width, originalImg.height);
 
 		// Create new slices each time the mouse is pressed inside the canvas
 		canvas.mousePressed(createNewSlices);

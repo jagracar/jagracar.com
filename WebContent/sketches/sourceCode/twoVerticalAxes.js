@@ -2,23 +2,38 @@ var twoVerticalAxesSketch = function(p) {
 	// Global variables
 	var plot1, plot2;
 
-	// Initial setup
-	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight;
-		var points, i;
+	// Creates and adds the canvas element
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth, canvas;
 
-		// Resize the canvas if necessary
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
-		canvasWidth = 500;
-		canvasHeight = 350;
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = referenceElement.clientWidth - 1;
 
 		if (canvasWidth > maxCanvasWidth) {
-			canvasHeight = canvasHeight * maxCanvasWidth / canvasWidth;
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
 			canvasWidth = maxCanvasWidth;
 		}
 
 		// Create the canvas
-		p.createCanvas(canvasWidth, canvasHeight);
+		canvas = p.createCanvas(canvasWidth, canvasHeight);
+
+		// Resize the canvas if necessary
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			p.resizeCanvas(maxCanvasWidth, maxCanvasWidth * canvasHeight / canvasWidth, true);
+		}
+
+		return canvas;
+	}
+
+	// Initial setup
+	p.setup = function() {
+		var points, i;
+
+		// Add the canvas element
+		addCanvas(500, 350);
 
 		// Create the first plot
 		plot1 = new GPlot(p);

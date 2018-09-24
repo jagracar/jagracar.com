@@ -7,23 +7,38 @@ var movingPointsSketch = function(p) {
 	var clockwise = true;
 	var scale = 5;
 
-	// Initial setup
-	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight;
-		var nPoints1, points1, nPoints2, points2, i;
+	// Creates and adds the canvas element
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth, canvas;
 
-		// Resize the canvas if necessary
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
-		canvasWidth = 450;
-		canvasHeight = canvasWidth;
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = referenceElement.clientWidth - 1;
 
 		if (canvasWidth > maxCanvasWidth) {
-			canvasHeight = canvasHeight * maxCanvasWidth / canvasWidth;
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
 			canvasWidth = maxCanvasWidth;
 		}
 
 		// Create the canvas
-		p.createCanvas(canvasWidth, canvasHeight);
+		canvas = p.createCanvas(canvasWidth, canvasHeight);
+
+		// Resize the canvas if necessary
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			p.resizeCanvas(maxCanvasWidth, maxCanvasWidth * canvasHeight / canvasWidth, true);
+		}
+
+		return canvas;
+	}
+
+	// Initial setup
+	p.setup = function() {
+		var nPoints1, points1, nPoints2, points2, i;
+
+		// Add the canvas element
+		addCanvas(450, 450);
 
 		// Prepare the first set of points
 		nPoints1 = stepsPerCycle / 10;

@@ -38,8 +38,10 @@ $sketch = 'seaLife';
 <?php require $homeDir . 'p5jsSketchesList.php';?>
 
 			<section class="sketch" id="widthRef">
-				<div class="sketch-canvas" id="sketch-canvas">
-					<div class="sketch-gui" id="sketch-gui"></div>
+				<div class="sketch-wrapper">
+					<div class="sketch-canvas" id="sketch-canvas">
+						<div class="sketch-gui" id="sketch-gui"></div>
+					</div>
 				</div>
 
 				<!-- Run the sketch -->

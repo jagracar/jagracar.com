@@ -2,22 +2,36 @@ var treeGeneratorSketch = function(p) {
 	// Global variables
 	var tree;
 
-	// Initial setup
-	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight, canvas;
+	// Creates and adds the canvas element
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth, canvas;
 
-		// Resize the canvas if necessary
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
-		canvasWidth = 600;
-		canvasHeight = 450;
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = referenceElement.clientWidth - 1;
 
 		if (canvasWidth > maxCanvasWidth) {
-			canvasHeight = canvasHeight * maxCanvasWidth / canvasWidth;
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
 			canvasWidth = maxCanvasWidth;
 		}
 
 		// Create the canvas
 		canvas = p.createCanvas(canvasWidth, canvasHeight);
+
+		// Resize the canvas if necessary
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			p.resizeCanvas(maxCanvasWidth, maxCanvasWidth * canvasHeight / canvasWidth, true);
+		}
+
+		return canvas;
+	}
+
+	// Initial setup
+	p.setup = function() {
+		// Add the canvas element
+		var canvas = addCanvas(600, 450);
 
 		// Create and paint a new tree each time the mouse is pressed inside the canvas
 		canvas.mousePressed(createAndPaintNewTree);

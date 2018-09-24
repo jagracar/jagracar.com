@@ -2,6 +2,23 @@ var lifeExpectancySketch = function(p) {
 	// Global variables
 	var table, plot;
 
+	// Creates and adds the canvas element
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth;
+
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = Math.max(referenceElement.clientWidth - 1, 450);
+
+		if (canvasWidth > maxCanvasWidth) {
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
+			canvasWidth = maxCanvasWidth;
+		}
+
+		// Create the canvas
+		return p.createCanvas(canvasWidth, canvasHeight);
+	}
+
 	// Load the table before the sketch is run
 	p.preload = function() {
 		// Load the cvs dataset.
@@ -14,21 +31,10 @@ var lifeExpectancySketch = function(p) {
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight;
 		var points, pointSizes, row, data, country, income, health, population, scaleFactor;
 
-		// Resize the canvas if necessary
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
-		canvasWidth = 750;
-		canvasHeight = 450;
-
-		if (canvasWidth > maxCanvasWidth) {
-			canvasHeight = canvasHeight * maxCanvasWidth / canvasWidth;
-			canvasWidth = maxCanvasWidth;
-		}
-
-		// Create the canvas
-		p.createCanvas(canvasWidth, canvasHeight);
+		// Add the canvas element
+		addCanvas(750, 450);
 
 		// Save the data in an array and calculate the point sizes
 		points = [];

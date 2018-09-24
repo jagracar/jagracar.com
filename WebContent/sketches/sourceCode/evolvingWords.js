@@ -3,25 +3,39 @@ var evolvingWordsSketch = function(p) {
 	var positions;
 	var step = 0;
 
-	// Initial setup
-	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight;
+	// Creates and adds the canvas element
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth, canvas;
 
-		// Resize the canvas if necessary
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
-		canvasWidth = 600;
-		canvasHeight = 400;
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = referenceElement.clientWidth - 1;
 
 		if (canvasWidth > maxCanvasWidth) {
-			canvasHeight = canvasHeight * maxCanvasWidth / canvasWidth;
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
 			canvasWidth = maxCanvasWidth;
 		}
 
 		// Create the canvas
-		p.createCanvas(canvasWidth, canvasHeight);
+		canvas = p.createCanvas(canvasWidth, canvasHeight);
+
+		// Resize the canvas if necessary
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			p.resizeCanvas(maxCanvasWidth, maxCanvasWidth * canvasHeight / canvasWidth, true);
+		}
+
+		return canvas;
+	}
+
+	// Initial setup
+	p.setup = function() {
+		// Add the canvas element
+		addCanvas(600, 400);
 
 		// Calculate the trajectory positions for every particle
-		positions = calculateTrajectories("This is not a LOVE story", 2 * canvasWidth);
+		positions = calculateTrajectories("This is not a LOVE story", 2 * p.width);
 	};
 
 	// Execute the sketch

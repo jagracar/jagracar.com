@@ -38,7 +38,9 @@ $sketch = 'oktoberfest';
 <?php require $homeDir . 'graficaSketchesList.php';?>
 
 			<section class="sketch" id="widthRef">
-				<div class="sketch-canvas" id="sketch-canvas"></div>
+				<div class="sketch-wrapper">
+					<div class="sketch-canvas" id="sketch-canvas"></div>
+				</div>
 
 				<!-- Run the sketch -->
 				<script>

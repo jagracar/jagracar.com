@@ -14,7 +14,7 @@ var oilPaintingSketch = function(p) {
 	// Compare the oil paint with the original picture
 	var comparisonMode = false;
 	// Show additional debug images
-	var debugMode = false;
+	var debugMode = true;
 	// Paint the traces step by step, or in one go
 	var paintStepByStep = false;
 	// The smaller brush size allowed
@@ -52,6 +52,34 @@ var oilPaintingSketch = function(p) {
 	var startTime;
 
 	//
+	// Creates and adds the canvas element
+	//
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth, canvas;
+
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
+			canvasWidth = maxCanvasWidth;
+		}
+
+		// Create the canvas
+		canvas = p.createCanvas(canvasWidth, canvasHeight);
+
+		// Resize the canvas if necessary
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			p.resizeCanvas(maxCanvasWidth, maxCanvasWidth * canvasHeight / canvasWidth, true);
+		}
+
+		return canvas;
+	}
+
+	//
 	// Load the image before the sketch is run
 	//
 	p.preload = function() {
@@ -62,29 +90,36 @@ var oilPaintingSketch = function(p) {
 	// Initial setup
 	//
 	p.setup = function() {
-		var maxCanvasWidth, nPixels, pixel;
+		var nPixels, pixel;
 
-		// Resize the image if necessary
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
+		// Add the sketch canvas
+		if (comparisonMode) {
+			addCanvas(2 * originalImg.width, originalImg.height);
 
-		if (originalImg.width > maxCanvasWidth) {
-			originalImg.resize(maxCanvasWidth, originalImg.height * maxCanvasWidth / originalImg.width);
+			// Resize the original image if necessary
+			if (originalImg.width > p.width / 2) {
+				originalImg.resize(p.width / 2, p.height);
+			}
+		} else if (debugMode) {
+			addCanvas(3 * originalImg.width, originalImg.height);
+
+			// Resize the original image if necessary
+			if (originalImg.width > p.width / 3) {
+				originalImg.resize(p.width / 3, p.height);
+			}
+		} else {
+			addCanvas(originalImg.width, originalImg.height);
+
+			// Resize the original image if necessary
+			if (originalImg.width > p.width) {
+				originalImg.resize(p.width, p.height);
+			}
 		}
-
-		imgWidth = originalImg.width;
-		imgHeight = originalImg.height;
 
 		// Load the original image pixels. This way they will be all the time available
+		imgWidth = originalImg.width;
+		imgHeight = originalImg.height;
 		originalImg.loadPixels();
-
-		// Create the sketch canvas
-		if (comparisonMode) {
-			p.createCanvas(2 * imgWidth, imgHeight);
-		} else if (debugMode) {
-			p.createCanvas(3 * imgWidth, imgHeight);
-		} else {
-			p.createCanvas(imgWidth, imgHeight);
-		}
 
 		// Sketch setup
 		backgroundColor = p.color(255);
@@ -135,10 +170,16 @@ var oilPaintingSketch = function(p) {
 				// Check if we finished painting the trace
 				if (traceStep === trace.getNSteps()) {
 					trace = undefined;
+
+					// Update the similar color and bad painted pixel arrays
+					updatePixelArrays();
 				}
 			} else {
 				trace.paint(visitedPixels, imgWidth, imgHeight);
 				trace = undefined;
+
+				// Update the similar color and bad painted pixel arrays
+				updatePixelArrays();
 			}
 
 			// Draw the additional images if necessary
@@ -156,9 +197,6 @@ var oilPaintingSketch = function(p) {
 	function getValidTrace() {
 		var trace, traceNotFound, invalidTrajectoriesCounter, invalidTracesCounter, startingPosition, nPixels, pixel;
 		var validTrajectory, brushSize, nSteps;
-
-		// Update the similar color and bad painted pixel arrays
-		updatePixelArrays();
 
 		// Obtain a new valid trace
 		trace = undefined;
@@ -251,9 +289,12 @@ var oilPaintingSketch = function(p) {
 		var pixelDensity, redBg, greenBg, blueBg, x, y, wellPainted, pixel, imgPixel, canvasPixel;
 		var redPainted, greenPainted, bluePainted;
 
+		// For some unknown reason, this is required to update the pixels
+		p.image(originalImg, 3 * imgWidth, 0);
+
 		// Load the screen pixels
-		p.loadPixels();
 		pixelDensity = p.displayDensity();
+		p.loadPixels();
 
 		// Update the arrays
 		nBadPaintedPixels = 0;
@@ -286,9 +327,6 @@ var oilPaintingSketch = function(p) {
 				}
 			}
 		}
-
-		// Update the screen pixels
-		p.updatePixels();
 	}
 
 	//
@@ -297,16 +335,19 @@ var oilPaintingSketch = function(p) {
 	function drawDebugImages() {
 		var pixelDensity, x, y, pixel, visitedCol, similarCol, canvasPixel1, canvasPixel2;
 
+		// For some unknown reason, this is required to update the pixels
+		p.image(originalImg, 3 * imgWidth, 0);
+
 		// Load the screen pixels
-		p.loadPixels();
 		pixelDensity = p.displayDensity();
+		p.loadPixels();
 
 		// Draw the arrays
 		for (x = 0; x < imgWidth; x++) {
 			for (y = 0; y < imgHeight; y++) {
 				pixel = x + y * imgWidth;
 				visitedCol = visitedPixels[pixel] ? 255 : 0;
-				similarCol = similarPixels[pixel] ? 255 : 0;
+				similarCol = similarColorPixels[pixel] ? 255 : 0;
 				canvasPixel1 = 4 * (x + y * p.width * pixelDensity + imgWidth) * pixelDensity;
 				canvasPixel2 = 4 * (x + y * p.width * pixelDensity + 2 * imgWidth) * pixelDensity;
 				p.pixels[canvasPixel1] = visitedCol;
@@ -754,8 +795,8 @@ var oilPaintingSketch = function(p) {
 		}
 
 		// Load the screen pixels
-		p.loadPixels();
 		pixelDensity = p.displayDensity();
+		p.loadPixels();
 
 		// Calculate the trace average color and obtain some trace statistics
 		redAverage = 0;
@@ -788,7 +829,6 @@ var oilPaintingSketch = function(p) {
 					y = Math.round(pos.y);
 
 					if (x >= 0 && x < width && y >= 0 && y < height) {
-
 						// Save the already painted color if it's not the background color
 						canvasPixel = 4 * (x + y * p.width * pixelDensity) * pixelDensity;
 						redPainted = p.pixels[canvasPixel];
@@ -837,9 +877,6 @@ var oilPaintingSketch = function(p) {
 			greenAverage /= insideCounter;
 			blueAverage /= insideCounter;
 		}
-
-		// Update the screen pixels
-		p.updatePixels();
 
 		// Reset the brush to the initial position
 		this.brush.init(this.positions[0]);

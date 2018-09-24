@@ -21,6 +21,32 @@ var seaLifeSketch = function(p) {
 	var paintDetails = true;
 	var bgImg;
 
+	// Creates and adds the canvas element
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth, canvas;
+
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
+			canvasWidth = maxCanvasWidth;
+		}
+
+		// Create the canvas
+		canvas = p.createCanvas(canvasWidth, canvasHeight);
+
+		// Resize the canvas if necessary
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			p.resizeCanvas(maxCanvasWidth, maxCanvasWidth * canvasHeight / canvasWidth, true);
+		}
+
+		return canvas;
+	}
+
 	// Load the image before the sketch is run
 	p.preload = function() {
 		// This image was created with the createWaterImage() method
@@ -29,26 +55,22 @@ var seaLifeSketch = function(p) {
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth;
+		// Add the canvas element
+		addCanvas(bgImg.width, bgImg.height);
 
 		// Resize the image if necessary
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
-
-		if (bgImg.width > maxCanvasWidth) {
-			bgImg.resize(maxCanvasWidth, bgImg.height * maxCanvasWidth / bgImg.width);
-
-			// Update some of the key distances
-			limitDist = 0.4 * Math.min(bgImg.width, bgImg.height);
-			limitDistSq = p.sq(limitDist);
-			attractionDist = 0.5 * limitDist;
-			attractionDistSq = p.sq(attractionDist);
+		if (bgImg.width > p.width) {
+			bgImg.resize(p.width, p.height);
 		}
-
-		// Create the canvas
-		p.createCanvas(bgImg.width, bgImg.height);
 
 		// Create the water-like image to be used as the background
 		// bgImg = createWaterImage(p.width, p.height);
+
+		// Update some of the key distances
+		limitDist = 0.4 * Math.min(bgImg.width, bgImg.height);
+		limitDistSq = p.sq(limitDist);
+		attractionDist = 0.5 * limitDist;
+		attractionDistSq = p.sq(attractionDist);
 
 		// Create all the species
 		createFishes(Math.round(0.3 * bgImg.height));

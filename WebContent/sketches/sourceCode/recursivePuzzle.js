@@ -4,6 +4,32 @@ var recursivePuzzleSketch = function(p) {
 	var minPieceSize = pieceSize;
 	var img, puzzle;
 
+	// Creates and adds the canvas element
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth, canvas;
+
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
+			canvasWidth = maxCanvasWidth;
+		}
+
+		// Create the canvas
+		canvas = p.createCanvas(canvasWidth, canvasHeight);
+
+		// Resize the canvas if necessary
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			p.resizeCanvas(maxCanvasWidth, maxCanvasWidth * canvasHeight / canvasWidth, true);
+		}
+
+		return canvas;
+	}
+
 	// Load the image before the sketch is run
 	p.preload = function() {
 		// Picture by Sukanto Debnath
@@ -13,24 +39,20 @@ var recursivePuzzleSketch = function(p) {
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvas;
+		// Add the canvas element
+		var canvas = addCanvas(img.width, img.height);
 
-		// Resize the image if necessary
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
+		// Resize the image to fit the pieces size
+		img.resize(pieceSize * Math.floor(p.width / pieceSize), pieceSize * Math.floor(p.height / pieceSize));
 
-		if (img.width > maxCanvasWidth) {
-			img.resize(maxCanvasWidth, img.height * maxCanvasWidth / img.width);
-		}
-
-		// Resize the image again to fit the pieces size
-		img.resize(pieceSize * Math.floor(img.width / pieceSize), pieceSize * Math.floor(img.height / pieceSize));
-
-		// Create the canvas
-		canvas = p.createCanvas(img.width, img.height);
-		p.frameRate(20);
+		// Resize the canvas again
+		p.resizeCanvas(img.width, img.height, true);
 
 		// Initiate a new puzzle each time the mouse is pressed inside the canvas
 		canvas.mousePressed(newPuzzle);
+
+		// Set the frame rate
+		p.frameRate(20);
 
 		// Initiate a new puzzle
 		newPuzzle();

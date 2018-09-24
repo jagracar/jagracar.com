@@ -48,8 +48,10 @@ $sketch = 'webcam';
 <?php require $homeDir . 'threejsSketchesList.php';?>
 
 			<section class="sketch" id="widthRef">
-				<div class="sketch-canvas" id="sketch-canvas">
-					<div class="sketch-gui" id="sketch-gui"></div>
+				<div class="sketch-wrapper">
+					<div class="sketch-canvas" id="sketch-canvas">
+						<div class="sketch-gui" id="sketch-gui"></div>
+					</div>
 				</div>
 
 				<script id="vertexShader" type="x-shader/x-vertex"><?php require 'sourceCode/shaders/webcam.vert';?></script>

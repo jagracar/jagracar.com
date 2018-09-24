@@ -12,11 +12,8 @@ function runSketch() {
 		// Scene setup
 		scene = new THREE.Scene();
 
-		// Get the WebGL renderer
-		renderer = getWebGLRenderer(640, 480);
-
-		// Add the renderer to the sketch container
-		document.getElementById(sketchContainer).appendChild(renderer.domElement);
+		// Add the WebGL renderer
+		renderer = addWebGLRenderer(640, 480);
 
 		// Camera setup
 		camera = new THREE.Camera();
@@ -78,17 +75,17 @@ function runSketch() {
 	}
 
 	/*
-	 * Returns the webGL renderer
+	 * Creates and adds the webGL renderer
 	 */
-	function getWebGLRenderer(canvasWidth, canvasHeight) {
-		var maxCanvasWidth, webGLRenderer;
+	function addWebGLRenderer(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth, webGLRenderer;
 
-		// Get the maximum possible size for the canvas
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
+		// Calculate the renderer dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = referenceElement.clientWidth - 1;
 
-		// Modify the specified canvas width and height if necessary
 		if (canvasWidth > maxCanvasWidth) {
-			canvasHeight = Math.round(canvasHeight * maxCanvasWidth / canvasWidth);
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
 			canvasWidth = maxCanvasWidth;
 		}
 
@@ -97,6 +94,16 @@ function runSketch() {
 			antialias : true
 		});
 		webGLRenderer.setSize(canvasWidth, canvasHeight);
+
+		// Add the renderer to the sketch container
+		document.getElementById(sketchContainer).appendChild(webGLRenderer.domElement);
+
+		// Resize the renderer if necessary
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			webGLRenderer.setSize(maxCanvasWidth, maxCanvasWidth * canvasHeight / canvasWidth);
+		}
 
 		return webGLRenderer;
 	}

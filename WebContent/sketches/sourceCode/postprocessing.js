@@ -8,33 +8,17 @@ function runSketch() {
 	 * Initializes the sketch
 	 */
 	function init() {
-		var maxCanvasWidth, canvasWidth, canvasHeight, controls, cubeGeometry, cubeMaterial;
-
-		// Resize the canvas if necessary
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
-		canvasWidth = 500;
-		canvasHeight = 400;
-
-		if (canvasWidth > maxCanvasWidth) {
-			canvasHeight = canvasHeight * maxCanvasWidth / canvasWidth;
-			canvasWidth = maxCanvasWidth;
-		}
+		var controls, cubeGeometry, cubeMaterial;
 
 		// Scene setup
 		scene = new THREE.Scene();
 
-		// Renderer setup
-		renderer = new THREE.WebGLRenderer({
-			antialias : true
-		});
-		renderer.setSize(canvasWidth, canvasHeight);
+		// Add the WebGL renderer
+		renderer = addWebGLRenderer(500, 400);
 		renderer.setClearColor(new THREE.Color(0.93, 0.93, 0.93));
 
-		// Add the renderer to the sketch container
-		document.getElementById(sketchContainer).appendChild(renderer.domElement);
-
 		// Camera setup
-		camera = new THREE.PerspectiveCamera(45, canvasWidth / canvasHeight, 0.1, 2000);
+		camera = new THREE.PerspectiveCamera(45, renderer.getSize().width / renderer.getSize().height, 0.1, 2000);
 		camera.position.set(0, 3, 10);
 
 		// Initialize the camera controls
@@ -104,4 +88,38 @@ function runSketch() {
 		// renderer.render(scene, camera);
 		composer.render();
 	}
+
+	/*
+	 * Creates and adds the webGL renderer
+	 */
+	function addWebGLRenderer(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth, webGLRenderer;
+
+		// Calculate the renderer dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
+			canvasWidth = maxCanvasWidth;
+		}
+
+		// Create the webGL renderer with the correct dimensions
+		webGLRenderer = new THREE.WebGLRenderer({
+			antialias : true
+		});
+		webGLRenderer.setSize(canvasWidth, canvasHeight);
+
+		// Add the renderer to the sketch container
+		document.getElementById(sketchContainer).appendChild(webGLRenderer.domElement);
+
+		// Resize the renderer if necessary
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			webGLRenderer.setSize(maxCanvasWidth, maxCanvasWidth * canvasHeight / canvasWidth);
+		}
+
+		return webGLRenderer;
+	}	
 }

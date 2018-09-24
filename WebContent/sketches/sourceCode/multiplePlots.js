@@ -3,6 +3,23 @@ var multiplePlotsSketch = function(p) {
 	var plot1, plot2, plot3, plot4, polygonPoints, mug, star, gaussianStack;
 	var gaussianCounter, uniformStack, uniformCounter;
 
+	// Creates and adds the canvas element
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth;
+
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = Math.max(referenceElement.clientWidth - 1, 500);
+
+		if (canvasWidth > maxCanvasWidth) {
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
+			canvasWidth = maxCanvasWidth;
+		}
+
+		// Create the canvas
+		return p.createCanvas(canvasWidth, canvasHeight);
+	}
+
 	// Load the image before the sketch is run
 	p.preload = function() {
 		mug = p.loadImage("img/beermug.png");
@@ -11,21 +28,10 @@ var multiplePlotsSketch = function(p) {
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight;
 		var points1a, points1b, points1c, points2, points3, points4, i, index;
 
-		// Resize the canvas if necessary
-		maxCanvasWidth = Math.max(document.getElementById("widthRef").clientWidth - 20, 500);
-		canvasWidth = 850;
-		canvasHeight = 0.8 * canvasWidth;
-
-		if (canvasWidth > maxCanvasWidth) {
-			canvasHeight = canvasHeight * maxCanvasWidth / canvasWidth;
-			canvasWidth = maxCanvasWidth;
-		}
-
-		// Create the canvas
-		p.createCanvas(canvasWidth, canvasHeight);
+		// Add the canvas element
+		addCanvas(850, 680);
 
 		// Obtain the points for the first plot
 		points1a = [];

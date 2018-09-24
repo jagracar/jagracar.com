@@ -1,22 +1,38 @@
 var multiplePanelsSketch = function(p) {
-	// Initial setup
-	p.setup = function() {
-		var maxCanvasWidth, canvasWidth, canvasHeight;
-		var firstPlotPos, margins, panelDim, plot1, plot2, plot3, plot4;
-		var nPoints, points1, points2, points3, points4, i;
 
-		// Resize the canvas if necessary
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
-		canvasWidth = 500;
-		canvasHeight = canvasWidth;
+	// Creates and adds the canvas element
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth, canvas;
+
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = referenceElement.clientWidth - 1;
 
 		if (canvasWidth > maxCanvasWidth) {
-			canvasHeight = canvasHeight * maxCanvasWidth / canvasWidth;
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
 			canvasWidth = maxCanvasWidth;
 		}
 
 		// Create the canvas
-		p.createCanvas(canvasWidth, canvasHeight);
+		canvas = p.createCanvas(canvasWidth, canvasHeight);
+
+		// Resize the canvas if necessary
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			p.resizeCanvas(maxCanvasWidth, maxCanvasWidth * canvasHeight / canvasWidth, true);
+		}
+
+		return canvas;
+	}
+
+	// Initial setup
+	p.setup = function() {
+		var firstPlotPos, margins, panelDim, plot1, plot2, plot3, plot4;
+		var nPoints, points1, points2, points3, points4, i;
+
+		// Add the canvas element
+		addCanvas(500, 500);
 
 		// Define panel properties
 		firstPlotPos = [ 0, 0 ];

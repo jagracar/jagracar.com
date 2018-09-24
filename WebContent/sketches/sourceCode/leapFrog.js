@@ -5,6 +5,32 @@ var leapFrogSketch = function(p) {
 	var stepsPerFrame = 10;
 	var timeStep = 0.02;
 
+	// Creates and adds the canvas element
+	function addCanvas(canvasWidth, canvasHeight) {
+		var referenceElement, maxCanvasWidth, canvas;
+
+		// Calculate the canvas dimensions
+		referenceElement = document.getElementById("widthRef");
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			canvasHeight = maxCanvasWidth * canvasHeight / canvasWidth;
+			canvasWidth = maxCanvasWidth;
+		}
+
+		// Create the canvas
+		canvas = p.createCanvas(canvasWidth, canvasHeight);
+
+		// Resize the canvas if necessary
+		maxCanvasWidth = referenceElement.clientWidth - 1;
+
+		if (canvasWidth > maxCanvasWidth) {
+			p.resizeCanvas(maxCanvasWidth, maxCanvasWidth * canvasHeight / canvasWidth, true);
+		}
+
+		return canvas;
+	}
+
 	// Load the image before the sketch is run
 	p.preload = function() {
 		// Picture by Alex Proimos
@@ -14,17 +40,13 @@ var leapFrogSketch = function(p) {
 
 	// Initial setup
 	p.setup = function() {
-		var maxCanvasWidth, canvas;
+		// Add the canvas element
+		var canvas = addCanvas(img.width, img.height);
 
 		// Resize the image if necessary
-		maxCanvasWidth = document.getElementById("widthRef").clientWidth - 20;
-
-		if (img.width > maxCanvasWidth) {
-			img.resize(maxCanvasWidth, img.height * maxCanvasWidth / img.width);
+		if (img.width > p.width) {
+			img.resize(p.width, p.height);
 		}
-
-		// Create the canvas
-		canvas = p.createCanvas(img.width, img.height);
 
 		// Start a new drawing each time the mouse is pressed inside the canvas
 		canvas.mousePressed(startNewDrawing);

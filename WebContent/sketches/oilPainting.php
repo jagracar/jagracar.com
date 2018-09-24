@@ -38,7 +38,9 @@ $sketch = 'oilPainting';
 <?php require $homeDir . 'p5jsSketchesList.php';?>
 
 			<section class="sketch" id="widthRef">
-				<div class="sketch-canvas is-framed" id="sketch-canvas"></div>
+				<div class="sketch-wrapper">
+					<div class="sketch-canvas is-framed" id="sketch-canvas"></div>
+				</div>
 
 				<!-- Run the sketch -->
 				<script>
