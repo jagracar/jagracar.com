@@ -92,6 +92,9 @@ var oilPaintingSketch = function(p) {
 	p.setup = function() {
 		var nPixels, pixel;
 
+		// Resize the image
+		originalImg.resize(0.8 * originalImg.width, 0.8 * originalImg.height);
+		
 		// Add the sketch canvas
 		if (comparisonMode) {
 			addCanvas(2 * originalImg.width, originalImg.height);
@@ -290,7 +293,7 @@ var oilPaintingSketch = function(p) {
 		var redPainted, greenPainted, bluePainted;
 
 		// For some unknown reason, this is required to update the pixels
-		p.image(originalImg, 3 * imgWidth, 0);
+		p.image(originalImg, -imgWidth, 0);
 
 		// Load the screen pixels
 		pixelDensity = p.displayDensity();
@@ -336,7 +339,7 @@ var oilPaintingSketch = function(p) {
 		var pixelDensity, x, y, pixel, visitedCol, similarCol, canvasPixel1, canvasPixel2;
 
 		// For some unknown reason, this is required to update the pixels
-		p.image(originalImg, 3 * imgWidth, 0);
+		p.image(originalImg, -imgWidth, 0);
 
 		// Load the screen pixels
 		pixelDensity = p.displayDensity();
@@ -353,9 +356,11 @@ var oilPaintingSketch = function(p) {
 				p.pixels[canvasPixel1] = visitedCol;
 				p.pixels[canvasPixel1 + 1] = visitedCol;
 				p.pixels[canvasPixel1 + 2] = visitedCol;
+				p.pixels[canvasPixel1 + 3] = 255;
 				p.pixels[canvasPixel2] = similarCol;
 				p.pixels[canvasPixel2 + 1] = similarCol;
 				p.pixels[canvasPixel2 + 2] = similarCol;
+				p.pixels[canvasPixel2 + 3] = 255;
 			}
 		}
 
