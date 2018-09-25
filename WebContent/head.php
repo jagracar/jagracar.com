@@ -18,7 +18,7 @@
 <script type="text/javascript" src="/js/libs/p5.min.js" async></script>
 <?php endif ?>
 <?php if($addGrafica): ?>
-<script type="text/javascript" src="/js/libs/grafica.js" async></script>
+<script type="text/javascript" src="/js/libs/grafica.min.js" async></script>
 <?php endif ?>
 <?php if($addToxiclibs): ?>
 <script type="text/javascript" src="/js/libs/toxiclibs.min.js" async></script>

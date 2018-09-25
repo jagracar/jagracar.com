@@ -164,7 +164,6 @@ var multiplePlotsSketch = function(p) {
 		plot1.activatePointLabels();
 		plot2.activateCentering();
 		plot2.activateZooming(1.3, p.CENTER, p.CENTER);
-		plot2.preventWheelDefault();
 		plot3.activateCentering();
 		plot4.activateZooming();
 		plot4.preventRightClickDefault();

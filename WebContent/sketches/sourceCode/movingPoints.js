@@ -63,8 +63,6 @@ var movingPointsSketch = function(p) {
 		plot = new GPlot(p);
 		plot.setPos(0, 0);
 		plot.setOuterDim(p.width, p.height);
-		plot.preventWheelDefault();
-		plot.preventRightClickDefault();
 
 		// Set the plot limits (this will fix them)
 		plot.setXLim(-1.2 * scale, 1.2 * scale);
@@ -77,6 +75,7 @@ var movingPointsSketch = function(p) {
 
 		// Activate the panning effect
 		plot.activatePanning();
+		plot.preventRightClickDefault();
 
 		// Add the two sets of points to the plot
 		plot.setPoints(points1);

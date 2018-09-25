@@ -70,8 +70,6 @@ var lifeExpectancySketch = function(p) {
 		plot.activatePointLabels();
 		plot.activatePanning();
 		plot.activateZooming(1.1, p.CENTER, p.CENTER);
-		plot.preventWheelDefault();
-		plot.preventRightClickDefault();
 	};
 
 	// Execute the sketch
