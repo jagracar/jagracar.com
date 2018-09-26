@@ -75,7 +75,6 @@ var movingPointsSketch = function(p) {
 
 		// Activate the panning effect
 		plot.activatePanning();
-		plot.preventRightClickDefault();
 
 		// Add the two sets of points to the plot
 		plot.setPoints(points1);

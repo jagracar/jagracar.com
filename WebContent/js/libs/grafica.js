@@ -3522,15 +3522,16 @@ function GPlot() {
 	this.yLimReset = undefined;
 
 	// Add the event listeners
+	this.clickListener = this.clickEvent.bind(this);
+	this.wheelListener = this.wheelEvent.bind(this);
 	this.mouseDownListener = this.mouseDownEvent.bind(this);
 	this.mouseMoveListener = this.mouseMoveEvent.bind(this);
 	this.mouseUpListener = this.mouseUpEvent.bind(this);
 	this.touchStartListener = this.touchStartEvent.bind(this);
 	this.touchMoveListener = this.touchMoveEvent.bind(this);
 	this.touchEndListener = this.touchEndEvent.bind(this);
-
-	this.parentElt.addEventListener("click", this.clickEvent.bind(this), false);
-	this.parentElt.addEventListener("wheel", this.wheelEvent.bind(this), false);
+	this.parentElt.addEventListener("click", this.clickListener, false);
+	this.parentElt.addEventListener("wheel", this.wheelListener, false);
 	this.parentElt.addEventListener("mousedown", this.mouseDownListener, false);
 	this.parentElt.addEventListener("touchstart", this.touchStartListener, false);
 }
@@ -5343,7 +5344,7 @@ GPlot.prototype.wheelEvent = function(event) {
 		if (this.zoomingIsActive) {
 			if (button === this.increaseZoomButton && modifier === this.increaseZoomKeyModifier && deltaY > 0) {
 				e.preventDefault();
-				
+
 				// Save the axes limits
 				if (this.resetIsActive) {
 					this.saveResetLimits();
@@ -5393,7 +5394,7 @@ GPlot.prototype.mouseDownEvent = function(event) {
 			// Add the mousemove and mouseup event listeners
 			document.addEventListener('mousemove', this.mouseMoveListener, false);
 			document.addEventListener('mouseup', this.mouseUpListener, false);
-			e.preventDefault();
+			//e.preventDefault();
 		}
 	}
 };
@@ -5429,11 +5430,6 @@ GPlot.prototype.mouseUpEvent = function(event) {
 	if (this.labelingIsActive && button === this.labelingButton) {
 		this.mousePos = undefined;
 	}
-
-	if (button === this.parent.RIGHT) {
-		// This is a right click!
-		this.clickEvent(e);
-	}
 };
 
 GPlot.prototype.touchStartEvent = function(event) {
@@ -5454,6 +5450,7 @@ GPlot.prototype.touchStartEvent = function(event) {
 		}
 
 		if(this.zoomingIsActive && typeof e.touches !== "undefined" && e.touches.length === 2){
+			addListeners = true;
 			var dx = e.touches[ 0 ].pageX - e.touches[ 1 ].pageX;
 			var dy = e.touches[ 0 ].pageY - e.touches[ 1 ].pageY;
 			this.zoomStartDistance = Math.sqrt( dx * dx + dy * dy );
@@ -5465,7 +5462,7 @@ GPlot.prototype.touchStartEvent = function(event) {
 			document.addEventListener('touchmove', this.touchMoveListener, {passive: false});
 			document.addEventListener('touchend', this.touchEndListener, false);
 			document.addEventListener('touchcancel', this.touchEndListener, false);
-			e.preventDefault();
+			//e.preventDefault();
 		}
 	}
 };
