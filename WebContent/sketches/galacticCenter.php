@@ -9,7 +9,7 @@ $addP5js = false;
 $addGrafica = false;
 $addToxiclibs = false;
 $addDatGui = true;
-$addThreejs = false;
+$addThreejs = true;
 $addJQuery = false;
 $sketch = 'galacticCenter';
 ?>
@@ -17,8 +17,6 @@ $sketch = 'galacticCenter';
 <html lang="en">
 <head>
 <?php require $homeDir . 'head.php';?>
-<script type="text/javascript"
-	src="https://cdnjs.cloudflare.com/ajax/libs/three.js/88/three.js"></script>
 <script type="text/javascript" src="/js/libs/TrackballControls.js" async></script>
 <script type="text/javascript" src="/js/libs/CopyShader.js" async></script>
 <script type="text/javascript" src="/js/libs/MergeShader.js" async></script>

@@ -315,6 +315,7 @@ function runSketch() {
 		material = new THREE.MeshBasicMaterial();
 		material.depthTest = false;
 		material.depthWrite = false;
+		material.side = THREE.BackSide;
 		sky = new THREE.Mesh(geometry, material);
 
 		// Rotate the mesh to have the galactic center in front
